@@ -3,7 +3,6 @@
  * autoload script
  */
 define('INCLUDE_ROOT', realpath(__DIR__ . '../../'));
-define('CONFIG_OBJECT', '\\chilimatic\\lib\\config\\Config');
 
 /**
  * @param $file
