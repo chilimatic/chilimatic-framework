@@ -1,4 +1,7 @@
 {
-  "name" : "chilimatic-framework",
-  "version": "1.0.0"
+  "name" : "chilimatic/chilimatic",
+  "version": "1.0.0",
+  "autoload": {
+    
+  }
 }
