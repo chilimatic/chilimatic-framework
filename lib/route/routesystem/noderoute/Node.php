@@ -27,7 +27,7 @@ class Node extends \chilimatic\lib\node\TreeNode
     private $comment = '';
 
     /**
-     * @param \chilimatic\lib\route\Node $parentNode
+     * @param \chilimatic\lib\route\routesystem\noderoute\Node $parentNode
      * @param $key
      * @param \chilimatic\lib\route\Map $map
      * @param string $comment

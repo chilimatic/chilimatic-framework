@@ -13,7 +13,7 @@ namespace chilimatic\lib\http;
  *
  * @package chilimatic\http
  */
-class HTTP_Protocol {
+class Protocol {
 
     /**
      * put method http request

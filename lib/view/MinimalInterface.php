@@ -11,7 +11,7 @@ namespace chilimatic\lib\view;
  * Interface minimalInterface
  * @package chilimatic\lib\view
  */
-interface minimalInterface
+interface MinimalInterface
 {
 
     /**

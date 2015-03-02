@@ -9,7 +9,7 @@
  */
 namespace chilimatic\lib\traits;
 
-trait observerSubject {
+trait ObserverSubject {
 
     /**
      * @var \SplObjectStorage

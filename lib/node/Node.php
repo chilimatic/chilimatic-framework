@@ -58,7 +58,7 @@ class Node
     /**
      * contains the list of children
      *
-     * @var Node_Collection
+     * @var Collection
      */
     protected $children = null;
 
@@ -80,7 +80,7 @@ class Node
         $this->value = $value;
         // optional comment
         $this->comment = $comment;
-        $this->children = new Node_Collection();
+        $this->children = new Collection();
     }
 
     /**

@@ -13,7 +13,7 @@ namespace chilimatic\lib\http;
  *
  * @package chilimatic\http
  */
-Class HTTP_RequestLine  {
+Class RequestLine  {
 
     /**
      * default protocol
@@ -50,14 +50,14 @@ Class HTTP_RequestLine  {
      * @param array $url_param
      * @param string $protocol
      *
-     * @return \chilimatic\http\HTTP_RequestLine
+     * @return \chilimatic\http\RequestLine
      */
-    public function __construct($address, $method = HTTP_Protocol::GET, $url_param = [] , $protocol = self::DEFAULT_PROTOCOL) {
+    public function __construct($address, $method = Protocol::GET, $url_param = [] , $protocol = self::DEFAULT_PROTOCOL) {
         if (empty($address)) return;
 
         $this->address = $address;
         // set method
-        $this->method = (!empty($method) ? $method : HTTP_Protocol::GET);
+        $this->method = (!empty($method) ? $method : Protocol::GET);
         // init protocol
         $this->protocol = $protocol;
         // init url param

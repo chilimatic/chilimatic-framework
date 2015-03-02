@@ -8,7 +8,7 @@
 
 namespace chilimatic\lib\http;
 
-Class HTTP_Socket {
+Class Socket {
 
     /**
      * default port for http
@@ -114,7 +114,7 @@ Class HTTP_Socket {
      * http protocol is the data object
      * for http requests
      *
-     * @var \chilimatic\http\HTTP_Protocol
+     * @var \chilimatic\lib\http\Protocol
      */
     public $http_protocol = null;
 
@@ -140,11 +140,11 @@ Class HTTP_Socket {
      *
      * @param \stdClass $param
      *
-     * @return \chilimatic\http\HTTP_Socket
+     * @return \chilimatic\lib\http\Socket
      */
     public function __construct($param){
         // get the data object for http request based on the current standards
-        $this->httpprotocol = new HTTP_Protocol();
+        $this->httpprotocol = new Protocol();
         $this->init($param);
     }
 
@@ -227,12 +227,12 @@ Class HTTP_Socket {
         $p->protocol = "HTTP/1.1";
 
 
-        $this->request = new HTTP_Request($p);
+        $this->request = new Request($p);
 
 
         // check if there is a user add user & pw base64 encoded
         if ($this->_user) {
-            $this->request->header = new HTTP_SingleParam("Authorization", "Basic " .base64_encode("$this->_user:$this->_password"));
+            $this->request->header = new SingleParam("Authorization", "Basic " .base64_encode("$this->_user:$this->_password"));
         }
         $r = $this->request->__toString();
         // write it to the buffer

@@ -10,7 +10,7 @@ use chilimatic\lib\Tool\Tool;
  *
  * @package chilimatic\file
  */
-class Directory extends \Base
+class Directory
 {
 
 

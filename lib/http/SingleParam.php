@@ -14,7 +14,7 @@ namespace chilimatic\lib\http;
  *
  * @package chilimatic\http
  */
-class HTTP_SingleParam {
+class SingleParam {
 
     /**
      * field name

@@ -9,7 +9,7 @@ use chilimatic\lib\file\File;
  *
  * @package chilimatic\log
  */
-class Error implements Log
+class Error implements ILog
 {
 
 

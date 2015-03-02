@@ -13,7 +13,7 @@ namespace chilimatic\lib\view\resolver;
  * Class templatePathStack
  * @package chilimatic\lib\view\resolver
  */
-class templatePathStack
+class TemplatePathStack
 {
     /**
      * @var \SplStack

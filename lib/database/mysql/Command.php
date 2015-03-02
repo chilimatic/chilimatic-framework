@@ -9,7 +9,7 @@ use \chilimatic\lib\config\Config as Config;
  *
  * @package chilimatic\lib\database
  */
-class MySQLCommand
+class Command
 {
 
     /**

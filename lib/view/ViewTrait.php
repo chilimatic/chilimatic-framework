@@ -12,7 +12,7 @@ namespace chilimatic\lib\view;
  * Class Generic
  * @package chilimatic\lib\view
  */
-trait viewTrait
+trait ViewTrait
 {
 
     /**

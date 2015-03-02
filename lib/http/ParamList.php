@@ -16,7 +16,7 @@ namespace chilimatic\lib\http;
  *
  * @package chilimatic\http
  */
-class HTTP_ParamList {
+class ParamList {
 
     /**
      * Accept param

@@ -11,4 +11,4 @@ namespace chilimatic\lib\route\routesystem\noderoute;
  * Class Route_NodeList
  * @package chilimatic\Route
  */
-class NodeCollection extends \chilimatic\lib\node\Node_Collection {}
+class NodeCollection extends \chilimatic\lib\node\Collection {}

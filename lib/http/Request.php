@@ -22,7 +22,7 @@ $this->request .= "\r\n";
 namespace chilimatic\lib\http;
 
 
-class HTTP_Request {
+class Request {
 
     /**
      * default HTTP Protocol
@@ -37,14 +37,14 @@ class HTTP_Request {
     /**
      * default Method
      */
-    const DEFAULT_METHOD = HTTP_Protocol::GET;
+    const DEFAULT_METHOD = Protocol::GET;
 
     /**
      * method for HTTP-Request
      *
      * @var string
      */
-    public $method = HTTP_Protocol::GET;
+    public $method = Protocol::GET;
 
     /**
      * url of the request/response
@@ -124,14 +124,14 @@ class HTTP_Request {
 
         $this->header = '';
 
-        $param_list = new HTTP_ParamList();
+        $param_list = new ParamList();
         foreach ($param as $key => $value) {
             if (property_exists($this, $key)) $this->$key = $value;
             elseif (property_exists($param_list, strtolower(str_replace('-','_', $key)))) {
                 if (is_string($value)) {
-                    $this->header[] = new HTTP_SingleParam($key, $value);
+                    $this->header[] = new SingleParam($key, $value);
                 } elseif(is_array($value)) {
-                    $this->header[] = new HTTP_MultiParam($key, $value);
+                    $this->header[] = new MultiParam($key, $value);
                 }
             }
 
@@ -149,11 +149,11 @@ class HTTP_Request {
      */
     public function __toString(){
         // first line of the request
-        $this->request_line = new HTTP_RequestLine($this->url, $this->method, $this->url_param, $this->protocol);
+        $this->request_line = new RequestLine($this->url, $this->method, $this->url_param, $this->protocol);
         $this->request .= $this->request_line;
 
         if ($this->content) {
-            $this->header[] = new HTTP_SingleParam("Content-Length", strlen($this->content));
+            $this->header[] = new SingleParam("Content-Length", strlen($this->content));
             $this->body = "this->content\r\n";
         }
 

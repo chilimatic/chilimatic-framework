@@ -9,7 +9,7 @@
  */
 namespace chilimatic\lib\database\orm;
 
-class PsqlQueryBuilder extends AbstractQueryBuilder {
+class PgsqlQueryBuilder extends AbstractQueryBuilder {
 
 
     public function __construct() {

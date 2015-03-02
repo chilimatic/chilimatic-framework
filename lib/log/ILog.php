@@ -6,7 +6,7 @@ namespace chilimatic\lib\log;
  *
  * @package chilimatic\log
  */
-Interface Log
+Interface ILog
 {
 
 

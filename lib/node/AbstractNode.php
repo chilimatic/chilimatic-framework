@@ -12,7 +12,7 @@ namespace chilimatic\lib\node;
  * Class Config
  * @package chilimatic\collection
  */
-abstract class Node_Abstract {
+abstract class AbstractNode {
 
     /**
      * main config node
@@ -51,7 +51,7 @@ abstract class Node_Abstract {
     {
         $node = $this->main_node->getByKey($key);
         if (empty($node)) return $this->main_node;
-        $this->main_node->children->removeNode($node);
+        $this->main_node->getChildren()->removeNode($node);
         unset($node);
         return $this->main_node;
     }

@@ -20,7 +20,7 @@ namespace chilimatic\lib\http;
  *
  * @package chilimatic\http
  */
-Class HTTP_MultiParam {
+Class MultiParam {
 
     /**
      * sets the default delimiter based on the specs
@@ -56,7 +56,7 @@ Class HTTP_MultiParam {
      * @param $param
      * @param null $delimiter
      *
-     * @return \chilimatic\http\HTTP_MultiParam
+     * @return \chilimatic\http\MultiParam
      */
     public function __construct($field, $param, $delimiter = null) {
         // if there is no name abort!

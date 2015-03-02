@@ -6,11 +6,11 @@ use chilimatic\lib\exception\Exception_Log;
 use chilimatic\lib\file\File;
 
 /**
- * Class Log_Process
+ * Class Log_Generic
  *
  * @package chilimatic\log
  */
-class Process implements Log
+class Generic implements ILog
 {
 
 
@@ -52,13 +52,17 @@ class Process implements Log
      * @param $file_name string
      * @param $log_path  string
      *
+     * @throws Exception_Log
      */
     public function __construct( $file_name = '' , $log_path = '' )
     {
-
-        $this->_log_path = (string) (!empty($log_path) ? $log_path : Config::get('process_log_path'));
-        $this->_file_name = (string) (!empty($file_name) ? $file_name : 'process_log_' . date(self::LOG_DATE_FILE) . '.log');
-        $this->_log_level = (int) Config::get('process_log_level');
+        if( empty($file_name) ) 
+        {
+            throw new Exception_Log("No filename given for logging!");
+        }
+        $this->_file_name = $file_name;
+        
+        $this->_log_path = (string) (!empty($log_path) ? $log_path : Config::get('logbase'));
         
         if ( strpos($this->_file_name, '.log') === false )
         {
@@ -72,12 +76,11 @@ class Process implements Log
      * write to the log file
      *
      * @param $msg string
-     *
      * @param int $log_level
      *
      * @return bool
      */
-    public function write_log( $msg = '' , $log_level = 0 )
+    public function write_log( $msg = '' , $log_level = 1 )
     {
 
         // log level check
@@ -107,15 +110,8 @@ class Process implements Log
 
             if ( $this->file->append($msg) === false )
             {
-                // some code
+                throw new Exception_Log( (string) "$msg was not appended to file: $this->_log_path/$this->_file_name.");
             }
-            /*
-             * while ( $this->file->append($msg) === false ) { /* // sleep 1
-             * second sleep(1); if ( $start_time + 10 == time() ) { throw new
-             * Exception_Log("Sleep time for file:
-             * $this->_log_path/$this->_file_name exceeded 10
-             * seconds\n[msg]$msg"); break; } }
-             */
         
         }
         catch ( Exception_Log $e )
@@ -127,6 +123,9 @@ class Process implements Log
     }
 
 
+    /**
+     * destructor
+     */
     public function __destruct()
     {
 

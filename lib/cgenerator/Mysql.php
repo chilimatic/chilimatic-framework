@@ -9,7 +9,7 @@ use chilimatic\lib\config\Config;
  * @property mixed _l_table_name
  * @author j
  */
-class Cgenerator_Mysql extends CGenerator
+class Mysql extends CGenerator
 {
 
     private $namespace = "chilimatic\\db\\";

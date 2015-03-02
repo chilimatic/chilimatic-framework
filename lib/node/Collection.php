@@ -13,7 +13,7 @@ namespace chilimatic\lib\node;
  * Class NodeList
  * @package chilimatic\Collection
  */
-class Node_Collection
+class Collection
 {
     /**
      * list of all nodes
@@ -28,7 +28,7 @@ class Node_Collection
     private $idList = null;
 
     /**
-     * @return Node_Collection
+     * @return Collection
      */
     public function __construct(){
         $this->list = [];
