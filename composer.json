@@ -1,7 +1,13 @@
 {
   "name" : "chilimatic/chilimatic",
   "version": "1.0.0",
+  "dist": {
+    "type": "vcs",
+    "url" : "ssh://j@goodball.chilimatic.com/var/cache/git/chilimatic-framework"
+  },
   "autoload": {
-    
+    "psr-4" :{
+        "chilimatic\\lib": "lib"
+    }
   }
 }
