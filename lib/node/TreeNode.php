@@ -33,7 +33,8 @@ class TreeNode extends Node {
     private function searchTree($depth = 0)
     {
         $this->depth = $depth;
-        foreach ($this->getChildren()->getList() as $node) {
+        foreach ($this->getChildren()->getList() as $node)
+        {
             if ($depth > count($this->treePath)) {
                 break;
             }
@@ -68,12 +69,12 @@ class TreeNode extends Node {
 
     /**
      * @param $key
-     * @param $value
+     * @param $data
      * @param string $delimiter
      *
      * @return TreeNode|null
      */
-    public function appendToBranch($key, $value, $delimiter = self::DEFAULT_KEY_DELIMITER) {
+    public function appendToBranch($key, $data, $delimiter = self::DEFAULT_KEY_DELIMITER) {
         $node = $this->findTreeBranch($key, $delimiter);
 
         /**
@@ -88,7 +89,7 @@ class TreeNode extends Node {
          * create just one missing node to a fully established tree with branches
          */
         $key = array_pop(explode((string) $delimiter, trim((string) $key, (string) $delimiter)));
-        $newNode = new self($node, $key , $value, $delimiter);
+        $newNode = new self($node, $key , $data, $delimiter);
         $node->addChild($newNode);
 
         return null;

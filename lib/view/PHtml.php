@@ -7,7 +7,7 @@
  */
 namespace chilimatic\lib\view;
 
-use chilimatic\lib\di\DIFactory;
+use chilimatic\lib\di\Factory;
 
 /**
  * Class PHtml

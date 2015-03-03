@@ -19,7 +19,7 @@ abstract class AbstractNode {
      *
      * @var Node
      */
-    public $main_node = null;
+    public $mainNode = null;
 
     /**
      * constructor
@@ -49,11 +49,11 @@ abstract class AbstractNode {
      */
     public function delete($key = '')
     {
-        $node = $this->main_node->getByKey($key);
-        if (empty($node)) return $this->main_node;
-        $this->main_node->getChildren()->removeNode($node);
+        $node = $this->mainNode->getByKey($key);
+        if (empty($node)) return $this->mainNode;
+        $this->mainNode->getChildren()->removeNode($node);
         unset($node);
-        return $this->main_node;
+        return $this->mainNode;
     }
 
     /**
@@ -64,7 +64,7 @@ abstract class AbstractNode {
      */
     public function get($var)
     {
-        $node = $this->main_node->getByKey($var);
+        $node = $this->mainNode->getByKey($var);
         if (empty($node)) return NULL;
         return $node->getValue();
     }
@@ -73,12 +73,11 @@ abstract class AbstractNode {
      * gets a specific parameter
      *
      * @param $id
-     * @internal param $var
      * @return mixed
      */
     public function getById($id)
     {
-        $node = $this->main_node->getById($id);
+        $node = $this->mainNode->getById($id);
         if (empty($node)) return NULL;
         return $node->getValue();
     }
@@ -96,9 +95,9 @@ abstract class AbstractNode {
         // set the variable
         if ( empty( $id ) ) return $this;
 
-        $node = new Node($this->main_node, $id, $val);
+        $node = new Node($this->mainNode, $id, $val);
 
-        $this->main_node->addChild($node);
+        $this->mainNode->addChild($node);
 
         return $this;
     }
@@ -115,8 +114,8 @@ abstract class AbstractNode {
         // set the variable
         if ( empty($key) ) return $this;
 
-        $node = new Node($this->main_node, $key, $val);
-        $this->main_node->addChild($node);
+        $node = new Node($this->mainNode, $key, $val);
+        $this->mainNode->addChild($node);
 
         return $this;
     }

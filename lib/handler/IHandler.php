@@ -11,12 +11,12 @@ namespace chilimatic\lib\handler;
  * Interface HandlerInterface
  * @package chilimatic\lib\handler
  */
-interface HandlerInterface {
+interface IHandler {
 
     /**
      * @return self
      */
-    public function __construct();
+    public function __construct($param = null);
 
 
     /**

@@ -12,7 +12,7 @@ namespace chilimatic\lib\di;
  *
  * @package chilimatic\lib\di
  */
-class DIFactory
+class Factory
 {
     /**
      * @var self
@@ -70,7 +70,7 @@ class DIFactory
      * @param null $path
      * @param $services
      *
-     * @return DIFactory ::$instance
+     * @return Factory::$instance
      */
     public static function getInstance($path = null, $services = null) {
         if (!self::$instance instanceof self) {

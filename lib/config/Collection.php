@@ -8,10 +8,9 @@
  */
 
 namespace chilimatic\lib\config;
-use chilimatic\lib\node\Node_Collection;
 
 /**
  * Class Config_NodeList
  * @package chilimatic\lib\config
  */
-class ConfigNodeCollection extends Node_Collection {}
+class Collection extends \chilimatic\lib\node\Collection {}

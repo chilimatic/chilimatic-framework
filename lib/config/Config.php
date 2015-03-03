@@ -117,9 +117,9 @@ class Config implements Singelton
     /**
      * save config wrapper
      *
-     * @param ConfigNode $node
+     * @param Node $node
      */
-    public function saveConfig(ConfigNode $node = null)
+    public function saveConfig(Node $node = null)
     {
         self::$instance->saveConfig($node);
     }

@@ -18,21 +18,21 @@ namespace chilimatic\lib\config;
  * Class Config_Generic
  * @package chilimatic\lib\config
  */
-abstract class AbstractConfig implements ConfigInterface {
+abstract class AbstractConfig implements IConfig {
 
     /**
      * comment within the nodes that it's a given parameter
      * through the constructor
      * @var string
      */
-    const INIT_PARAMETER = 'init_param';
+    const INIT_PARAMETER = 'init-param';
 
     /**
      * main config node
      *
-     * @var ConfigNode
+     * @var Node
      */
-    public $main_node = null;
+    public $mainNode = null;
 
     /**
      * constructor
@@ -42,7 +42,7 @@ abstract class AbstractConfig implements ConfigInterface {
     public function __construct($param = null)
     {
         // set the main node on which all other nodes should be appended
-        $this->main_node = new ConfigNode(null, self::MAIN_NODE_KEY, null);
+        $this->mainNode = new Node(null, IConfig::MAIN_NODE_KEY, null);
 
         // add custom parameters
         if (is_array($param) && count($param))
@@ -50,8 +50,8 @@ abstract class AbstractConfig implements ConfigInterface {
             // set the given parameters
             foreach ($param as $key => $value)
             {
-                $node = new ConfigNode($this->main_node, $key, $value, self::INIT_PARAMETER);
-                $this->main_node->addChild($node);
+                $node = new Node($this->mainNode, $key, $value, self::INIT_PARAMETER);
+                $this->mainNode->addChild($node);
             }
         }
 
@@ -73,11 +73,11 @@ abstract class AbstractConfig implements ConfigInterface {
      * @return mixed
      */
     public function delete($key = ''){
-        $node = $this->main_node->getByKey($key);
-        if (empty($node)) return $this->main_node;
-        $this->main_node->getChildren()->removeNode($node);
+        $node = $this->mainNode->getByKey($key);
+        if (empty($node)) return $this->mainNode;
+        $this->mainNode->getChildren()->removeNode($node);
         unset($node);
-        return $this->main_node;
+        return $this->mainNode;
     }
 
     /**
@@ -87,7 +87,7 @@ abstract class AbstractConfig implements ConfigInterface {
      * @return mixed
      */
      public function get($var) {
-         $node = $this->main_node->getByKey($var);
+         $node = $this->mainNode->getByKey($var);
          if (empty($node)) return NULL;
          return $node->getValue();
      }
@@ -100,7 +100,7 @@ abstract class AbstractConfig implements ConfigInterface {
      * @return mixed
      */
     public function getById($id) {
-        $node = $this->main_node->getById($id);
+        $node = $this->mainNode->getById($id);
         if (empty($node)) return NULL;
         return $node->getValue();
     }
@@ -115,11 +115,11 @@ abstract class AbstractConfig implements ConfigInterface {
      */
     public function setById($id, $val){
         // set the variable
-        if ( empty( $id ) ) return $this;
+        if (empty($id)) return $this;
 
-        $node = new ConfigNode($this->main_node, $id, $val);
+        $node = new Node($this->mainNode, $id, $val);
 
-        $this->main_node->addChild($node);
+        $this->mainNode->addChild($node);
 
         return $this;
 
@@ -136,9 +136,9 @@ abstract class AbstractConfig implements ConfigInterface {
         // set the variable
         if ( empty( $key ) ) return $this;
 
-        $node = new ConfigNode($this->main_node, $key, $val);
+        $node = new Node($this->mainNode, $key, $val);
 
-        $this->main_node->addChild($node);
+        $this->mainNode->addChild($node);
 
         return $this;
 
@@ -147,11 +147,11 @@ abstract class AbstractConfig implements ConfigInterface {
     /**
      * saves the specified config
      *
-     * @param ConfigNode $node
+     * @param Node $node
      * @internal param $array ;
      *
      * @return mixed
      */
-    abstract function saveConfig(ConfigNode $node = null);
+    public abstract function saveConfig(Node $node = null);
 
 }

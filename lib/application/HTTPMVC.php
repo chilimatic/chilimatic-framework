@@ -58,7 +58,7 @@ class HTTPMVC {
      * @param \chilimatic\lib\di\DIFactory $di
      * @param AbstractConfig               $config
      */
-    public function __construct(\chilimatic\lib\di\DIFactory $di = null, AbstractConfig $config = null)
+    public function __construct(\chilimatic\lib\di\Factory $di = null, AbstractConfig $config = null)
     {
         if (!$di) return;
 

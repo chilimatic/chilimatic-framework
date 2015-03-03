@@ -7,7 +7,7 @@
  */
 namespace chilimatic\lib\controller;
 
-use chilimatic\lib\di\DIFactory;
+use chilimatic\lib\di\Factory;
 use chilimatic\lib\request\Request;
 
 /**
@@ -30,7 +30,7 @@ abstract class HTTPController {
      *
      */
     public function __construct() {
-        $this->view = DIFactory::getInstance()->get(self::VIEWSERVICE_INDEX);
+        $this->view = Factory::getInstance()->get(self::VIEWSERVICE_INDEX);
     }
 
     /**

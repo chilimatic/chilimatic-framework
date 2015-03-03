@@ -8,12 +8,12 @@
  */
 
 namespace chilimatic\lib\config;
-use chilimatic\lib\node\Node;
+
 /**
- * Class ConfigNode
+ * Class Node
  * @package chilimatic\lib\config
  */
-class ConfigNode extends Node{
+class Node extends \chilimatic\lib\node\Node{
 
     /**
      * Config Node if loaded
@@ -26,12 +26,12 @@ class ConfigNode extends Node{
     /**
      * constructor
      *
-     * @param ConfigNode $parentNode
+     * @param Node $parentNode
      * @param $key
      * @param $value
      * @param string $comment
      */
-    public function __construct(ConfigNode $parentNode = null, $key, $value, $comment = '') {
+    public function __construct(\chilimatic\lib\config\Node $parentNode = null, $key, $value, $comment = '') {
         // get the current node
         $this->parentNode = $parentNode;
         // set the current key identifier
@@ -53,7 +53,7 @@ class ConfigNode extends Node{
         // optional comment
         $this->comment = $comment;
 
-        $this->children = new ConfigNodeCollection();
+        $this->children = new Collection();
     }
 
     /**

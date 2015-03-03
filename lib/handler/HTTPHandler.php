@@ -7,7 +7,7 @@
  */
 
 namespace chilimatic\lib\handler;
-use chilimatic\lib\di\DIFactory;
+use chilimatic\lib\di\Factory;
 
 /**
  * Class HTTPHandler
@@ -21,10 +21,22 @@ class HTTPHandler extends GenericHandler
     const FRAMEWORK_NAMESPACE = 'chilimatic';
 
     /**
-     *
+     * @var string
      */
-    public function __construct()
+    private $includeRoot;
+
+
+    /**
+     * $param['include-root'] is mandatory !
+     *
+     * @param null|array $param
+     */
+    public function __construct($param = null)
     {
+        if (!isset($param['include-root'])) {
+            throw new \LogicException('No Include Root has been passed along');
+        }
+        $this->includeRoot = $param['include-root'];
         $this->init();
     }
 
@@ -50,7 +62,8 @@ class HTTPHandler extends GenericHandler
      *
      * @return string
      */
-    public function getDefaultTemplate($className){
+    public function getDefaultTemplate($className)
+    {
         return INCLUDE_ROOT .
             strtolower(
                 str_replace('\\', '/',

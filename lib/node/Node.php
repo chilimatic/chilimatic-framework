@@ -15,6 +15,9 @@ namespace chilimatic\lib\node;
  */
 class Node
 {
+    /**
+     * @var string
+     */
     const DEFAULT_KEY_DELIMITER = '.';
 
     /**
@@ -32,14 +35,12 @@ class Node
      *
      * @var string
      */
-    protected $id = '';
+    protected $id;
 
     /**
-     * key value is the
-     *
      * @var string
      */
-    protected $key = '';
+    protected $key;
 
     /**
      * Config Node if loaded
@@ -47,7 +48,7 @@ class Node
      *
      * @var mixed
      */
-    protected $value = null;
+    protected $data;
 
     /**
      * @var string
@@ -67,17 +68,16 @@ class Node
      *
      * @param Node $parentNode
      * @param $key
-     * @param $value
+     * @param $data
      * @param string $comment
-     * @internal param $parent_id
      */
-    public function __construct(Node $parentNode = null, $key, $value, $comment = '')
+    public function __construct(Node $parentNode = null, $key, $data, $comment = '')
     {
         // set the parent node
         $this->parentNode = $parentNode;
         // set the current key identifier
         $this->key = $key;
-        $this->value = $value;
+        $this->data = $data;
         // optional comment
         $this->comment = $comment;
         $this->children = new Collection();
@@ -92,19 +92,19 @@ class Node
         if ( empty($this->parentNode->key)) {
             $this->id = $this->key;
         } else {
-            $this->id = "{$this->parentNode->key}".$this->keyDelimiter."{$this->key}";
+            $this->id = "{$this->parentNode->key}$this->keyDelimiter{$this->key}";
         }
         $this->id = str_replace('..', '.', $this->id);
     }
 
     /**
-     * gets the value
+     * gets the Data
      *
      * @return mixed|null
      */
-    public function getValue()
+    public function getData()
     {
-        return $this->value;
+        return $this->data;
     }
 
     /**
@@ -134,14 +134,14 @@ class Node
     }
 
     /**
-     * set the current value
+     * set the current data
      *
-     * @param $value
+     * @param $data
      * @return $this
      */
-    public function setValue($value)
+    public function setData($data)
     {
-        $this->value = $value;
+        $this->data = $data;
         return $this;
     }
 
@@ -241,7 +241,7 @@ class Node
     /**
      * gets the children
      *
-     * @return Node_Collection
+     * @return Collection
      */
     public function getChildren()
     {
@@ -261,6 +261,8 @@ class Node
 
     /**
      * deletes the current node and everything
+     *
+     * @return $this
      */
     public function delete()
     {

@@ -12,7 +12,7 @@ namespace chilimatic\lib\handler;
  * Class GenericHandler
  * @package chilimatic\lib\handler
  */
-abstract class GenericHandler implements HandlerInterface
+abstract class GenericHandler implements IHandler
 {
 
     /**
@@ -33,7 +33,7 @@ abstract class GenericHandler implements HandlerInterface
     /**
      *
      */
-    public function __construct() {
+    public function __construct($param = null) {
         // do something
     }
 

@@ -10,7 +10,7 @@
 
 namespace chilimatic\lib\config\configfile;
 
-use chilimatic\lib\config\ConfigNode;
+use chilimatic\lib\config\Node;
 
 /**
  * Class Parser
@@ -73,11 +73,11 @@ class Parser
 
     /**
      * @param array $currentConfig
-     * @param ConfigNode $configNode
+     * @param Node $Node
      *
-     * @return ConfigNode
+     * @return Node
      */
-    public function parse(array $currentConfig, ConfigNode $configNode)
+    public function parse(array $currentConfig, Node $Node)
     {
         $currentComment = '';
 
@@ -94,13 +94,13 @@ class Parser
 
             if ($match) {
                 // append the child;
-                $configNode->addChild(new ConfigNode($configNode, strtolower(trim($match[0])), trim($match [1]), $currentComment));
+                $Node->addChild(new Node($Node, strtolower(trim($match[0])), trim($match [1]), $currentComment));
                 // clear the comment
                 $currentComment = '';
             }
         }
 
-        return $configNode;
+        return $Node;
     }
 
 }
