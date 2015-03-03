@@ -1,10 +1,16 @@
 {
-  "name" : "chilimatic/framework",
-  "description" : "chilimatic Curiosity Framework",
-  "version": "0.1.0",
-  "license" : "MIT",
-  "require": {
-    "php": ">=5.4"
-  },
-  "minimum-stability" : "dev"
+    "name": "chilimatic/framework",
+    "description": "chilimatic framework of curiosity",
+    "license": "MIT",
+    "type": "library",
+    "version": "0.1.0",
+    "minimum-stability" : "dev",
+    "require": {
+        "php": ">=5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "chilimatic\\lib\\": "lib/"
+        }
+    }
 }
