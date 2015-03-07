@@ -5,9 +5,10 @@
  * Date: 03.03.15
  * Time: 09:14
  */
-//require_once '../autoload.php';
+require_once '../autoload.php';
 
-class NodeTest extends PHPUnit_Framework_TestCase {
+class NodeTest extends PHPUnit_Framework_TestCase
+{
 
     public function testNodeInstances() {
         $this->assertInstanceOf('\Chilimatic\Lib\Node\Node', new \chilimatic\lib\node\Node(null, '',''));
@@ -27,9 +28,46 @@ class NodeTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($myArray, $node->getData());
     }
 
-    public function testGetChildValue() {
+    public function testGetChildValueByKey() {
         $node = new \chilimatic\lib\node\Node(null, '.', '');
         $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 23));
-        $this->assertEquals(23, $node->getByKey('test')->getData());
+        $this->assertEquals(23, $node->getFirstByKey('test')->getData());
     }
+
+    public function testGetChildValueById() {
+        $node = new \chilimatic\lib\node\Node(null, '.', '');
+        $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 23));
+        $this->assertEquals(23, $node->getById('.test')->getData());
+    }
+
+    public function testGetDuplicatedChildValueByKeyBehaviour() {
+        $node = new \chilimatic\lib\node\Node(null, '.', '');
+        $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 23));
+        $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 24));
+        $this->assertEquals(24, $node->getFirstByKey('test')->getData());
+    }
+
+    public function testGetDuplicatedChildValueByIdBehaviour() {
+        $node = new \chilimatic\lib\node\Node(null, '.', '');
+        $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 23));
+        $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 24));
+        $this->assertEquals(23, $node->getById('.test')->getData());
+    }
+
+    public function testGetDuplicatedChildNodeValueByIdBehaviour() {
+        $node = new \chilimatic\lib\node\Node(null, '.', '');
+        $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 23));
+        $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 24));
+        $this->assertEquals(24, $node->getById('.test-0')->getData());
+    }
+
+    public function testGetMultiNestedChildNodeValueByIdKey() {
+        $node = new \chilimatic\lib\node\Node(null, '.', '');
+        $node2 = new \chilimatic\lib\node\Node($node, 'test', 23);
+        $node->addChild($node2);
+        $node3 = new \chilimatic\lib\node\Node($node2, 'test', 24);
+        $node2->addChild($node3);
+        $this->assertEquals(24, $node->getBykey('test')->getData());
+    }
+
 }

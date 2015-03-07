@@ -7,14 +7,14 @@
  */
 
 namespace chilimatic\lib\database;
-use \chilimatic\lib\interfaces\SingeltonString;
+use \chilimatic\lib\interfaces\ISingeltonString;
 
 /**
  * Class Collection
  *
  * @package chilimatic\lib\database
  */
-class Collection implements SingeltonString {
+class Collection implements ISingeltonString {
 
     /**
      * collection of opened database objects

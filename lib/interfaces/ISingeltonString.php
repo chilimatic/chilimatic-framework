@@ -13,7 +13,7 @@ namespace chilimatic\lib\interfaces;
  *
  * @package chilimatic\lib\interfaces
  */
-interface SingeltonString{
+interface ISingeltonString{
     /**
      * standard singelton method returns
      * the instance

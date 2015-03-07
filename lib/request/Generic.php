@@ -9,7 +9,7 @@
 
 namespace chilimatic\lib\request;
 
-use chilimatic\lib\interfaces\SingeltonArray;
+use chilimatic\lib\interfaces\ISingeltonArray;
 use chilimatic\lib\tool\TypeCast;
 use \JsonSerializable;
 
@@ -17,7 +17,7 @@ use \JsonSerializable;
  * Class Generic
  * @package chilimatic\lib\request
  */
-abstract class Generic extends \stdClass implements JsonSerializable, SingeltonArray {
+abstract class Generic extends \stdClass implements JsonSerializable, ISingeltonArray {
 
     /**
      * the default delimiter

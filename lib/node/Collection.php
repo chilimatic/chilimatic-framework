@@ -51,12 +51,43 @@ class Collection
      */
     public function addNode(Node $node)
     {
-        $pos = $node->getId();
+        if (isset($this->idList[$node->getId()])) {
+            $node->setId($this->getNextPossibleIdinContext($node));
+        }
+
         $this->list[$node->getKey()] = $node;
-        $this->idList[$pos] = $node;
+        $this->idList[$node->getId()] = $node;
 
         return $this;
     }
+
+    /**
+     * this method will iterate over all sibl
+     *
+     * @param Node $node
+     *
+     * @return mixed|string
+     * @throws \Exception
+     */
+    public function getNextPossibleIdInContext(Node $node)
+    {
+        if (!isset($this->idList[$node->getId()])) {
+            return $node->getId();
+        }
+
+        $newId = false;
+        $id = $node->getId();
+        for ($i = 0; $newId == false; $i++) {
+            $newId = $id . Node::MULTIPLE_ID_ENTRY_DELIMITER . "$i";
+
+            if ($id > 100) {
+                throw new \Exception('Are you crazy? 1000 child elements with the same ID ?');
+            }
+        }
+
+        return $newId;
+    }
+
 
     /**
      * move the node within the current schema
@@ -81,7 +112,9 @@ class Collection
      */
     public function getById($id)
     {
-        if (isset($this->idList[$id])) return $this->idList[$id];
+        if (isset($this->idList[$id])) {
+            return $this->idList[$id];
+        }
 
         foreach($this->idList as $node)
         {
@@ -93,26 +126,26 @@ class Collection
     }
 
     /**
-     * fuzzy search option based on the key
+     * fuzzy search option based on the id
+     * -> it's a strpos comparison so every hit is returned
      *
      * @param $key
-     * @return array|null
+     * @return \SplObjectStorage|null
      */
-    private function _fuzzySearch($key)
+    public function getByIdFuzzy($key)
     {
         if (!$key) {
             return null;
         }
 
         $hit_array = null;
-        $idList = array_reverse($this->idList);
-        foreach ($idList as $id => $node) {
+        $resultSet = new \SplObjectStorage();
+        foreach ($this->idList as $id => $node) {
             if (strpos($id, $key) !== false) {
-                return $node;
+                $resultSet->attach($node);
             }
         }
-
-        return null;
+        return $resultSet;
     }
 
     /**
@@ -122,21 +155,19 @@ class Collection
      *
      * @return mixed
      */
-    public function getByKey($key)
+    public function getFirstByKey($key)
     {
         if (count($this->list) == 0) return null;
-
-        if (($node = $this->_fuzzySearch($key)) !== null) {
-            return $node;
-        }
-
+        /**
+         * @var Node $node
+         */
         foreach ($this->list as $node) {
             if ($node->getKey() == $key) {
                 return $node;
             }
 
             /**
-             * @var Node $node
+             * @var Node $cnode
              */
             foreach ($node->getChildren()->getList() as $cnode) {
                 if ($cnode->getKey() == $key) {
@@ -150,6 +181,56 @@ class Collection
         }
 
         return null;
+    }
+
+
+    /**
+     * iterates through all the child nodes
+     * returns an object storage in the end
+     *
+     * @param $key
+     *
+     * @return mixed
+     */
+    public function getByKey($key, \Closure $filter = null)
+    {
+        if (count($this->list) == 0) return null;
+
+        $result = new \SplObjectStorage();
+
+        /**
+         * @var Node $node
+         */
+        foreach ($this->list as $node) {
+            if ($node->getKey() == $key && !$result->contains($node)) {
+                $result->attach($node);
+            }
+
+            /**
+             * @var Node $cNode
+             */
+            foreach ($node->getChildren()->getList() as $cNode) {
+                if ($cNode->getKey() == $key && !$result->contains($cNode)) {
+                    $result->attach($cNode);
+                } else {
+                    $rNode = $cNode->getByKey($key);
+                    if (!$result->contains($rNode)) {
+                        $result->attach($rNode);
+                    }
+                }
+            }
+        }
+
+        /**
+         * flag them for the GC
+         */
+        unset ($node, $cNode, $rNode);
+
+        if ($filter) {
+            return $filter($result);
+        }
+
+        return $result;
     }
 
     /**

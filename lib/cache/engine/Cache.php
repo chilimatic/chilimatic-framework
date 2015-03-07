@@ -3,13 +3,13 @@
 namespace chilimatic\lib\cache\engine;
 
 use \chilimatic\lib\exception\Exception_Cache;
-use \chilimatic\lib\interfaces\Singelton;
+use \chilimatic\lib\interfaces\ISingelton;
 
 /**
  * Class Cache
  * @package chilimatic\cache
  */
-class Cache implements Singelton
+class Cache implements ISingelton
 {
 
     /**

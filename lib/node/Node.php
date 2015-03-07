@@ -15,6 +15,20 @@ namespace chilimatic\lib\node;
  */
 class Node
 {
+
+    /**
+     * this is the delimiter for multiple entries
+     * since the ID should be unique so if you insert 2 or more nodes with the same
+     * key in the same child collection
+     *
+     * id1 would be <key>
+     * id2 would be <key>-0
+     * id3 would be <key>-1
+     *
+     * @var string
+     */
+    const MULTIPLE_ID_ENTRY_DELIMITER = '-';
+
     /**
      * @var string
      */
@@ -31,13 +45,16 @@ class Node
 
     /**
      * Id of this node -> needed for the
-     * searching and specific calls
+     * searching it's unique in context
      *
      * @var string
      */
     protected $id;
 
     /**
+     * key identifier -> this is basically the
+     * search word
+     *
      * @var string
      */
     protected $key;
@@ -54,7 +71,6 @@ class Node
      * @var string
      */
     protected $keyDelimiter = self::DEFAULT_KEY_DELIMITER;
-
 
     /**
      * contains the list of children
@@ -81,6 +97,7 @@ class Node
         // optional comment
         $this->comment = $comment;
         $this->children = new Collection();
+        $this->updateId();
     }
 
     /**
@@ -112,13 +129,26 @@ class Node
      * out of the depths in the chain
      *
      * @param $key
-     * @return mixed|null
+     * @param \AbstractFilter $filter
+     *
+     * @return Node|null
      */
-    public function getByKey($key)
+    public function getByKey($key, \AbstractFilter $filter = null)
     {
         if ($this->key == $key ) return $this;
-        return $this->children->getByKey($key);
+        return $this->children->getByKey($key, $filter);
     }
+
+    /**
+     * @param $key
+     *
+     * @return Node|null
+     */
+    public function getFirstByKey($key) {
+        if ($this->key == $key ) return $this;
+        return $this->children->getFirstByKey($key);
+    }
+
 
     /**
      * gets a config variable

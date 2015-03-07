@@ -16,15 +16,15 @@ namespace chilimatic\lib\interfaces;
  *
  * @package chilimatic\lib\interfaces
  */
-interface Singelton {
+interface ISingelton {
 
     /**
      * standard singelton method returns
      * the instance
      *
-     * @param null|\stdClass $param
+     * @param null|mixed $param
      *
      * @return mixed
      */
-    public static function getInstance(\stdClass $param = null);
+    public static function getInstance($param = null);
 }

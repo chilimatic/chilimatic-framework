@@ -9,13 +9,13 @@
 
 namespace chilimatic\lib\config;
 
-use chilimatic\lib\interfaces\Singelton;
+use chilimatic\lib\interfaces\ISingelton;
 
 /**
  * Class Config
  * @package chilimatic\lib\config
  */
-class Config implements Singelton
+class Config implements ISingelton
 {
     /**
      * Default config as a fallback

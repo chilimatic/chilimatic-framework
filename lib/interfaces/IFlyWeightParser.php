@@ -2,17 +2,12 @@
 namespace chilimatic\lib\interfaces;
 
 /**
- * Interface FlyWeightParser
+ * Interface IFlyWeightParser
  *
  * @package chilimatic\lib\interfaces
  */
-interface FlyWeightParser {
-
-    /**
-     * @param string $content
-     */
-    public function __construct($content);
-
+interface IFlyWeightParser
+{
     /**
      * parse method that fills the collection
      * @param string $content
