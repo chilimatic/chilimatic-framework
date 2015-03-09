@@ -30,7 +30,7 @@ class DynamicCallNamePreTransformed implements IFlyWeightParser{
      *
      * @var string
      */
-    private $invalidCharacters = '/|,.:;?`!"§\'%&$\/()=*<>/';
+    private $invalidCharacters = '/[|,.:;?`!"§\'%&$\/()=*<>]/';
 
     /**
      * @var string

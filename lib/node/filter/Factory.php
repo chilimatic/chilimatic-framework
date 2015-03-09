@@ -8,8 +8,6 @@
  * File: FilterFactory.php
  */
 namespace chilimatic\lib\node\filter;
-use chilimatic\lib\interfaces\IFlyWeightParser;
-use chilimatic\lib\transformer\string\DynamicObjectCallName;
 
 /**
  * Class Factory
@@ -19,23 +17,77 @@ use chilimatic\lib\transformer\string\DynamicObjectCallName;
 class Factory
 {
     /**
+     * @var null|\chilimatic\lib\interfaces\IFlyWeightParser
+     */
+    private $parser;
+
+    /**
+     * @var null|\chilimatic\lib\interfaces\IFlyWeightTransformer
+     */
+    private $transformer;
+
+    /**
      * @param $filterName
-     * @param IFlyWeightParser $parser
      *
      * @return null|AbstractFilter
      */
-    public static function make($filterName, IFlyWeightParser $parser = null)
+    public function make($filterName)
     {
-        if ($parser && !$parser->parse($filterName)) {
+        if ($this->parser && !$this->parser->parse($filterName)) {
             return null;
         }
 
-        $transformer = new DynamicObjectCallName();
-        $class = __NAMESPACE__ . '\\' . $transformer->transform($filterName);
+        if ($this->transformer) {
+            $class = __NAMESPACE__ . '\\' . $this->transformer->transform($filterName);
+        } else {
+            $class =  __NAMESPACE__ . '\\' . $filterName;
+        }
+
+        echo $class;
         if (!class_exists($class)) {
             return null;
         }
 
         return new $class();
+    }
+
+    /**
+     * @return \chilimatic\lib\interfaces\IFlyWeightParser|null
+     */
+    public function getParser()
+    {
+        return $this->parser;
+    }
+
+    /**
+     * @param \chilimatic\lib\interfaces\IFlyWeightParser $parser
+     *
+     * @return $this
+     */
+    public function setParser(\chilimatic\lib\interfaces\IFlyWeightParser $parser)
+    {
+        $this->parser = $parser;
+
+        return $this;
+    }
+
+    /**
+     * @return \chilimatic\lib\interfaces\IFlyWeightTransformer|null
+     */
+    public function getTransformer()
+    {
+        return $this->transformer;
+    }
+
+    /**
+     * @param \chilimatic\lib\interfaces\IFlyWeightTransformer $transformer
+     *
+     * @return $this
+     */
+    public function setTransformer(\chilimatic\lib\interfaces\IFlyWeightTransformer $transformer)
+    {
+        $this->transformer = $transformer;
+
+        return $this;
     }
 }

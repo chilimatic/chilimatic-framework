@@ -26,7 +26,6 @@ class DynamicFunctionCallName implements IFlyWeightTransformer
      */
     const TRANSFORM_DELIMITER = '-';
 
-
     /**
      * @param $content
      *
