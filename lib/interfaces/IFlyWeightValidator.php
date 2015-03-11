@@ -6,13 +6,13 @@
  */
 
 namespace chilimatic\lib\route\validator;
-
+namespace chilimatic\lib\interfaces;
 /**
  * Interface ValidatorInterface
  *
  * @package chilimatic\lib\route\validator
  */
-interface ValidatorInterface {
+interface IFlyWeightValidator {
 
     /**
      * abstract validation

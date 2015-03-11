@@ -17,7 +17,6 @@ namespace chilimatic\lib\route\validator;
 class ValidatorNum extends AbstractValidator
 {
 
-
     /**
      * (non-PHPdoc)
      *
