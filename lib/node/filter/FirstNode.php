@@ -2,34 +2,33 @@
 /**
  *
  * @author j
- * Date: 3/7/15
- * Time: 1:38 PM
+ * Date: 3/11/15
+ * Time: 9:07 PM
  *
- * File: lastNode.php
+ * File: FirstNode.php
  */
 namespace chilimatic\lib\node\filter;
 use chilimatic\lib\comperator\traits\StringValueBiggerThan;
 
 /**
- * returns the "deepest nested Node"
- *
  * Class LastNode
  *
  * @package chilimatic\lib\node\filter
  */
-class LastNode extends AbstractFilter
+class FirstNode extends AbstractFilter
 {
+
     use StringValueBiggerThan;
 
     /**
      * @param \SplObjectStorage $param
      *
-     * @return \SplObjectStorage
+     * @return mixed
      */
     function filter($param = null)
     {
         if (!$param) {
-            return new \SplObjectStorage();
+            return null;
         }
 
         if ($param->count() === 1){
@@ -39,7 +38,7 @@ class LastNode extends AbstractFilter
         $idValue = $returnNode = null;
         $returnCollection = new \SplObjectStorage();
         foreach($param as $node) {
-            if (!$idValue || $this->compare($node->getId(), $idValue)) {
+            if (!$idValue || $this->compare($idValue, $node->getId())) {
                 $idValue = $node->getId();
                 $returnNode = $node;
             }
@@ -48,5 +47,4 @@ class LastNode extends AbstractFilter
         $returnCollection->attach($returnNode);
         return $returnCollection;
     }
-
 }

@@ -32,7 +32,8 @@ class FactoryStatic {
      *
      * @return null|AbstractFilter
      */
-    public static function make($filterName) {
+    public static function make($filterName)
+    {
         if (self::$parser && !self::$parser->parse($filterName)) {
             return null;
         }

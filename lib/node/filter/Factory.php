@@ -43,7 +43,6 @@ class Factory
             $class =  __NAMESPACE__ . '\\' . $filterName;
         }
 
-        echo $class;
         if (!class_exists($class)) {
             return null;
         }

@@ -109,7 +109,7 @@ class Node
         if ( empty($this->parentNode->key)) {
             $this->id = $this->key;
         } else {
-            $this->id = "{$this->parentNode->key}$this->keyDelimiter{$this->key}";
+            $this->id = "{$this->parentNode->id}$this->keyDelimiter{$this->key}";
         }
         $this->id = str_replace('..', '.', $this->id);
     }
@@ -124,18 +124,21 @@ class Node
         return $this->data;
     }
 
+    public function __toString(){
+        return json_encode($this->getData());
+    }
+
     /**
      * gets a config variable
      * out of the depths in the chain
      *
      * @param $key
-     * @param \AbstractFilter $filter
+     * @param \chilimatic\lib\node\filter\AbstractFilter $filter
      *
-     * @return Node|null
+     * @return \SplObjectStorage
      */
-    public function getByKey($key, \AbstractFilter $filter = null)
+    public function getByKey($key, \chilimatic\lib\node\filter\AbstractFilter $filter = null)
     {
-        if ($this->key == $key ) return $this;
         return $this->children->getByKey($key, $filter);
     }
 
@@ -162,6 +165,7 @@ class Node
         if ($this->id == $id ) return $this;
         return $this->children->getById($id);
     }
+
 
     /**
      * set the current data

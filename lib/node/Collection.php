@@ -192,11 +192,12 @@ class Collection
      *
      * @return mixed
      */
-    public function getByKey($key, \Closure $filter = null)
+    public function getByKey($key, \chilimatic\lib\node\filter\AbstractFilter $filter = null)
     {
-        if (count($this->list) == 0) return null;
 
         $result = new \SplObjectStorage();
+
+        if (count($this->list) == 0) return $result;
 
         /**
          * @var Node $node
@@ -206,27 +207,20 @@ class Collection
                 $result->attach($node);
             }
 
-            /**
-             * @var Node $cNode
-             */
-            foreach ($node->getChildren()->getList() as $cNode) {
-                if ($cNode->getKey() == $key && !$result->contains($cNode)) {
-                    $result->attach($cNode);
-                } else {
-                    $rNode = $cNode->getByKey($key);
-                    if (!$result->contains($rNode)) {
-                        $result->attach($rNode);
+
+            if ($subSet = $node->getByKey($key, $filter))
+            {
+                if (!$subSet->count()) continue;
+
+                foreach ($subSet as $cNode) {
+                    if (!$result->contains($cNode)) {
+                        $result->attach($cNode);
                     }
                 }
             }
         }
 
-        /**
-         * flag them for the GC
-         */
-        unset ($node, $cNode, $rNode);
-
-        if ($filter) {
+        if ($result->count() && $filter) {
             return $filter($result);
         }
 

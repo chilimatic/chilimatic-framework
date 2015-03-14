@@ -9,6 +9,32 @@ require_once '../autoload.php';
 
 class NodeTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \chilimatic\lib\node\Node
+     */
+    protected $node;
+
+
+    /**
+     *
+     */
+    public function initNodes() {
+        $this->node = new \chilimatic\lib\node\Node(null, '.', '');
+        for ($i = 0; $i < 10; $i++) {
+            $node2 = new \chilimatic\lib\node\Node($this->node, 'test-'.$i, $i);
+            for ($x = 0; $x < 11; $x++) {
+                $node3 = new \chilimatic\lib\node\Node($node2, 'test-'.$x, $x+4);
+                for ($y = 0; $y < 5; $y++) {
+                    $node4 = new \chilimatic\lib\node\Node($node3, 'test-'.$y, $y+10);
+                    $node3->addChild($node4);
+                }
+                $node2->addChild($node3);
+
+            }
+            $this->node->addChild($node2);
+        }
+    }
+
 
     public function testNodeInstances() {
         $this->assertInstanceOf('\Chilimatic\Lib\Node\Node', new \chilimatic\lib\node\Node(null, '',''));
@@ -61,13 +87,25 @@ class NodeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(24, $node->getById('.test-0')->getData());
     }
 
-    public function testGetMultiNestedChildNodeValueByIdKey() {
-        $node = new \chilimatic\lib\node\Node(null, '.', '');
-        $node2 = new \chilimatic\lib\node\Node($node, 'test', 23);
-        $node->addChild($node2);
-        $node3 = new \chilimatic\lib\node\Node($node2, 'test', 24);
-        $node2->addChild($node3);
-        $this->assertEquals(24, $node->getBykey('test')->getData());
+    public function testGetMultiResultByKey() {
+        $this->initNodes();
+        $this->assertInstanceOf('\SplObjectStorage', $this->node->getByKey('test-1'));
+    }
+
+    public function testGetMultiResultByKeyPreFiltered()
+    {
+        $filterFactory = new \chilimatic\lib\node\filter\Factory();
+        $filterFactory->setParser(new chilimatic\lib\parser\DynamicCallNamePreTransformed());
+        $filterFactory->setTransformer(new chilimatic\lib\transformer\string\DynamicObjectCallName());
+
+        $this->initNodes();
+        $resultSet = $this->node->getByKey('test-1', $filterFactory->make('last-node'));
+        $resultSet->rewind();
+        $result = $resultSet->current();
+
+        $this->assertInstanceOf('\SplObjectStorage', $resultSet);
+        $this->assertEquals(".test-9.test-10.test-1", $result->getId());
+        $this->assertCount(1, $resultSet);
     }
 
 }
