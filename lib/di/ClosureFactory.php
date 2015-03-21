@@ -12,7 +12,7 @@ namespace chilimatic\lib\di;
  *
  * @package chilimatic\lib\di
  */
-class Factory
+class ClosureFactory
 {
     /**
      * @var self
@@ -70,7 +70,7 @@ class Factory
      * @param null $path
      * @param $services
      *
-     * @return Factory::$instance
+     * @return self::$instance
      */
     public static function getInstance($path = null, $services = null) {
         if (!self::$instance instanceof self) {
@@ -82,12 +82,22 @@ class Factory
 
     /**
      * @param string $key
-     * @param $service
+     * @param \Closure $service
      *
      * @return $this
      */
     public function set($key, $service) {
         $this->serviceCollection[$key] = $service;
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return $this
+     */
+    public function remove($key) {
+        unset($this->serviceCollection[$key]);
         return $this;
     }
 
@@ -108,7 +118,8 @@ class Factory
      * @return mixed
      * @throws \BadFunctionCallException
      */
-    public function get($key, $setting = [], $singelton = false) {
+    public function get($key, $setting = [], $singelton = false)
+    {
         if (!isset($this->serviceCollection[$key])) {
             throw new \BadFunctionCallException($key . 'function is missing');
         }
@@ -141,7 +152,8 @@ class Factory
      * @param string $key
      * @return mixed|null
      */
-    public function getClosure($key) {
+    public function getClosure($key)
+    {
         if (!isset($this->serviceCollection[$key])) return null;
 
         return $this->serviceCollection[$key];

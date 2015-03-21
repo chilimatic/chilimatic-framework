@@ -2,7 +2,7 @@
 namespace chilimatic\lib\database;
 
 
-use \chilimatic\lib\exception\Exception_Database;
+use \chilimatic\lib\exception\DatabaseException;
 
 /**
  * Class MysqlStatistic
@@ -62,7 +62,7 @@ class MysqlStatistic extends Mysql
     /**
      * get processlist
      * 
-     * @throws Exception_Database
+     * @throws DatabaseException
      * @return mixed:
      */
     public function get_processlist()
@@ -72,7 +72,7 @@ class MysqlStatistic extends Mysql
         {
             if ( empty($this->db) )
             {
-                throw new Exception_Database(__METHOD__ . 'No Database Object has been given', Mysql::ERR_NO_CREDENTIALS, Mysql::SEVERITY_LOG, __FILE__, __LINE__);
+                throw new DatabaseException(__METHOD__ . 'No Database Object has been given', Mysql::ERR_NO_CREDENTIALS, Mysql::SEVERITY_LOG, __FILE__, __LINE__);
             }
             
             $sql = (string) "SHOW FULL PROCESSLIST";
@@ -82,7 +82,7 @@ class MysqlStatistic extends Mysql
             
             return $this->db->fetch_object_list($res);
         }
-        catch ( Exception_Database $e )
+        catch ( DatabaseException $e )
         {
             throw $e;
         }
@@ -91,7 +91,7 @@ class MysqlStatistic extends Mysql
     /**
      * show table listing
      * 
-     * @throws Exception_Database
+     * @throws DatabaseException
      * 
      * @return array:
      */
@@ -102,7 +102,7 @@ class MysqlStatistic extends Mysql
         {
             if ( empty($this->db) )
             {
-                throw new Exception_Database(__METHOD__ . 'No Database Object has been given', Mysql::ERR_NO_CREDENTIALS, Mysql::SEVERITY_LOG, __FILE__, __LINE__);
+                throw new DatabaseException(__METHOD__ . 'No Database Object has been given', Mysql::ERR_NO_CREDENTIALS, Mysql::SEVERITY_LOG, __FILE__, __LINE__);
             }
             
             $sql = (string) "SELECT * FROM `information_schema`.`tables`";
@@ -113,7 +113,7 @@ class MysqlStatistic extends Mysql
             return $this->db->fetch_object_list($res);
         
         }
-        catch ( Exception_Database $e )
+        catch ( DatabaseException $e )
         {
             throw $e;
         }

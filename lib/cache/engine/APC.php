@@ -3,7 +3,7 @@
 namespace chilimatic\lib\cache\engine;
 
 use chilimatic\lib\base\Error;
-use \chilimatic\lib\exception\Exception_Cache;
+use chilimatic\lib\exception\CacheException;
 
 /**
  * Class Cache_APC
@@ -51,7 +51,7 @@ class APC implements CacheInterface {
 
     /**
      * @param \stdClass $param
-     * @throws \chilimatic\lib\exception\Exception_Cache
+     * @throws CacheException
      */
     public function __construct(\stdClass $param = null) {
         
@@ -59,7 +59,7 @@ class APC implements CacheInterface {
          * check if the chache does exists
          */
         if (! function_exists ( 'apc_cache_info' )) {
-            throw new Exception_Cache ( 'APC Cache not installed', Cache::ERROR_CACHE_MISSING, Error::SEVERITY_CRIT, __FILE__, __LINE__ );
+            throw new CacheException ( 'APC Cache not installed', Cache::ERROR_CACHE_MISSING, Error::SEVERITY_CRIT, __FILE__, __LINE__ );
         }
 
         // if we can establish the connection

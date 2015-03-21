@@ -2,7 +2,7 @@
 
 namespace chilimatic\lib\cache\engine;
 
-use \chilimatic\lib\exception\Exception_Cache;
+use chilimatic\lib\exception\CacheException;
 use \chilimatic\lib\interfaces\ISingelton;
 
 /**
@@ -54,7 +54,7 @@ class Cache implements ISingelton
      * @param null $name
      * @param array $credentials
      *
-     * @throws \chilimatic\lib\exception\Exception_Cache|\Exception
+     * @throws CacheException|\Exception
      */
     private function __construct( $name = null, $credentials = array() )
     {
@@ -63,7 +63,7 @@ class Cache implements ISingelton
             $this->cacheName = get_class($this->cache);
             $this->connected = $this->cache->isConnected();
             $this->credentials = $credentials;
-        } catch ( Exception_Cache $e ) {
+        } catch ( CacheException $e ) {
             throw $e;
         }
     }

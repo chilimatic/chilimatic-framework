@@ -86,7 +86,12 @@ abstract class AbstractConfig implements IConfig {
      * @param $var
      * @return mixed
      */
-     public function get($var) {
+     public function get($var)
+     {
+         if (!$this->mainNode) {
+             return null;
+         }
+
          $node = $this->mainNode->getByKey($var);
          if (empty($node)) return NULL;
          return $node->getValue();

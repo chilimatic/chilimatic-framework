@@ -74,41 +74,7 @@ class Tool
     }
 
 
-    /**
-     * generates a random int
-     *
-     * @param int|number $length
-     *
-     * @return number
-     */
-    public static function random_int( $length = 10) 
-    {
-    	$time = time();
-    	
-    	mt_srand($time);
-    	$tmp = mt_rand();
-    	
-    	return (int) substr(number_format($tmp ,0,'',''),0,$length);    	
-    }
-    
-    /**
-     * function copied from
-     * http://stackoverflow.com/questions/4356289/php-random-string-generator
-     *
-     * @param $length int            
-     * @return string
-     */
-    public static function random_string( $length = 10 )
-    {
 
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $randomString = '';
-        for ( $i = 0 ; $i < $length ; $i++ )
-        {
-            $randomString .= $characters[rand(0, strlen($characters) - 1)];
-        }
-        return $randomString;
-    }
 
 
     /**

@@ -47,9 +47,9 @@ class Config implements ISingelton
      *
      * @return AbstractConfig
      */
-    public static function getInstance(\stdClass $param = null)
+    public static function getInstance($param = null)
     {
-        $configname = (string)  __NAMESPACE__ . (string) '\\Config' . (string) (!empty($param->type) ?  $param->type : self::DEFAULT_CONFIG_TYPE);
+        $configname = (string) __NAMESPACE__ . '\\' . (string) (!empty($param->type) ?  $param->type : self::DEFAULT_CONFIG_TYPE);
 
         if ( self::$instance === null)
         {

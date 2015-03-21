@@ -6,7 +6,7 @@ use chilimatic\lib\database\CouchDB;
 use chilimatic\lib\database\Mongo;
 use chilimatic\lib\database\mysql\Mysql;
 use chilimatic\lib\database\mysql\MysqlConnection;
-use chilimatic\lib\exception\Exception_Database;
+use chilimatic\lib\exception\DatabaseException;
 
 /**
  * Generic trait to initialize the database object if it's needed
@@ -43,7 +43,7 @@ trait Database
      *
      *
      * @param null $param
-     * @throws \chilimatic\lib\exception\Exception_Database|\Exception
+     * @throws \chilimatic\lib\exception\DatabaseException|\Exception
      * @return boolean
      */
     protected function __init_database($param = null)
@@ -90,7 +90,7 @@ trait Database
             }
 
         }
-        catch ( Exception_Database $e )
+        catch ( DatabaseException $e )
         {
             throw $e;
         }

@@ -5,16 +5,20 @@ namespace chilimatic\lib\cache\engine;
 
 use chilimatic\lib\base\Error;
 use chilimatic\lib\cache\engine\shmop\Entry;
-use \chilimatic\lib\exception\Exception_Cache;
-use chilimatic\lib\Tool\Tool;
-
+use chilimatic\lib\exception\CacheException;
+use chilimatic\lib\traits\RandomDataGenerator;
 
 /**
- * Class Cache_Shmop
- * @package chilimatic\cache
+ * Class Shmop
+ *
+ * @package chilimatic\lib\cache\engine
  */
 class Shmop implements CacheInterface
 {
+    /**
+     * random number generator
+     */
+    use RandomDataGenerator;
 
     /**
      * cache trait to reduce code duplication
@@ -131,7 +135,7 @@ class Shmop implements CacheInterface
     /**
      * initializes the cache
      *
-     * @throws Exception_Cache
+     * @throws CacheException
      *
      * @return bool
      */
@@ -148,7 +152,7 @@ class Shmop implements CacheInterface
             $this->setConnected(true);
 
         }
-        catch (Exception_Cache $e)
+        catch (CacheException $e)
         {
             throw $e;
         }
@@ -160,7 +164,7 @@ class Shmop implements CacheInterface
     {
         if ( !function_exists( 'shmop_open' ) )
         {
-            throw new Exception_Cache( _('Shared memory functions are not available'), self::ERROR_CACHE_MISSING, Error::SEVERITY_CRIT, __FILE__, __LINE__ );
+            throw new CacheException( _('Shared memory functions are not available'), self::ERROR_CACHE_MISSING, Error::SEVERITY_CRIT, __FILE__, __LINE__ );
         }
 
         $id = shmop_open( self::INDEX_LIST, $this->indexMode, self::DEFAULT_PERMISSIONS, self::INDEX_SIZE );
@@ -253,20 +257,6 @@ class Shmop implements CacheInterface
     }
 
 
-
-    /**
-     * wrapper for a random int
-     *
-     * @return number
-     */
-    private function _generateRandomId()
-    {
-
-        return Tool::random_int();
-    }
-
-
-
     /**
      * Sets a cache entry by key
      *
@@ -294,7 +284,7 @@ class Shmop implements CacheInterface
         $entry = new Entry();
 
         $entry->setKeyName($key);
-        $entry->setKey($this->_generateRandomId());
+        $entry->setKey($this->getRandomInt());
 
         $entry->setPermission(self::DEFAULT_PERMISSIONS);
         $entry->setMode(self::CREATE_MOD);

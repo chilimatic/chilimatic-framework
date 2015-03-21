@@ -34,9 +34,12 @@ function main_loader( $class_name )
     $class_name = str_replace('\\', '/', $class_name);
     $class_name = preg_replace('|chilimatic/|', '/', $class_name);
     $file_name = $class_name . '.php';
+
+
+
     unset($part);
 
-    $base_path[] = (string) INCLUDE_ROOT . (string) "$file_name";
+    $base_path[] = realpath(INCLUDE_ROOT . "/$file_name");
     unset($class_name, $file_name, $folder_name);
 
     while ($class = array_pop($base_path)) {

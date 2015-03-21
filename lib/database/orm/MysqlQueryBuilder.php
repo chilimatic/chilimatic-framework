@@ -10,6 +10,7 @@
 
 namespace chilimatic\lib\database\orm;
 use chilimatic\lib\cache\engine\CacheInterface;
+use chilimatic\lib\parser\ORMParser;
 
 /**
  * Class MysqlQueryBuilder
@@ -57,7 +58,7 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
     private $model;
 
     /**
-     * @var \chilimatic\lib\cache\shmop
+     * @var \chilimatic\lib\cache\engine\shmop
      */
     private $cache;
 
@@ -67,9 +68,18 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
     private $param;
 
     /**
-     * init cache connection
+     * @var ORMParser
      */
-    public function __construct(CacheInterface $cache = null){
+    private $parser;
+
+    /**
+     * init cache connection
+     *
+     * @param CacheInterface $cache
+     */
+    public function __construct(CacheInterface $cache = null)
+    {
+        $this->parser = new ORMParser();
         $this->relation = new \SplFixedArray();
     }
 
@@ -79,7 +89,7 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
      *
      * @return string
      */
-    public function generateForModel(AbstractModel $model, $param)
+    public function generateSelectForModel(AbstractModel $model, $param)
     {
         $this->reflection = new \ReflectionClass($model);
         $this->model = $model;
@@ -87,14 +97,16 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
         $this->extractRelations();
         $this->checkRelations();
 
-        return $this->_generateQuery();
+        return $this->_generateSelect();
     }
 
     /**
      *
      */
-    public function getTableName(){
-        $hd = $this->parseORMAttribute($this->reflection->getDocComment());
+    public function getTableName()
+    {
+        $hd = $this->parser->parse($this->reflection->getDocComment());
+
         if (!empty($hd[0])) {
             $this->$hd[0] = $hd[1];
             return;
@@ -123,8 +135,8 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
     /**
      * @return string
      */
-    public function _generateQuery(){
-        return "SELECT * FROM $this->table ". $this->generateCondition();
+    public function _generateSelect(){
+        return "SELECT " . ($this->propertyList ? implode(',', $this->propertyList) : '*') . " FROM $this->table ". $this->generateCondition();
     }
 
     /**
@@ -152,8 +164,6 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
     public function extractRelations()
     {
         $this->relation = new \SplFixedArray();
-
-
         $this->getTableName();
 
         $this->propertyList = $this->reflection->getDefaultProperties();
@@ -164,13 +174,14 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
         }
 
         foreach ($this->propertyList as $name => $value) {
-            $d = $this->parseORMAttribute($this->reflection->getProperty($name)->getDocComment());
+            $d = $this->parser->parse($this->reflection->getProperty($name)->getDocComment());
             if ( !$d ) {
                 continue;
             }
             $this->relation->setSize($this->relation->getSize() + 1);
             $this->relation[$this->relation->count()-1] = $d;
         }
+
         if ($this->cache){
             $this->cache->set(md5(json_encode($this->propertyList)), $this->relation, 300);
         }
@@ -179,18 +190,36 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
     }
 
     /**
-     * @param string $doc
+     * @param AbstractModel $model
      *
-     * @return \SplFixedArray|void
+     * @return mixed
      */
-    private function parseORMAttribute($doc) {
-        if (strpos($doc, '@ORM') === false) {
-            return;
-        }
-        if (preg_match('/@ORM[\s]*(\w*)=(.*);/', $doc, $matches)) {
-            return (new \SplFixedArray(2))->fromArray([$matches[1],$matches[2]]);
-        }
+    public function generateInsertForModel(AbstractModel $model)
+    {
+        // TODO: Implement generateInsertForModel() method.
     }
+
+
+    /**
+     * @param AbstractModel $model
+     *
+     * @return mixed
+     */
+    public function generateUpdateForModel(AbstractModel $model)
+    {
+        // TODO: Implement generateUpdateForModel() method.
+    }
+
+    /**
+     * @param AbstractModel $model
+     *
+     * @return mixed
+     */
+    public function generateDeleteForModel(AbstractModel $model)
+    {
+        // TODO: Implement generateDeleteForModel() method.
+    }
+
 
     /**
      * @return \ReflectionClass

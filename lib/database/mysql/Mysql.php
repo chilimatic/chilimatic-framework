@@ -14,7 +14,7 @@ namespace chilimatic\lib\database\mysql;
 use chilimatic\lib\database\AbstractDatabase;
 use chilimatic\lib\config\Config;
 use chilimatic\lib\database\AbstractConnection;
-use chilimatic\lib\exception\Exception_Database;
+use chilimatic\lib\exception\DatabaseException;
 
 /**
  * Class Mysql
@@ -299,7 +299,7 @@ class Mysql extends AbstractDatabase
      * @param AbstractConnection $masterConnection
      * @param AbstractConnection $slaveConnection
      *
-     * @throws Exception_Database
+     * @throws DatabaseException
      * @throws \Exception
      */
     public function __construct( AbstractConnection $masterConnection, AbstractConnection $slaveConnection = null)
@@ -356,7 +356,7 @@ class Mysql extends AbstractDatabase
      *
      * @param MysqlConnection $connection
      *
-     * @throws \chilimatic\lib\exception\Exception_Database|\Exception
+     * @throws \chilimatic\lib\exception\DatabaseException|\Exception
      *
      * @return bool
      */
@@ -365,7 +365,7 @@ class Mysql extends AbstractDatabase
         try
         {
             if ( !$connection->isValid() ) {
-                throw new Exception_Database(__METHOD__ . _(sprintf(" One or More missing Parameters \nhost:%s\nusername:\n%s\npassword:%s"), $connection->getHost(), $connection->getUsername(), $connection->getPassword()), self::ERR_NO_CREDENTIALS, self::SEVERITY_LOG, __FILE__, __LINE__);
+                throw new DatabaseException(__METHOD__ . _(sprintf(" One or More missing Parameters \nhost:%s\nusername:\n%s\npassword:%s"), $connection->getHost(), $connection->getUsername(), $connection->getPassword()), self::ERR_NO_CREDENTIALS, self::SEVERITY_LOG, __FILE__, __LINE__);
             }
             // because mariadb has a completely new header setting
             $db = @new \PDO($connection->getPDOConnectionString(), $connection->getUsername(), $connection->getPassword());
@@ -377,7 +377,7 @@ class Mysql extends AbstractDatabase
             
             // if no connection to master and slave is possible
             if (!$connection->isConnected()) {
-                throw new Exception_Database(__METHOD__ . "\nConnection failure no ressource given", self::NO_RESSOURCE, self::SEVERITY_LOG, __FILE__, __LINE__);
+                throw new DatabaseException(__METHOD__ . "\nConnection failure no ressource given", self::NO_RESSOURCE, self::SEVERITY_LOG, __FILE__, __LINE__);
             }
 
             // get the mysql (only master) server details
@@ -387,7 +387,7 @@ class Mysql extends AbstractDatabase
             
             // sets the charset based on the client_encoding
             $this->setCharset((!empty($this->db_detail) ? $this->db_detail->character_set_database : MysqlConnection::STANDARD_CHARSET) , $connection->getDb());
-        } catch ( Exception_Database $ed ) {
+        } catch ( DatabaseException $ed ) {
             throw $ed;
         }
 
@@ -414,7 +414,7 @@ class Mysql extends AbstractDatabase
      * @param \PDOStatement $res
      * @param int $col
      *
-     * @throws Exception_Database|\Exception
+     * @throws DatabaseException|\Exception
      *
      * @return array
      */
@@ -427,13 +427,13 @@ class Mysql extends AbstractDatabase
         $result = array();
         try {
             if ( !$res ) {
-                throw new Exception_Database(__METHOD__ . " No ressource has been given", self::NO_RESSOURCE, self::SEVERITY_LOG, __FILE__, __LINE__);
+                throw new DatabaseException(__METHOD__ . " No ressource has been given", self::NO_RESSOURCE, self::SEVERITY_LOG, __FILE__, __LINE__);
             }
             
             while ($row = $res->fetch(\PDO::FETCH_ASSOC)) {
                 $result[] = $row[$col];
             }
-        } catch ( Exception_Database $e ) {
+        } catch ( DatabaseException $e ) {
             throw $e;
         }
         
@@ -446,7 +446,7 @@ class Mysql extends AbstractDatabase
      *
      * @param \PDOStatement $res
      *
-     * @throws Exception_Database|\Exception
+     * @throws DatabaseException|\Exception
      * @return bool array
      */
     public function fetchAssoc(\PDOStatement $res )
@@ -462,7 +462,7 @@ class Mysql extends AbstractDatabase
      * @param \PDOStatement $res
      * @param $assign_by string
      *
-     * @throws Exception_Database|\Exception
+     * @throws DatabaseException|\Exception
      *
      * @return array bool
      */
@@ -493,7 +493,7 @@ class Mysql extends AbstractDatabase
                     $result[] = (array) $row;
                 }
             }
-        } catch ( Exception_Database $e ) {
+        } catch ( DatabaseException $e ) {
             throw $e;
         }
         
@@ -506,7 +506,7 @@ class Mysql extends AbstractDatabase
      *
      * @param \PDOStatement $res
      *
-     * @throws \chilimatic\lib\exception\Exception_Database
+     * @throws \chilimatic\lib\exception\DatabaseException
      * @throws \Exception
      *
      * @return \SplFixedArray
@@ -518,7 +518,7 @@ class Mysql extends AbstractDatabase
             while ( $row = $res->fetch(\PDO::FETCH_NUM)) {
                 $result[] = (array) $row;
             }
-        } catch ( Exception_Database $e ) {
+        } catch ( DatabaseException $e ) {
             throw $e;
         }
 
@@ -531,7 +531,7 @@ class Mysql extends AbstractDatabase
      *
      * @param \PDOStatement $res
      *
-     * @throws Exception_Database|\Exception
+     * @throws DatabaseException|\Exception
      * @return bool object
      */
     public function fetchObject(\PDOStatement $res)
@@ -548,7 +548,7 @@ class Mysql extends AbstractDatabase
      * @param \PDOStatement $res
      * @param string $assign_by
      *
-     * @throws Exception_Database|\Exception
+     * @throws DatabaseException|\Exception
      * @return array bool
      */
     public function fetchObjectList(\PDOStatement $res , $assign_by = null )
@@ -579,7 +579,7 @@ class Mysql extends AbstractDatabase
                     $result[] = (object) $row;
                 }
             }
-        } catch ( Exception_Database $e ) {
+        } catch ( DatabaseException $e ) {
             throw $e;
         }
         
@@ -606,7 +606,7 @@ class Mysql extends AbstractDatabase
      *
      * @param \mysqli_result $res
      *
-     * @throws \chilimatic\lib\exception\Exception_Database|\Exception
+     * @throws \chilimatic\lib\exception\DatabaseException|\Exception
      * @return bool
      */
     public function free( $res )
@@ -619,7 +619,7 @@ class Mysql extends AbstractDatabase
      *
      * @param string $query
      * @return \PDOStatement
-     * @throws \chilimatic\lib\exception\Exception_Database
+     * @throws \chilimatic\lib\exception\DatabaseException
      * @throws \Exception
      */
     public function prepare($query = ''){
@@ -627,10 +627,10 @@ class Mysql extends AbstractDatabase
             if (empty($query)) return false;
 
             if (empty($this->db)) {
-                throw new Exception_Database(__METHOD__ . " No Database Connection opened", self::NO_RESSOURCE, self::SEVERITY_DEBUG, __FILE__, __LINE__);
+                throw new DatabaseException(__METHOD__ . " No Database Connection opened", self::NO_RESSOURCE, self::SEVERITY_DEBUG, __FILE__, __LINE__);
             }
             return $this->db->getDb()->prepare($query);
-        } catch (Exception_Database $e) {
+        } catch (DatabaseException $e) {
             throw $e;
         }
     }
@@ -688,7 +688,7 @@ class Mysql extends AbstractDatabase
      * sends the query / update / insert statement to the database and returns
      * a resource of the table
      *
-     * @throws Exception_Database
+     * @throws DatabaseException
      *
      * @param $query string            
      *
@@ -711,7 +711,7 @@ class Mysql extends AbstractDatabase
         // insert anything
         if ( $this->slaveConnection === $this->getDb() && stripos(trim($query), 'SELECT') !== 0 )
         {
-            throw new Exception_Database(__METHOD__ . ' no Select on slave, abort !!', self::ERR_CONN, self::SEVERITY_LOG, __FILE__, __LINE__);
+            throw new DatabaseException(__METHOD__ . ' no Select on slave, abort !!', self::ERR_CONN, self::SEVERITY_LOG, __FILE__, __LINE__);
         }
         
         // tries execute the query and fetches the result
@@ -725,10 +725,10 @@ class Mysql extends AbstractDatabase
             {
                 $this->error = $db->getDb()->errorCode();
                 $this->errorno = $db->getDb()->errorCode();
-                throw new Exception_Database(__METHOD__ . "\nsql: $this->lastSql\nsql_error:$this->error\nsql_errorno:$this->errorno", self::ERR_EXEC, self::SEVERITY_LOG, __FILE__, __LINE__);
+                throw new DatabaseException(__METHOD__ . "\nsql: $this->lastSql\nsql_error:$this->error\nsql_errorno:$this->errorno", self::ERR_EXEC, self::SEVERITY_LOG, __FILE__, __LINE__);
             }
         }
-        catch ( Exception_Database $e )
+        catch ( DatabaseException $e )
         {
             if ( Config::get('use_exception') !== true ) return false;
             throw $e;
@@ -759,7 +759,7 @@ class Mysql extends AbstractDatabase
      * @param \PDO $db
      * @param string $dbname
      *
-     * @throws Exception_Database
+     * @throws DatabaseException
      *
      * @return bool
      */
@@ -770,9 +770,9 @@ class Mysql extends AbstractDatabase
             if ( !$db->query("USE `$dbname`") ) {
                 $this->error = (string) $db->errorInfo();
                 $this->errorno = (int) $db->errorCode();
-                throw new Exception_Database(__METHOD__ . "\nsql_error: $this->error\nsql_errorno:$this->errorno", self::ERR_EXEC, self::SEVERITY_LOG, __FILE__, __LINE__);
+                throw new DatabaseException(__METHOD__ . "\nsql_error: $this->error\nsql_errorno:$this->errorno", self::ERR_EXEC, self::SEVERITY_LOG, __FILE__, __LINE__);
             }
-        } catch ( Exception_Database $e ) {
+        } catch ( DatabaseException $e ) {
             throw $e;
         }
 
@@ -786,7 +786,7 @@ class Mysql extends AbstractDatabase
      * @param string $charset
      * @param \PDO $db
      *
-     * @throws Exception_Database|\Exception
+     * @throws DatabaseException|\Exception
      * @return bool
      */
     public function setCharset( $charset = 'UTF8', \PDO $db)
@@ -794,7 +794,7 @@ class Mysql extends AbstractDatabase
         try
         {
             if ( empty($charset) || !$db ) {
-                throw new Exception_Database(__METHOD__ . "\ncharset:$charset\nressource:" . print_r($this->db, true), self::ERR_EXEC, self::SEVERITY_LOG, __FILE__, __LINE__);
+                throw new DatabaseException(__METHOD__ . "\ncharset:$charset\nressource:" . print_r($this->db, true), self::ERR_EXEC, self::SEVERITY_LOG, __FILE__, __LINE__);
             }
             
             $this->mysqli_client_encoding = (string) $charset;
@@ -802,7 +802,7 @@ class Mysql extends AbstractDatabase
             if ( $this->db_detail ) {
                 $this->db_detail->character_set_client = (string) $charset;
             }
-        } catch ( Exception_Database $e ) {
+        } catch ( DatabaseException $e ) {
             throw $e;
         }
 

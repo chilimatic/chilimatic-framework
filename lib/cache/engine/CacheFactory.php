@@ -10,7 +10,7 @@
 
 namespace chilimatic\lib\cache\engine;
 use chilimatic\lib\base\Error;
-use chilimatic\lib\exception\Exception_Cache;
+use chilimatic\lib\exception\CacheException;
 
 /**
  * Class CacheFactory
@@ -39,7 +39,7 @@ class CacheFactory
      * @param $name
      * @param array $credentials
      *
-     * @throws \chilimatic\lib\exception\Exception_Cache|\Exception
+     * @throws \chilimatic\lib\exception\CacheException|\Exception
      *
      * @return mixed
      */
@@ -52,11 +52,10 @@ class CacheFactory
         try
         {
             $cacheName = ( empty( $name ) ) ? self::CACHE_DEFAULT_TYPE : $name;
-            $c = '\\'.__NAMESPACE__.'\\'.$cacheName;
-
+            $c = '\\'.__NAMESPACE__.'\\'. ucfirst($cacheName);
             // check if the class exists or can be loaded
-            if ( !class_exists( $c ) ) {
-                throw new Exception_Cache( _( 'The Cache is not implemented or not installed:' ).$c, self::ERROR_CACHE_MISSING, Error::SEVERITY_CRIT, __FILE__, __LINE__ );
+            if ( !class_exists( $c , true ) ) {
+                throw new CacheException( _( 'The Cache is not implemented or not installed:' ).$c, self::ERROR_CACHE_MISSING, Error::SEVERITY_CRIT, __FILE__, __LINE__ );
             }
 
             /**
@@ -65,10 +64,10 @@ class CacheFactory
             $cache = new $c( $credentials );
 
             if ($cache->isConnected() == false ) {
-                throw new Exception_Cache( _( 'The Cache could not establish connection:' ).$c, self::ERROR_CACHE_MISSING, Error::SEVERITY_CRIT, __FILE__, __LINE__ );
+                throw new CacheException( _( 'The Cache could not establish connection:' ).$c, self::ERROR_CACHE_MISSING, Error::SEVERITY_CRIT, __FILE__, __LINE__ );
             }
 
-        } catch ( Exception_Cache $e )
+        } catch ( CacheException $e )
         {
             throw $e;
         }

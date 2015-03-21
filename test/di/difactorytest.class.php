@@ -5,8 +5,6 @@
  * Date: 25.11.14
  * Time: 22:14
  */
-require_once '../../vendor/autoload.php';
-require_once '/usr/share/php/PHPUnit/Autoload.php';
 
 
 class DIFactory_Test extends PHPUnit_Framework_TestCase

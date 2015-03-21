@@ -59,7 +59,7 @@ class EntityManager {
      *
      * @var
      */
-    private $modeCache;
+    private $modelCache;
 
 
     /**
@@ -141,10 +141,11 @@ class EntityManager {
     public function findBy(AbstractModel $model, $param = [])
     {
         if ($this->useCache && $this->modelCache) {
-            return $this->modelCache->fetchFromCache($model, $param);
+            return $this->modelCache->get($model, $param);
         }
 
-        $query = $this->queryBuilder->generateForModel($model, $param);
+
+        $query = $this->queryBuilder->generateSelectForModel($model, $param);
         $res = $this->executeQuery($model, $this->prepare($query, $param));
 
         if ($this->useCache && $this->modelCache) {
@@ -237,6 +238,14 @@ class EntityManager {
         return $model;
     }
 
+    public function persist(AbstractModel $model) {
+        if ($this->useCache && $this->modelCache) {
+
+        } else {
+            $this->queryBuilder->generateUpdateForModel($model);
+        }
+
+    }
 
     /**
      *

@@ -8,10 +8,14 @@
  * File: menucontroller.php
  */
 require_once '../../../app/general/init.php';
-\chilimatic\lib\di\Factory::getInstance(
-    realpath('../../../app/config/serviceCollection.php')
-);
-class ORM_Test extends PHPUnit_Framework_TestCase{
+
+class ORM_Test extends PHPUnit_Framework_TestCase {
+
+    public function getDI() {
+        \chilimatic\lib\di\ClosureFactory::getInstance(
+            realpath('../../../app/config/serviceCollection.php')
+        );
+    }
 
     /**
      * @return \chilimatic\lib\database\mysql\MysqlConnection
@@ -27,11 +31,18 @@ class ORM_Test extends PHPUnit_Framework_TestCase{
         );
     }
 
-    public function testMysqlConnection() {
+
+    /**
+     * @test
+     */
+    public function mysqlConnectionInstance() {
         $this->assertInstanceOf('\chilimatic\lib\database\mysql\MysqlConnection', $this->getConnection());
     }
 
-    public function testMysqlDatabase() {
+    /**
+     * @test
+     */
+    public function mysqlDatabase() {
         $db = new \chilimatic\lib\database\mysql\Mysql($this->getConnection());
         $this->assertInstanceOf('\chilimatic\lib\database\mysql\Mysql', $db);
     }

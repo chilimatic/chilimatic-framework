@@ -2,7 +2,7 @@
 
 namespace chilimatic\lib\database;
 
-use \chilimatic\lib\exception\Exception_Database as Exception_Database;
+use \chilimatic\lib\exception\DatabaseException as DatabaseException;
 
 /**
  * Class MySQLClone
@@ -70,7 +70,7 @@ class MySQLClone extends Mysql
      * @param $clone_db   string
      * @param $table_list array|string
      *
-     * @throws \chilimatic\exception\Exception_Database
+     * @throws \chilimatic\exception\DatabaseException
      * @throws \Exception
      * @return boolean
      */
@@ -83,7 +83,7 @@ class MySQLClone extends Mysql
             
             if ( !$this->select_db((string) $main_db) )
             {
-                throw new Exception_Database('Could not select Main Database ' . $main_db);
+                throw new DatabaseException('Could not select Main Database ' . $main_db);
             }
             
             $this->clone_dbname = $clone_db;
@@ -93,7 +93,7 @@ class MySQLClone extends Mysql
             
             if ( ($this->database_list = $this->fetch_simple_list($this->query((string) $sql))) == false )
             {
-                throw new Exception_Database('No Databases on the Main Server');
+                throw new DatabaseException('No Databases on the Main Server');
             }
             
             $this->clone_exists = (!in_array($clone_db, $this->database_list)) ? false : true;
@@ -116,7 +116,7 @@ class MySQLClone extends Mysql
             
             if ( $this->clone_exists === false && !$this->clone_database($main_db, $clone_db) )
             {
-                throw new Exception_Database('Couldnt replicate database');
+                throw new DatabaseException('Couldnt replicate database');
             }
             
             foreach ( $this->table_list as $table_name )
@@ -133,7 +133,7 @@ class MySQLClone extends Mysql
             }
         
         }
-        catch ( Exception_Database $e )
+        catch ( DatabaseException $e )
         {
             throw $e;
         }
@@ -149,7 +149,7 @@ class MySQLClone extends Mysql
      * @param $clone_db string
      *
      * @return bool
-     * @throws Exception_Database
+     * @throws DatabaseException
      * @throws \Exception
      */
     public function clone_database( $main_db = null , $clone_db = null )
@@ -157,12 +157,12 @@ class MySQLClone extends Mysql
 
         if ( empty($this->db) )
         {
-            throw new Exception_Database('Clone or Main database not connected');
+            throw new DatabaseException('Clone or Main database not connected');
         }
         
         if ( empty($main_db) || empty($clone_db) )
         {
-            throw new Exception_Database('clone names havent been set');
+            throw new DatabaseException('clone names havent been set');
         }
         
         $sql = "SHOW CREATE DATABASE `$main_db`";
@@ -172,7 +172,7 @@ class MySQLClone extends Mysql
         
         if ( empty($create_sql) )
         {
-            throw new Exception_Database('Create database statement is empty!');
+            throw new DatabaseException('Create database statement is empty!');
         }
         
         return $this->query($create_sql);

@@ -8,8 +8,6 @@
  * File: NodeFilterFactoryTest.php
  */
 
-require_once '../autoload.php';
-
 class NodeFilterFactoryTest extends PHPUnit_Framework_TestCase
 {
     public function testNodeFilterInstances()

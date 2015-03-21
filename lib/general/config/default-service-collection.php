@@ -39,11 +39,11 @@
             );
             $master = $mysqlStorage->getConnection(0);
             $em = new \chilimatic\lib\database\orm\EntityManager(new \chilimatic\lib\database\mysql\Mysql($master));
-            return $em->setQueryBuilder(\chilimatic\lib\di\Factory::getInstance()->get('query-builder'));
+            return $em->setQueryBuilder(\chilimatic\lib\di\ClosureFactory::getInstance()->get('query-builder'));
         },
         'query-builder' => function($setting = []) {
             $queryBuilder = new \chilimatic\lib\database\orm\MysqlQueryBuilder();
-            return $queryBuilder->setCache(\chilimatic\lib\di\Factory::getInstance()->get('cache', ['type' => 'shmop']));
+            return $queryBuilder->setCache(\chilimatic\lib\di\ClosureFactory::getInstance()->get('cache', ['type' => 'shmop']));
         },
         'error-handler' => function($setting = []) {
             return new \chilimatic\lib\error\Handler(new \chilimatic\lib\log\client\printOut());

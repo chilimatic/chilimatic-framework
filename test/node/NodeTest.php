@@ -5,8 +5,6 @@
  * Date: 03.03.15
  * Time: 09:14
  */
-require_once '../autoload.php';
-
 class NodeTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -36,63 +34,93 @@ class NodeTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testNodeInstances() {
+    /**
+     * @test
+     */
+    public function nodeInstances() {
         $this->assertInstanceOf('\Chilimatic\Lib\Node\Node', new \chilimatic\lib\node\Node(null, '',''));
         $this->assertInstanceOf('\Chilimatic\Lib\Node\Collection', new \chilimatic\lib\node\Collection());
         $this->assertInstanceOf('\Chilimatic\Lib\Node\TreeNode', new \chilimatic\lib\node\TreeNode(null, '',''));
     }
 
-    public function testSetNodeStringData() {
+    /**
+     * @test
+     */
+    public function setNodeStringData() {
         $node = new \chilimatic\lib\node\Node(null, 'name', 'My Name');
         $this->assertEquals('name', $node->getKey());
         $this->assertEquals('My Name', $node->getData());
     }
 
-    public function testSetNodeArrayData() {
+    /**
+     * @test
+     */
+    public function setNodeArrayData() {
         $myArray = ['adfasfdasfd'];
         $node = new \chilimatic\lib\node\Node(null, 'array', $myArray);
         $this->assertEquals($myArray, $node->getData());
     }
 
-    public function testGetChildValueByKey() {
+    /**
+     * @test
+     */
+    public function getChildValueByKey() {
         $node = new \chilimatic\lib\node\Node(null, '.', '');
         $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 23));
         $this->assertEquals(23, $node->getFirstByKey('test')->getData());
     }
 
-    public function testGetChildValueById() {
+    /**
+     * @test
+     */
+    public function getChildValueById() {
         $node = new \chilimatic\lib\node\Node(null, '.', '');
         $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 23));
         $this->assertEquals(23, $node->getById('.test')->getData());
     }
 
-    public function testGetDuplicatedChildValueByKeyBehaviour() {
+    /**
+     * @test
+     */
+    public function getDuplicatedChildValueByKeyBehaviour() {
         $node = new \chilimatic\lib\node\Node(null, '.', '');
         $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 23));
         $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 24));
         $this->assertEquals(24, $node->getFirstByKey('test')->getData());
     }
 
-    public function testGetDuplicatedChildValueByIdBehaviour() {
+    /**
+     * @test
+     */
+    public function getDuplicatedChildValueByIdBehaviour() {
         $node = new \chilimatic\lib\node\Node(null, '.', '');
         $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 23));
         $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 24));
         $this->assertEquals(23, $node->getById('.test')->getData());
     }
 
-    public function testGetDuplicatedChildNodeValueByIdBehaviour() {
+    /**
+     * @test
+     */
+    public function getDuplicatedChildNodeValueByIdBehaviour() {
         $node = new \chilimatic\lib\node\Node(null, '.', '');
         $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 23));
         $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 24));
         $this->assertEquals(24, $node->getById('.test-0')->getData());
     }
 
-    public function testGetMultiResultByKey() {
+    /**
+     * @test
+     */
+    public function getMultiResultByKey() {
         $this->initNodes();
         $this->assertInstanceOf('\SplObjectStorage', $this->node->getByKey('test-1'));
     }
 
-    public function testGetMultiResultByKeyPreFiltered()
+    /**
+     * @test
+     */
+    public function getMultiResultByKeyPreFiltered()
     {
         $filterFactory = new \chilimatic\lib\node\filter\Factory();
         $filterFactory->setParser(new chilimatic\lib\parser\DynamicCallNamePreTransformed());

@@ -12,7 +12,7 @@
 
 namespace chilimatic\lib\database;
 
-use chilimatic\lib\exception\Exception_Database;
+use chilimatic\lib\exception\DatabaseException;
 
 
 /**
@@ -152,7 +152,7 @@ class Statement {
     /**
      * execute the query
      *
-     * @throws \chilimatic\lib\exception\Exception_Database
+     * @throws \chilimatic\lib\exception\DatabaseException
      * @throws \Exception
      */
     public function execute() {
@@ -162,7 +162,7 @@ class Statement {
             foreach($this->param_list as $placeholder => $param)
             {
                 if (strpos($this->prepared_sql, $placeholder) === false) {
-                    throw new Exception_Database(__METHOD__ . " missing bound placeholder: $placeholder in sql $this->prepared_sql", Mysql::ERR_CONN, Mysql::SEVERITY_LOG, __FILE__, __LINE__);
+                    throw new DatabaseException(__METHOD__ . " missing bound placeholder: $placeholder in sql $this->prepared_sql", Mysql::ERR_CONN, Mysql::SEVERITY_LOG, __FILE__, __LINE__);
                 }
 
 
@@ -189,7 +189,7 @@ class Statement {
                 }
                 $sql = str_replace($placeholder, $val, $sql);
             }
-        } catch (Exception_Database $e) {
+        } catch (DatabaseException $e) {
             throw $e;
         }
 
@@ -216,13 +216,13 @@ class Statement {
      * @param null $type
      *
      * @return array
-     * @throws Exception_Database
+     * @throws DatabaseException
      * @throws \Exception
      */
     public function fetchAll($type = null){
         try {
             if ($this->res === false) {
-                throw new Exception_Database(__METHOD__ . " No ressource has been given", Mysql::NO_RESSOURCE, Mysql::SEVERITY_DEBUG, __FILE__, __LINE__);
+                throw new DatabaseException(__METHOD__ . " No ressource has been given", Mysql::NO_RESSOURCE, Mysql::SEVERITY_DEBUG, __FILE__, __LINE__);
             }
 
             switch($type) {
@@ -237,7 +237,7 @@ class Statement {
                     return $this->_db->fetch_object_list($this->res);
                     break;
             }
-        } catch (Exception_Database $e) {
+        } catch (DatabaseException $e) {
             throw $e;
         }
 
