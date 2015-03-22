@@ -8,7 +8,7 @@
 class NodeTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \chilimatic\lib\node\Node
+     * @var \chilimatic\lib\datastructure\graph\Node
      */
     protected $node;
 
@@ -17,13 +17,13 @@ class NodeTest extends PHPUnit_Framework_TestCase
      *
      */
     public function initNodes() {
-        $this->node = new \chilimatic\lib\node\Node(null, '.', '');
+        $this->node = new \chilimatic\lib\datastructure\graph\Node(null, '.', '');
         for ($i = 0; $i < 10; $i++) {
-            $node2 = new \chilimatic\lib\node\Node($this->node, 'test-'.$i, $i);
+            $node2 = new \chilimatic\lib\datastructure\graph\Node($this->node, 'test-'.$i, $i);
             for ($x = 0; $x < 11; $x++) {
-                $node3 = new \chilimatic\lib\node\Node($node2, 'test-'.$x, $x+4);
+                $node3 = new \chilimatic\lib\datastructure\graph\Node($node2, 'test-'.$x, $x+4);
                 for ($y = 0; $y < 5; $y++) {
-                    $node4 = new \chilimatic\lib\node\Node($node3, 'test-'.$y, $y+10);
+                    $node4 = new \chilimatic\lib\datastructure\graph\Node($node3, 'test-'.$y, $y+10);
                     $node3->addChild($node4);
                 }
                 $node2->addChild($node3);
@@ -38,16 +38,16 @@ class NodeTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function nodeInstances() {
-        $this->assertInstanceOf('\Chilimatic\Lib\Node\Node', new \chilimatic\lib\node\Node(null, '',''));
-        $this->assertInstanceOf('\Chilimatic\Lib\Node\Collection', new \chilimatic\lib\node\Collection());
-        $this->assertInstanceOf('\Chilimatic\Lib\Node\TreeNode', new \chilimatic\lib\node\TreeNode(null, '',''));
+        $this->assertInstanceOf('\chilimatic\lib\datastructure\graph\Node', new \chilimatic\lib\datastructure\graph\Node(null, '',''));
+        $this->assertInstanceOf('\chilimatic\lib\datastructure\graph\Collection', new \chilimatic\lib\datastructure\graph\Collection());
+        $this->assertInstanceOf('\chilimatic\lib\datastructure\graph\TreeNode', new \chilimatic\lib\datastructure\graph\TreeNode(null, '',''));
     }
 
     /**
      * @test
      */
     public function setNodeStringData() {
-        $node = new \chilimatic\lib\node\Node(null, 'name', 'My Name');
+        $node = new \chilimatic\lib\datastructure\graph\Node(null, 'name', 'My Name');
         $this->assertEquals('name', $node->getKey());
         $this->assertEquals('My Name', $node->getData());
     }
@@ -57,7 +57,7 @@ class NodeTest extends PHPUnit_Framework_TestCase
      */
     public function setNodeArrayData() {
         $myArray = ['adfasfdasfd'];
-        $node = new \chilimatic\lib\node\Node(null, 'array', $myArray);
+        $node = new \chilimatic\lib\datastructure\graph\Node(null, 'array', $myArray);
         $this->assertEquals($myArray, $node->getData());
     }
 
@@ -65,8 +65,8 @@ class NodeTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function getChildValueByKey() {
-        $node = new \chilimatic\lib\node\Node(null, '.', '');
-        $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 23));
+        $node = new \chilimatic\lib\datastructure\graph\Node(null, '.', '');
+        $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 23));
         $this->assertEquals(23, $node->getFirstByKey('test')->getData());
     }
 
@@ -74,8 +74,8 @@ class NodeTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function getChildValueById() {
-        $node = new \chilimatic\lib\node\Node(null, '.', '');
-        $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 23));
+        $node = new \chilimatic\lib\datastructure\graph\Node(null, '.', '');
+        $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 23));
         $this->assertEquals(23, $node->getById('.test')->getData());
     }
 
@@ -83,9 +83,9 @@ class NodeTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function getDuplicatedChildValueByKeyBehaviour() {
-        $node = new \chilimatic\lib\node\Node(null, '.', '');
-        $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 23));
-        $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 24));
+        $node = new \chilimatic\lib\datastructure\graph\Node(null, '.', '');
+        $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 23));
+        $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 24));
         $this->assertEquals(24, $node->getFirstByKey('test')->getData());
     }
 
@@ -93,9 +93,9 @@ class NodeTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function getDuplicatedChildValueByIdBehaviour() {
-        $node = new \chilimatic\lib\node\Node(null, '.', '');
-        $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 23));
-        $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 24));
+        $node = new \chilimatic\lib\datastructure\graph\Node(null, '.', '');
+        $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 23));
+        $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 24));
         $this->assertEquals(23, $node->getById('.test')->getData());
     }
 
@@ -103,9 +103,9 @@ class NodeTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function getDuplicatedChildNodeValueByIdBehaviour() {
-        $node = new \chilimatic\lib\node\Node(null, '.', '');
-        $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 23));
-        $node->addChild(new \chilimatic\lib\node\Node($node, 'test', 24));
+        $node = new \chilimatic\lib\datastructure\graph\Node(null, '.', '');
+        $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 23));
+        $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 24));
         $this->assertEquals(24, $node->getById('.test-0')->getData());
     }
 
@@ -122,7 +122,7 @@ class NodeTest extends PHPUnit_Framework_TestCase
      */
     public function getMultiResultByKeyPreFiltered()
     {
-        $filterFactory = new \chilimatic\lib\node\filter\Factory();
+        $filterFactory = new \chilimatic\lib\datastructure\graph\filter\Factory();
         $filterFactory->setParser(new chilimatic\lib\parser\DynamicCallNamePreTransformed());
         $filterFactory->setTransformer(new chilimatic\lib\transformer\string\DynamicObjectCallName());
 
