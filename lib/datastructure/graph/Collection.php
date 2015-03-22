@@ -7,7 +7,7 @@
  * NodeList -> JSDOM Collection
  */
 
-namespace chilimatic\lib\node;
+namespace chilimatic\lib\datastructure\graph;
 
 /**
  * Class NodeList
@@ -192,7 +192,7 @@ class Collection
      *
      * @return mixed
      */
-    public function getByKey($key, \chilimatic\lib\node\filter\AbstractFilter $filter = null)
+    public function getByKey($key, \chilimatic\lib\datastructure\graph\filter\AbstractFilter $filter = null)
     {
 
         $result = new \SplObjectStorage();

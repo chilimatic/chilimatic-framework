@@ -7,7 +7,7 @@
  */
 namespace chilimatic\lib\route\routesystem;
 use chilimatic\lib\exception\Exception_Route;
-use chilimatic\lib\node\TreeNode;
+use chilimatic\lib\datastructure\graph\TreeNode;
 use chilimatic\lib\route\Map;
 use chilimatic\lib\route\routesystem\noderoute\Node;
 

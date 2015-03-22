@@ -7,7 +7,7 @@
  */
 
 
-namespace chilimatic\lib\node;
+namespace chilimatic\lib\datastructure\graph;
 
 class TreeNode extends Node {
 
@@ -127,13 +127,15 @@ class TreeNode extends Node {
 
 
     /**
-     * @param $path
-     * @return self
+     * @param $key
+     * @param string $delimiter
+     *
+     * @return $this|null
      */
     public function findTreeBranch($key, $delimiter = self::DEFAULT_KEY_DELIMITER) {
         $this->resetTreeSearch();
         $this->treePath = explode($delimiter, trim($key, $delimiter));
-        if (($node = $this->searchTree() ) != null) {
+        if (($node = $this->searchTree()) != null) {
             return $node;
         }
 

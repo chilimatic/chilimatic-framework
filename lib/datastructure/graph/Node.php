@@ -7,7 +7,7 @@
  * Node System like the JSDOM
  */
 
-namespace chilimatic\lib\node;
+namespace chilimatic\lib\datastructure\graph;
 
 /**
  * Class Node
@@ -133,11 +133,11 @@ class Node
      * out of the depths in the chain
      *
      * @param $key
-     * @param \chilimatic\lib\node\filter\AbstractFilter $filter
+     * @param \chilimatic\lib\datastructure\graph\filter\AbstractFilter $filter
      *
      * @return \SplObjectStorage
      */
-    public function getByKey($key, \chilimatic\lib\node\filter\AbstractFilter $filter = null)
+    public function getByKey($key, \chilimatic\lib\datastructure\graph\filter\AbstractFilter $filter = null)
     {
         return $this->children->getByKey($key, $filter);
     }

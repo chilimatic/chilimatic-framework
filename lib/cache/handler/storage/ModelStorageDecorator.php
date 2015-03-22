@@ -9,10 +9,15 @@
  */
 
 namespace chilimatic\lib\cache\handler\storage;
-
 use chilimatic\lib\database\orm\AbstractModel;
 
-class ModelStorageDecorator {
+/**
+ * Class ModelStorageDecorator
+ *
+ * @package chilimatic\lib\cache\handler\storage
+ */
+class ModelStorageDecorator
+{
 
     /**
      * @var AbstractModel
@@ -23,6 +28,12 @@ class ModelStorageDecorator {
      * @var array
      */
     private $data;
+
+    /**
+     * @lazy_loaded
+     * @var \ReflectionClass
+     */
+    private $reflection;
 
     /**
      * @param AbstractModel $model
@@ -76,6 +87,30 @@ class ModelStorageDecorator {
     public function setData($data)
     {
         $this->data = $data;
+
+        return $this;
+    }
+
+    /**
+     * @return \ReflectionClass
+     */
+    public function getReflection()
+    {
+        if (!$this->reflection) {
+            $this->reflection = new \ReflectionClass($this->model);
+        }
+
+        return $this->reflection;
+    }
+
+    /**
+     * @param \Reflection $reflection
+     *
+     * @return $this
+     */
+    public function setReflection($reflection)
+    {
+        $this->reflection = $reflection;
 
         return $this;
     }

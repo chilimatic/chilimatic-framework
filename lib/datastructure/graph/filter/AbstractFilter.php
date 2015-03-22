@@ -8,7 +8,7 @@
  * File: AbstractNodeFilter.php
  */
 
-namespace chilimatic\lib\node\filter;
+namespace chilimatic\lib\datastructure\graph\filter;
 
 use chilimatic\lib\interfaces\IFlyWeightFilter;
 

@@ -7,12 +7,12 @@
  *
  * File: FilterFactory.php
  */
-namespace chilimatic\lib\node\filter;
+namespace chilimatic\lib\datastructure\graph\filter;
 
 /**
  * Class Factory
  *
- * @package chilimatic\lib\node\filter
+ * @package chilimatic\lib\datastructure\graph\filter
  */
 class Factory
 {

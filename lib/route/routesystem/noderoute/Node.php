@@ -16,7 +16,7 @@ use chilimatic\lib\route\Map;
  *
  * @package chilimatic\lib\route\routesystem\noderoute
  */
-class Node extends \chilimatic\lib\node\TreeNode
+class Node extends \chilimatic\lib\datastructure\graph\TreeNode
 {
 
     /**

@@ -6,7 +6,7 @@
  * Time: 9:23 AM
  */
 
-namespace chilimatic\lib\node;
+namespace chilimatic\lib\datastructure\graph;
 
 /**
  * Class Config

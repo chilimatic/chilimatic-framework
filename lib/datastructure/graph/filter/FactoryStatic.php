@@ -7,12 +7,12 @@
  *
  * File: FactoryStatic.php
  */
-namespace chilimatic\lib\node\filter;
+namespace chilimatic\lib\datastructure\graph\filter;
 
 /**
  * Class FactoryStatic
  *
- * @package chilimatic\lib\node\filter
+ * @package chilimatic\lib\datastructure\graph\filter
  */
 class FactoryStatic {
 

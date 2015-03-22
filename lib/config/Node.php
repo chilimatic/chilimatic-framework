@@ -13,7 +13,7 @@ namespace chilimatic\lib\config;
  * Class Node
  * @package chilimatic\lib\config
  */
-class Node extends \chilimatic\lib\node\Node{
+class Node extends \chilimatic\lib\datastructure\graph\Node{
 
     /**
      * Config Node if loaded

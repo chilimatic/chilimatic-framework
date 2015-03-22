@@ -11,17 +11,17 @@ namespace chilimatic\lib\cache\handler\storage;
 
 use chilimatic\lib\database\orm\AbstractModel;
 
-class ModelStorage implements  \Countable, \Iterator, \Serializable
+class ModelStorage implements \Countable, \Iterator, \Serializable
 {
     /**
      * @var array
      */
-    public $storage = [];
+    private $storage = [];
 
     /**
      * @var string
      */
-    public $currentId;
+    private $currentId;
 
     /**
      * @param AbstractModel $model
@@ -64,7 +64,10 @@ class ModelStorage implements  \Countable, \Iterator, \Serializable
      * @param AbstractModel $model
      * @param null|mixed $param
      */
-    public function set(AbstractModel $model, $param = null) {
+    public function attach(AbstractModel $model, $param = null) {
+        if ($this->contains($model)) {
+            return;
+        }
         $this->currentId = $this->generateHash($model);
         $this->storage[$this->currentId] = new ModelStorageDecorator($model, $param);
     }
@@ -94,14 +97,72 @@ class ModelStorage implements  \Countable, \Iterator, \Serializable
     }
 
     /**
+     * @param string $modelName
+     * @param array $param
+     *
+     * @return null
+     */
+    public function findByParam($modelName, $param)
+    {
+        /**
+         * @var ModelStorageDecorator $storedModel
+         */
+        foreach ($this->storage as $key => $storedModel) {
+            if ($modelName != get_class($storedModel)) {
+                continue;
+            }
+
+            if ($this->containsParam($storedModel, $param)) {
+                return $storedModel->getModel();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param ModelStorageDecorator $storedModel
+     * @param array $param
+     *
+     * @return null|AbstractModel
+     */
+    public function containsParam(ModelStorageDecorator $storedModel, $param) {
+        if (!$storedModel || !$param) {
+            return false;
+        }
+        $reflection = $storedModel->getReflection();
+
+        foreach ($param as $propertyName => $propertyValue) {
+            if (!($p = $reflection->getProperty($propertyName))) {
+                return false;
+            }
+
+            if ($p->isPublic()) {
+                if ($propertyValue != $storedModel->$propertyName) {
+                    return false;
+                }
+            }
+
+            if ($p->isPrivate() || $p->isProtected()) {
+                $p->setAccessible(true);
+                if ($propertyValue != $storedModel->$propertyName) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @param AbstractModel $model
      * @param null $param
      *
      * @return null|AbstractModel
      */
     public function get(AbstractModel $model, $param = null) {
-        if ($this->exists($model, $param)) {
-            return $this->storage[$this->generateHash($model, $param)];
+        if ($this->contains($model)) {
+            return $this->storage[$this->generateHash($model, $param)]->getModel();
         }
 
         return null;
