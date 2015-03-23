@@ -1,0 +1,9 @@
+{
+	"packages": {
+	        "chilimatic/chilimatic": {
+			"1.0.0" : {
+				@composer.json
+			}
+		}
+	}
+}

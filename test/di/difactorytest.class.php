@@ -6,22 +6,19 @@
  * Time: 22:14
  */
 
-require_once '../../app/general/init.php';
 
-
-
-class DiFactory_Test extends PHPUnit_Framework_TestCase
+class DIFactory_Test extends PHPUnit_Framework_TestCase
 {
 
     public function testDIFactorySingelton()
     {
-        $this->assertInstanceOf('\chilimatic\lib\di\DIFactory', \chilimatic\lib\di\DIFactory::getInstance());
+        $this->assertInstanceOf('\chilimatic\lib\di\DIFactory', \chilimatic\lib\di\Factory::getInstance());
     }
 
-    public function testTicketOfficeReservationNull()
+    public function testGetDefaultService()
     {
-        $di = \chilimatic\lib\di\DIFactory::getInstance();
+        $di = \chilimatic\lib\di\Factory::getInstance();
+        $di->loadServiceFromFile(__DIR__ .'../lib/general/config/default-service-collection.php');
     }
-
 
 }

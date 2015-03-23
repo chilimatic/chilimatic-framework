@@ -9,7 +9,7 @@
  */
 
 require_once '../../../app/general/init.php';
-\chilimatic\lib\di\DIFactory::getInstance(
+\chilimatic\lib\di\Factory::getInstance(
     realpath('../../../app/config/serviceCollection.php')
 );
 
@@ -17,7 +17,7 @@ require_once '../../../app/general/init.php';
 class PSQL_Query_Builder_Test extends PHPUnit_Framework_TestCase{
 
     public function testAbstraction() {
-        $queryBuilder = new \chilimatic\lib\database\orm\PsqlQueryBuilder();
+        $queryBuilder = new \chilimatic\lib\database\orm\PgsqlQueryBuilder();
         $this->assertInstanceOf('\chilimatic\lib\database\orm\AbstractQueryBuilder', $queryBuilder);
     }
 

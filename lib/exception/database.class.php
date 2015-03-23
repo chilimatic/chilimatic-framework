@@ -4,7 +4,7 @@ namespace chilimatic\lib\exception;
 use chilimatic\lib\cache\engine\Cache;
 use chilimatic\lib\config\Config;
 
-class Exception_Database extends \ErrorException
+class DatabaseException extends \ErrorException
 {
 
     /**
@@ -139,7 +139,7 @@ class Exception_Database extends \ErrorException
         switch ( Config::get( 'log_type' ) )
         {
             case 'xml' :
-                $log_msg = str_replace( '#MESSAGE#', $this->message, Exception_Database::ERROR_LOG_XML );
+                $log_msg = str_replace( '#MESSAGE#', $this->message, DatabaseException::ERROR_LOG_XML );
                 $log_msg = str_replace( '#DATETIME#', date( Log_Error::LOG_DATE_FORMAT ), $log_msg );
                 $log_msg = str_replace( '#SEVERITY#', $this->severity, $log_msg );
                 $log_msg = str_replace( '#CODE#', $this->code, $log_msg );
