@@ -7,14 +7,15 @@
  */
 namespace chilimatic\lib\view;
 
-use chilimatic\lib\di\Factory;
-
 /**
  * Class PHtml
  * @package chilimatic\lib\view
  */
 class PHtml extends \chilimatic\lib\view\Generic
 {
+    /**
+     * default rendering file extension
+     */
     const FILE_EXTENSION = '.phtml';
 
     /**
@@ -58,7 +59,6 @@ class PHtml extends \chilimatic\lib\view\Generic
         }
 
         try {
-
             ob_start();
             include $this->templateFile;
             $this->content = ob_get_clean();

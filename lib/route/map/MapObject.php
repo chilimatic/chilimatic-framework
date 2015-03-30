@@ -1,7 +1,7 @@
 <?php
 namespace chilimatic\lib\route\map;
 
-use chilimatic\lib\exception\Exception_Route;
+use chilimatic\lib\exception\RouteException;
 
 /**
  * Class MapObject
@@ -34,7 +34,7 @@ class MapObject extends Generic
 
     /**
      * @return mixed|void
-     * @throws Exception_Route
+     * @throws RouteException
      */
     public function init()
     {
@@ -56,7 +56,7 @@ class MapObject extends Generic
         }
         // invalid
         else {
-            throw new Exception_Route( sprintf( _( 'The Callback was not propper defined %s' ), print_r( $this->config, true ) ) );
+            throw new RouteException( sprintf( _( 'The Callback was not propper defined %s' ), print_r( $this->config, true ) ) );
         }
     }
 

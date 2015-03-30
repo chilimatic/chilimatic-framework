@@ -3,7 +3,7 @@ namespace chilimatic\lib\route;
 
 use chilimatic\lib\cache\engine\Cache;
 use chilimatic\lib\config\Config;
-use chilimatic\lib\exception\Exception_Route;
+use chilimatic\lib\exception\RouteException;
 use chilimatic\lib\route\routesystem\RouteSystemFactory;
 
 /**
@@ -78,7 +78,7 @@ class Router
     /**
      * singelton contructor
      *
-     * @throws Exception_Route
+     * @throws RouteException
      * @throws \Exception
      */
     public function __construct($type) {
@@ -206,7 +206,7 @@ class Router
      *
      * @return null
      *
-     * @throws Exception_Route
+     * @throws RouteException
      */
     public function getRoute( $path = null )
     {

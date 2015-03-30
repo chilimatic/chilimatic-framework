@@ -10,7 +10,7 @@
 
 namespace chilimatic\lib\session\engine;
 
-use chilimatic\lib\exception\Exception_InvalidArgument;
+use chilimatic\lib\exception\InvalidArgumentException;
 
 class Factory
 {
@@ -19,15 +19,15 @@ class Factory
      * @param mixed $param
      *
      * @return GenericEngine|null
-     * @throws Exception_InvalidArgument
+     * @throws InvalidArgumentException
      */
     public static function make ($engineName, $param = null) {
 
         // namespace needed for dynamic loading ;) php is sometime pretty weird
-        $session_name =  (string) __NAMESPACE__ . (string) '\\'  . (string) $engineName;
+        $session_name =  (string) __NAMESPACE__ . (string) '\\'  . (string) ucfirst($engineName);
 
         if (!class_exists($session_name, true)) {
-            throw new Exception_InvalidArgument('Session Engine ' .$session_name . ' does not exist');
+            throw new InvalidArgumentException('Session Engine ' .$session_name . ' does not exist');
         }
 
         return new $session_name($param);

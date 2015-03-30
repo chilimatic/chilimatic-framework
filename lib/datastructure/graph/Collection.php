@@ -174,7 +174,7 @@ class Collection
                     return $cnode;
                 }
 
-                if (($rnode = $cnode->getChildren()->getByKey($key)) !== null) {
+                if (($rnode = $cnode->getChildren()->getFirstByKey($key)) !== null) {
                     return $rnode;
                 }
             }

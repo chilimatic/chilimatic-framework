@@ -2,7 +2,7 @@
     return
     [
         'view' => function($setting = []) {
-            return new \chilimatic\lib\view\phtml();
+            return new \chilimatic\lib\view\PHtml();
         },
         'db' => function($setting = []) {
             return new PDO($setting['dns']);

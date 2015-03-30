@@ -44,7 +44,7 @@ Trait RouteTrait {
     /**
      * @var string
      */
-    private $defaultNameSpace = '\\chilimatic\\app\\controller\\';
+    private $defaultNameSpace = '\chilimatic\app\\controller\\';
 
     /**
      * @var string
@@ -60,7 +60,7 @@ Trait RouteTrait {
     /**
      * gets the default route based on my framework scheme
      *
-     * @throws \chilimatic\lib\exception\Exception_Route
+     * @throws \chilimatic\lib\exception\RouteException
      *
      * @returns \chilimatic\lib\route\Map
      */
@@ -74,7 +74,7 @@ Trait RouteTrait {
                 ],
                 $this->defaultUrlDelimiter
             );
-        } catch (\chilimatic\lib\exception\Exception_Route $e) {
+        } catch (\chilimatic\lib\exception\RouteException $e) {
             throw $e;
         }
     }
@@ -85,7 +85,7 @@ Trait RouteTrait {
      * @param string $path
      * @param array $config
      * @param string $delimiter
-     * @throws \chilimatic\lib\exception\Exception_Route
+     * @throws \chilimatic\lib\exception\RouteException
      *
      * @return \chilimatic\lib\route\Map
      */
@@ -96,7 +96,7 @@ Trait RouteTrait {
                 $this->setMapFactory(new MapFactory());
             }
             return $this->mapFactory->make($path, $config, $delimiter);
-        } catch ( \chilimatic\lib\exception\Exception_Route $e ) {
+        } catch ( \chilimatic\lib\exception\RouteException $e ) {
             throw $e;
         }
 
@@ -110,7 +110,7 @@ Trait RouteTrait {
      * @return string
      */
     private function generateClassName($namespace, $class) {
-        return $namespace . \chilimatic\lib\interpreter\Url::interpret($class);
+        return $namespace . ucfirst(\chilimatic\lib\interpreter\Url::interpret($class));
     }
 
 
@@ -136,7 +136,7 @@ Trait RouteTrait {
             $method = \chilimatic\lib\interpreter\Url::interpret($urlMethod);
         }
 
-        if (class_exists($class)) {
+        if (class_exists($class, true)) {
             foreach ((array) get_class_methods($class) as $cmethod) {
                 if (strtolower($cmethod) != strtolower($method)) {
                     continue;

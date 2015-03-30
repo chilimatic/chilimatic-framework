@@ -28,16 +28,16 @@ class Node extends \chilimatic\lib\datastructure\graph\Node{
      *
      * @param Node $parentNode
      * @param $key
-     * @param $value
+     * @param $data
      * @param string $comment
      */
-    public function __construct(\chilimatic\lib\config\Node $parentNode = null, $key, $value, $comment = '') {
+    public function __construct(\chilimatic\lib\config\Node $parentNode = null, $key, $data, $comment = '') {
         // get the current node
         $this->parentNode = $parentNode;
         // set the current key identifier
         $this->key = $key;
         // set the current value of the node
-        $this->_initType($value);
+        $this->_initType($data);
 
         if ( empty($this->parentNode->key))
         {
@@ -59,40 +59,40 @@ class Node extends \chilimatic\lib\datastructure\graph\Node{
     /**
      * method to set the current type and initializes it
      *
-     * @param $value
+     * @param $data
      *
      * @return bool
      */
-    private function _initType($value)
+    private function _initType($data)
     {
-        if ( !is_string($value) ) return true;
+        if ( !is_string($data) ) return true;
 
         switch (true) {
             // check if it's not a json array or object
-            case (strpos(trim($value), '[' ) === 0 || strpos(trim($value), '{' ) === 0):
-                $this->value = json_decode(trim($value));
+            case (strpos(trim($data), '[' ) === 0 || strpos(trim($data), '{' ) === 0):
+                $this->data = json_decode(trim($data));
                 break;
             // check if it's a string with quotes on the outside
-            case ((preg_match('/^["|\']{1}(.*)["|\']{1}$/', trim($value), $match)) === 1):
-                $this->value = (string) $match[1];
+            case ((preg_match('/^["|\']{1}(.*)["|\']{1}$/', trim($data), $match)) === 1):
+                $this->data = (string) $match[1];
                 break;
-            case (!is_numeric(trim($value)) && preg_match('/^(true|false){1}$/', trim($value))):
-                $this->value = (bool) (strpos($value, 'true') !== false) ? true : false;
+            case (!is_numeric(trim($data)) && preg_match('/^(true|false){1}$/', trim($data))):
+                $this->data = (bool) (strpos($data, 'true') !== false) ? true : false;
                 break;
-            case (($tmp = @unserialize($value) !== false)):
-                $this->value = $tmp;
+            case (($tmp = @unserialize($data) !== false)):
+                $this->data = $tmp;
                 break;
-            case !is_numeric(trim($value)):
-                $this->value = (string) trim($value);
+            case !is_numeric(trim($data)):
+                $this->data = (string) trim($data);
                 break;
             default:
                 // integer
-                if (is_numeric($value) && strpos($value, '.') === false) {
-                    $this->value = (int) trim($value);
+                if (is_numeric($data) && strpos($data, '.') === false) {
+                    $this->data = (int) trim($data);
                 }
                 // english notation for float
-                elseif (is_numeric($value) && strpos($value, '.') > 1) {
-                    $this->value = (float) trim($value);
+                elseif (is_numeric($data) && strpos($data, '.') > 1) {
+                    $this->data = (float) trim($data);
                 }
                 break;
         }
@@ -120,6 +120,6 @@ class Node extends \chilimatic\lib\datastructure\graph\Node{
      * @return mixed|null|string
      */
     public function __toString() {
-        return is_scalar($this->getValue()) ? $this->getValue() : json_encode($this->getValue());
+        return is_scalar($this->getData()) ? $this->getData() : json_encode($this->getData());
     }
 }

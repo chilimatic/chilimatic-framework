@@ -65,7 +65,7 @@ class Node extends \chilimatic\lib\datastructure\graph\TreeNode
     }
 
     public function getMap() {
-        return $this->getValue();
+        return $this->getData();
     }
 
     /**
@@ -89,11 +89,5 @@ class Node extends \chilimatic\lib\datastructure\graph\TreeNode
         return $this;
     }
 
-
-    public function createTreePath($urlParts = array()) {
-
-
-
-    }
 
 }

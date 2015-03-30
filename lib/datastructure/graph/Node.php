@@ -124,6 +124,9 @@ class Node
         return $this->data;
     }
 
+    /**
+     * @return string
+     */
     public function __toString(){
         return json_encode($this->getData());
     }

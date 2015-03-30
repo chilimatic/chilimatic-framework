@@ -41,7 +41,7 @@ class HTTPMVC {
     protected $handle;
 
     /**
-     * @var \chilimatic\lib\di\DIFactory
+     * @var \chilimatic\lib\di\ClosureFactory
      */
     protected $di;
 
@@ -55,10 +55,10 @@ class HTTPMVC {
     ];
 
     /**
-     * @param \chilimatic\lib\di\DIFactory $di
+     * @param \chilimatic\lib\di\ClosureFactory $di
      * @param AbstractConfig               $config
      */
-    public function __construct(\chilimatic\lib\di\Factory $di = null, AbstractConfig $config = null)
+    public function __construct(\chilimatic\lib\di\ClosureFactory $di = null, AbstractConfig $config = null)
     {
         if (!$di) return;
 
@@ -148,7 +148,8 @@ class HTTPMVC {
     public function getRouter()
     {
         if (!$this->router) {
-            $this->router = $this->di->get('routing',
+            $this->router = $this->di->get(
+                'routing',
                 [
                     'type' => $this->config->get('routingType') ?  $this->config->get('routingType') : Router::DEFAULT_ROUTING_TYPE
                 ]
