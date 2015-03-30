@@ -2,7 +2,7 @@
 namespace chilimatic\lib\file;
 
 use chilimatic\lib\config\Config;
-use chilimatic\lib\exception\Exception_File;
+use chilimatic\lib\exception\FileException;
 
 /**
  * Class File_Upload
@@ -58,7 +58,7 @@ class Upload extends File
      *
      * @param $file array
      *
-     * @throws Exception_File
+     * @throws FileException
      */
     public function __construct( $file = null )
     {
@@ -75,7 +75,7 @@ class Upload extends File
      * @param $file array
      *
      * @return bool
-     * @throws Exception_File
+     * @throws FileException
      */
     public function upload( $file = null )
     {
@@ -90,7 +90,7 @@ class Upload extends File
         
         if ( $this->u_error )
         {
-            throw new Exception_File("File couldn't be uploaded reason " . Exception_File::$upload_errors[$this->u_error], Config::get('file_error'), Config::get('error_lvl_low'), __FILE__, __LINE__);
+            throw new FileException("File couldn't be uploaded reason " . FileException::$upload_errors[$this->u_error], Config::get('file_error'), Config::get('error_lvl_low'), __FILE__, __LINE__);
         }
         
         $this->_get_file_extension();
@@ -142,7 +142,7 @@ class Upload extends File
      * @param string $file_name
      * @param bool $delete_source
      *
-     * @throws \chilimatic\lib\exception\Exception_File
+     * @throws \chilimatic\lib\exception\FileException
      * @throws \Exception
      * @internal param string $filename
      *
@@ -155,7 +155,7 @@ class Upload extends File
         {
             if ( empty($path) )
             {
-                throw new Exception_File("No path has been given : $path", Config::get('file_error'), Config::get('error_lvl_low'), __FILE__, __LINE__);
+                throw new FileException("No path has been given : $path", Config::get('file_error'), Config::get('error_lvl_low'), __FILE__, __LINE__);
             }
             
             $save_name = "$path/" . (empty($file_name) ? $this->u_name : $file_name);
@@ -164,7 +164,7 @@ class Upload extends File
             
             if ( !copy($this->u_tmp_name, $save_name) )
             {
-                throw new Exception_File("Copy operation wasn't possible: $this->u_tmp_name, $save_name", Config::get('file_error'), Config::get('error_lvl_low'), __FILE__, __LINE__);
+                throw new FileException("Copy operation wasn't possible: $this->u_tmp_name, $save_name", Config::get('file_error'), Config::get('error_lvl_low'), __FILE__, __LINE__);
             }
             
             if ( $delete_source === true )
@@ -176,7 +176,7 @@ class Upload extends File
             return $this->open($save_name);
         
         }
-        catch ( Exception_File $e )
+        catch ( FileException $e )
         {
             throw $e;
         }

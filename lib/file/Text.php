@@ -2,7 +2,7 @@
 namespace chilimatic\lib\file;
 
 use chilimatic\lib\config\Config;
-use chilimatic\lib\exception\Exception_File;
+use chilimatic\lib\exception\FileException;
 
 /**
  * Class File_Text
@@ -14,19 +14,16 @@ Class Text extends File
 
     public function cat()
     {
-    	try {
-    		if (empty($this->file) && empty($this->fp))
-    		{
-    			throw new Exception_File("No File has been given", Config::get('file_error'), Config::get('error_lvl_low'), __FILE__, __LINE__);
-    		}
-    		
-    	} 
-    	catch (Exception_File $e)
-    	{
-    		throw $e;
-    	}
-    	
-    	return true;
+        try {
+            if (empty($this->file) && empty($this->fp)) {
+                throw new FileException("No File has been given", Config::get('file_error'), Config::get('error_lvl_low'), __FILE__, __LINE__);
+            }
+        }
+        catch (FileException $e) {
+            throw $e;
+        }
+
+        return true;
     } 
 }
 ?>

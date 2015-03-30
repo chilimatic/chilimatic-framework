@@ -49,7 +49,7 @@ class Config implements ISingelton
      */
     public static function getInstance($param = null)
     {
-        $configname = (string) __NAMESPACE__ . '\\' . (string) (!empty($param->type) ?  $param->type : self::DEFAULT_CONFIG_TYPE);
+        $configname = (string) __NAMESPACE__ . '\\' . (string) (!empty($param['type']) ?  $param['type'] : self::DEFAULT_CONFIG_TYPE);
 
         if ( self::$instance === null)
         {

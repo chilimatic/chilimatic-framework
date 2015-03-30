@@ -2,7 +2,7 @@
 namespace chilimatic\lib\file;
 
 use chilimatic\lib\config\Config;
-use chilimatic\lib\exception\Exception_File;
+use chilimatic\lib\exception\FileException;
 use chilimatic\lib\Tool\Tool;
 
 /**
@@ -91,7 +91,7 @@ class Directory
      * @param bool $grouped
      *
      * @return bool
-     * @throws \chilimatic\exception\Exception_File
+     * @throws \chilimatic\exception\FileException
      * @throws \Exception
      */
     public function open( $dir = null , $recursive = false , $grouped = false )
@@ -102,17 +102,17 @@ class Directory
             
             if ( empty($dir) )
             {
-                throw new Exception_File("The given path is empty", Config::get('file_error'), Config::get('error_lvl_low'), __FILE__, __LINE__);
+                throw new FileException("The given path is empty", Config::get('file_error'), Config::get('error_lvl_low'), __FILE__, __LINE__);
             }
             
             if ( !is_dir($dir) )
             {
-                throw new Exception_File("The given path is not a directory", Config::get('file_error'), Config::get('error_lvl_low'), __FILE__, __LINE__);
+                throw new FileException("The given path is not a directory", Config::get('file_error'), Config::get('error_lvl_low'), __FILE__, __LINE__);
             }
             
             if ( !is_readable($dir) )
             {
-                throw new Exception_File("The given path is not readable", Config::get('file_error'), Config::get('error_lvl_low'), __FILE__, __LINE__);
+                throw new FileException("The given path is not readable", Config::get('file_error'), Config::get('error_lvl_low'), __FILE__, __LINE__);
             }
             
             $this->dir = (string) $dir;
@@ -162,7 +162,7 @@ class Directory
             }
         
         }
-        catch ( Exception_File $e )
+        catch ( FileException $e )
         {
             throw $e;
         }

@@ -1,7 +1,7 @@
 <?php
 namespace chilimatic\lib\log;
 use chilimatic\lib\config\Config;
-use chilimatic\lib\exception\Exception_Log;
+use chilimatic\lib\exception\LogException;
 use chilimatic\lib\file\File;
 
 /**
@@ -113,7 +113,7 @@ class Error implements ILog
                 if ( !$this->file->create_file("$this->_log_path/$this->_file_name") )
                 {
                     // $message = null, $code = null, $previous = null
-                    throw new Exception_Log((string) "file: $this->_log_path/$this->_file_name couldn't be created.");
+                    throw new LogException((string) "file: $this->_log_path/$this->_file_name couldn't be created.");
                 }
                 $this->file->open((string) "$this->_log_path/$this->_file_name");
             }
@@ -151,7 +151,7 @@ class Error implements ILog
                 // some code that
             }
         }
-        catch ( Exception_Log $e )
+        catch ( LogException $e )
         {
             error_log($e->getMessage());
             return false;
