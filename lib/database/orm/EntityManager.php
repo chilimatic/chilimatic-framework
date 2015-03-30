@@ -144,7 +144,6 @@ class EntityManager {
             return $this->modelCache->get($model, $param);
         }
 
-
         $query = $this->queryBuilder->generateSelectForModel($model, $param);
         $res = $this->executeQuery($model, $this->prepare($query, $param));
 
@@ -244,13 +243,6 @@ class EntityManager {
         } else {
             $this->queryBuilder->generateUpdateForModel($model);
         }
-
-    }
-
-    /**
-     *
-     */
-    public function getCustomQuery(){
 
     }
 

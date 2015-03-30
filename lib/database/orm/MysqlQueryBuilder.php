@@ -48,12 +48,12 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
     private $relation;
 
     /**
-     * @var
+     * @var array
      */
-    private $table;
+    private $tableData;
 
     /**
-     * @var
+     * @var \chilimatic\lib\database\ORM\AbstractModel
      */
     private $model;
 
@@ -81,6 +81,7 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
     {
         $this->parser = new ORMParser();
         $this->relation = new \SplFixedArray();
+        $this->tableData = new TableData();
     }
 
     /**
@@ -108,11 +109,11 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
         $hd = $this->parser->parse($this->reflection->getDocComment());
 
         if (!empty($hd[0])) {
-            $this->$hd[0] = $hd[1];
+            $this->tableData->setTableName($hd[1]);
             return;
         } else {
             $table = substr($this->reflection->getName(), strlen($this->reflection->getNamespaceName()));
-            $this->table = strtolower(str_replace('\\', '', $table));
+            $this->tableData->setTableName(strtolower(str_replace('\\', '', $table)));
         }
     }
 
@@ -132,11 +133,27 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
         return substr($str, 0, -3);
     }
 
+    public function generateColumList()
+    {
+        return ($this->propertyList ? implode(',', $this->tableData->getColumnsNamesWithPrefix($this->propertyList)) : '*');
+    }
+
+
     /**
      * @return string
      */
     public function _generateSelect(){
-        return "SELECT " . ($this->propertyList ? implode(',', $this->propertyList) : '*') . " FROM $this->table ". $this->generateCondition();
+        return implode(
+            " ",
+            [
+                "SELECT",
+                $this->generateColumList($this->tableData->getPrefix()),
+                "FROM",
+                $this->tableData->getTableName(),
+                $this->tableData->getPrefix(),
+                $this->generateCondition()
+            ]
+        );
     }
 
     /**
@@ -284,19 +301,19 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
     /**
      * @return mixed
      */
-    public function getTable()
+    public function getTableData()
     {
-        return $this->table;
+        return $this->tableData;
     }
 
     /**
-     * @param mixed $table
+     * @param mixed $tableData
      *
      * @return $this
      */
-    public function setTable($table)
+    public function setTable($tableData)
     {
-        $this->table = $table;
+        $this->tableData = $tableData;
 
         return $this;
     }

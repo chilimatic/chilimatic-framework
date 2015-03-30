@@ -2,7 +2,7 @@
 namespace chilimatic\lib\log;
 
 use chilimatic\lib\config\Config;
-use chilimatic\lib\exception\Exception_Log;
+use chilimatic\lib\exception\LogException;
 use chilimatic\lib\file\File;
 
 /**
@@ -52,13 +52,13 @@ class Generic implements ILog
      * @param $file_name string
      * @param $log_path  string
      *
-     * @throws Exception_Log
+     * @throws LogException
      */
     public function __construct( $file_name = '' , $log_path = '' )
     {
         if( empty($file_name) ) 
         {
-            throw new Exception_Log("No filename given for logging!");
+            throw new LogException("No filename given for logging!");
         }
         $this->_file_name = $file_name;
         
@@ -91,7 +91,7 @@ class Generic implements ILog
             if ( !$this->file->open( (string) "$this->_log_path/$this->_file_name") && !$this->file->create_file("$this->_log_path/$this->_file_name") )
             {
                 // $message = null, $code = null, $previous = null
-                throw new Exception_Log( (string) "file: $this->_log_path/$this->_file_name couldn't be created.");
+                throw new LogException( (string) "file: $this->_log_path/$this->_file_name couldn't be created.");
             }
             
             // check for the 2nd time
@@ -110,11 +110,11 @@ class Generic implements ILog
 
             if ( $this->file->append($msg) === false )
             {
-                throw new Exception_Log( (string) "$msg was not appended to file: $this->_log_path/$this->_file_name.");
+                throw new LogException( (string) "$msg was not appended to file: $this->_log_path/$this->_file_name.");
             }
         
         }
-        catch ( Exception_Log $e )
+        catch ( LogException $e )
         {
             error_log($e->getMessage());
         }

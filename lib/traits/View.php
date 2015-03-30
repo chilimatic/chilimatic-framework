@@ -5,9 +5,13 @@ namespace chilimatic\lib\traits;
  *
  * @author j
  */
+use \chilimatic\lib\exception\ViewException;
 
-use \chilimatic\lib\exception\Exception_View;
-
+/**
+ * Class View
+ *
+ * @package chilimatic\lib\traits
+ */
 trait View
 {
     /**
@@ -30,7 +34,7 @@ trait View
      *
      *
      * @param string $engine
-     * @throws \chilimatic\lib\exception\Exception_View|\Exception
+     * @throws \chilimatic\lib\exception\ViewException|\Exception
      * @return boolean
      */
     protected function __init_view($engine = '')
@@ -44,7 +48,7 @@ trait View
         {
             $this->view = new $view();
         }
-        catch ( Exception_View $e )
+        catch ( ViewException $e )
         {
             throw $e;
         }

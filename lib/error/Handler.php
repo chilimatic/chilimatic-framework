@@ -8,20 +8,17 @@
 
 namespace chilimatic\lib\error;
 
-use chilimatic\lib\exception\Exception_Admin;
-
-class Handler {
-
-    /**
-     * @var string
-     */
-    private $message;
+class Handler
+{
 
     /**
      * @var \chilimatic\lib\log\client\AbstractClient
      */
     private $client;
 
+    /**
+     * @param \chilimatic\lib\log\client\AbstractClient $client
+     */
     public function __construct(\chilimatic\lib\log\client\AbstractClient $client) {
         if (!$client) {
             throw new \chilimatic\lib\exception\Dependency('No Client was declared');

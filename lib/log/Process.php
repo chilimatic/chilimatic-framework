@@ -2,7 +2,7 @@
 namespace chilimatic\lib\log;
 
 use chilimatic\lib\config\Config;
-use chilimatic\lib\exception\Exception_Log;
+use chilimatic\lib\exception\LogException;
 use chilimatic\lib\file\File;
 
 /**
@@ -88,7 +88,7 @@ class Process implements ILog
             if ( !$this->file->open( (string) "$this->_log_path/$this->_file_name") && !$this->file->create_file("$this->_log_path/$this->_file_name") )
             {
                 // $message = null, $code = null, $previous = null
-                throw new Exception_Log( (string) "file: $this->_log_path/$this->_file_name couldn't be created.");
+                throw new LogException( (string) "file: $this->_log_path/$this->_file_name couldn't be created.");
             }
             
             // check for the 2nd time
@@ -112,13 +112,13 @@ class Process implements ILog
             /*
              * while ( $this->file->append($msg) === false ) { /* // sleep 1
              * second sleep(1); if ( $start_time + 10 == time() ) { throw new
-             * Exception_Log("Sleep time for file:
+             * LogException("Sleep time for file:
              * $this->_log_path/$this->_file_name exceeded 10
              * seconds\n[msg]$msg"); break; } }
              */
         
         }
-        catch ( Exception_Log $e )
+        catch ( LogException $e )
         {
             error_log($e->getMessage());
         }

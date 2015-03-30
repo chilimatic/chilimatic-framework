@@ -1,7 +1,7 @@
 <?php
 namespace chilimatic\lib\exception;
 
-class Exception_Log extends \ErrorException
+class LogException extends \ErrorException
 {
     
 }
