@@ -8,7 +8,7 @@
 namespace chilimatic\lib\di;
 
 /**
- * Class DIFactory
+ * Class ClosureFactory
  *
  * @package chilimatic\lib\di
  */

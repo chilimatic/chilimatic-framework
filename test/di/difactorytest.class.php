@@ -7,17 +7,17 @@
  */
 
 
-class DIFactory_Test extends PHPUnit_Framework_TestCase
+class ClosureFactory_Test extends PHPUnit_Framework_TestCase
 {
 
-    public function testDIFactorySingelton()
+    public function testClosureFactorySingelton()
     {
-        $this->assertInstanceOf('\chilimatic\lib\di\DIFactory', \chilimatic\lib\di\Factory::getInstance());
+        $this->assertInstanceOf('\chilimatic\lib\di\ClosureFactory', \chilimatic\lib\di\ClosureFactory::getInstance());
     }
 
     public function testGetDefaultService()
     {
-        $di = \chilimatic\lib\di\Factory::getInstance();
+        $di = \chilimatic\lib\di\ClosureFactory::getInstance();
         $di->loadServiceFromFile(__DIR__ .'../lib/general/config/default-service-collection.php');
     }
 

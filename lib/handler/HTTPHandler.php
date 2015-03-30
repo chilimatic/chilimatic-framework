@@ -7,7 +7,6 @@
  */
 
 namespace chilimatic\lib\handler;
-use chilimatic\lib\di\Factory;
 
 /**
  * Class HTTPHandler
@@ -66,7 +65,7 @@ class HTTPHandler extends GenericHandler
     {
         return INCLUDE_ROOT .
             strtolower(
-                str_replace('\\', '/',
+                str_replace(array('\\'), '/',
                     str_replace(
                         self::FRAMEWORK_NAMESPACE, '', str_replace(
                             'controller', 'view', $className

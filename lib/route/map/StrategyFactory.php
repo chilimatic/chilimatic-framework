@@ -1,6 +1,6 @@
 <?php
 namespace chilimatic\lib\route\map;
-use chilimatic\lib\exception\Exception_Route;
+use chilimatic\lib\exception\RouteException;
 use chilimatic\lib\route\Map;
 
 class StrategyFactory implements StaticMapFactory {
@@ -22,7 +22,7 @@ class StrategyFactory implements StaticMapFactory {
                 //return new LambdaFunction($config);
                 break;
             default:
-                throw new Exception_Route("Invalid Call type" . __METHOD__);
+                throw new RouteException("Invalid Call type" . __METHOD__);
                 break;
         }
     }

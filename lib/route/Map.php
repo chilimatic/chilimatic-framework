@@ -3,7 +3,7 @@
 namespace chilimatic\lib\route;
 
 
-use \chilimatic\lib\exception\Exception_Route;
+use \chilimatic\lib\exception\RouteException;
 use chilimatic\lib\route\map\StrategyFactory;
 
 
@@ -111,7 +111,7 @@ class Map
      *
      * @param string $uri
      *
-     * @throws Exception_Route
+     * @throws RouteException
      *
      *
      * @return boolean Ambigous \Route\Route_Validator>
@@ -147,7 +147,7 @@ class Map
                 $this->validate = true;
             }
             unset($parts, $c, $i, $uri);
-        } catch ( Exception_Route $e )
+        } catch ( RouteException $e )
         {
             throw $e;
         }
@@ -168,7 +168,7 @@ class Map
      *
      * @param string $uri
      * @param mixed $callback
-     * @throws Exception_Route
+     * @throws RouteException
      *
      * @return boolean
      */
@@ -203,7 +203,7 @@ class Map
 
                     if ( !function_exists( $callback ) )
                     {
-                        throw new Exception_Route( sprintf( _( 'There is no such Function like %s' ), $callback ) );
+                        throw new RouteException( sprintf( _( 'There is no such Function like %s' ), $callback ) );
                     }
                     break;
                 
@@ -216,7 +216,7 @@ class Map
                     break;
             }
         } 
-        catch ( Exception_Route $e )
+        catch ( RouteException $e )
         {
             throw $e;
         }

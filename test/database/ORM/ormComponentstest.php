@@ -65,7 +65,7 @@ class ORM_Test extends PHPUnit_Framework_TestCase {
         /**
          * @var \chilimatic\lib\database\orm\entitymanager $em
          */
-        $em = \chilimatic\lib\di\Factory::getInstance()->get('entity-manager' , [
+        $em = \chilimatic\lib\di\ClosureFactory::getInstance()->get('entity-manager' , [
             'host' => 'localhost',
             'username' => 'root',
             'password' => '$karpunk1',
@@ -76,7 +76,7 @@ class ORM_Test extends PHPUnit_Framework_TestCase {
     }
 
     public function testORMMysqlQueryBuilderFindBy() {
-        $em = \chilimatic\lib\di\Factory::getInstance()->get('entity-manager' , [
+        $em = \chilimatic\lib\di\ClosureFactory::getInstance()->get('entity-manager' , [
             'host' => 'localhost',
             'username' => 'root',
             'password' => '$karpunk1',
@@ -87,7 +87,7 @@ class ORM_Test extends PHPUnit_Framework_TestCase {
     }
 
     public function testORMMysqlQueryBuilderGenerateForModel() {
-        $em = \chilimatic\lib\di\Factory::getInstance()->get('entity-manager' , [
+        $em = \chilimatic\lib\di\ClosureFactory::getInstance()->get('entity-manager' , [
             'host' => 'localhost',
             'username' => 'root',
             'password' => '$karpunk1',

@@ -8,7 +8,7 @@
 
 namespace chilimatic\lib\view;
 
-class Json implements minimalInterface
+class Json implements MinimalInterface
 {
     /**
      * <p>
@@ -24,7 +24,7 @@ class Json implements minimalInterface
     /**
      * @generic view trait as template
      */
-    use viewTrait;
+    use ViewTrait;
 
     /**
      * (non-PHPdoc)

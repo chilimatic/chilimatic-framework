@@ -29,7 +29,7 @@ class Url {
     public static function interpret($url, $action_delimiter = self::DEFAULT_ACTION_DELIMITER)
     {
         if (mb_stripos($url, $action_delimiter) === false) {
-            return $url;
+            return ucfirst($url);
         }
 
         $action_parts = array_map(function($val) { return ucfirst($val); }, explode($action_delimiter, $url));

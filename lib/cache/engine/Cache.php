@@ -74,7 +74,7 @@ class Cache implements ISingelton
      * @param \stdClass $param
      * @return Cache
      */
-    public static function getInstance( \stdClass $param = null)
+    public static function getInstance( $param = null)
     {
         if ( !self::$instance instanceof Cache ) {
             $type = $param->type;

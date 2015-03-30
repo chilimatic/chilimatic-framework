@@ -8,6 +8,6 @@
  */
 namespace chilimatic\lib\exception;
 
-class Exception_Config extends \ErrorException
+class ConfigException extends \ErrorException
 {
 }

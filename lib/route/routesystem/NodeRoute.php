@@ -6,7 +6,8 @@
  * Time: 17:34
  */
 namespace chilimatic\lib\route\routesystem;
-use chilimatic\lib\exception\Exception_Route;
+
+use chilimatic\lib\exception\RouteException;
 use chilimatic\lib\datastructure\graph\TreeNode;
 use chilimatic\lib\route\Map;
 use chilimatic\lib\route\routesystem\noderoute\Node;
@@ -29,7 +30,7 @@ class NodeRoute extends AbstractRoute
 
     /**
      * @return Node
-     * @throws \chilimatic\lib\exception\Exception_Route
+     * @throws \chilimatic\lib\exception\RouteException
      */
     public function getRoot() {
         if (!$this->rootNode) {
@@ -57,7 +58,7 @@ class NodeRoute extends AbstractRoute
      *
      * @return null
      *
-     * @throws Exception_Route
+     * @throws RouteException
      */
     public function getRoute( $path = null )
     {
@@ -68,7 +69,7 @@ class NodeRoute extends AbstractRoute
             $this->currentRoute = $this->getRoot()->findTreeBranch($path, MAP::DEFAULT_URL_DELIMITER);
         }
 
-        return $this->currentRoute->getValue();
+        return $this->currentRoute->getData();
     }
 
     /**
@@ -78,7 +79,7 @@ class NodeRoute extends AbstractRoute
      * @param mixed $callback
      * @param $delimiter
      *
-     * @throws Exception_Route
+     * @throws RouteException
      * @return void
      */
     public function addRoute( $uri , $callback , $delimiter = Map::DEFAULT_URL_DELIMITER )
@@ -89,16 +90,14 @@ class NodeRoute extends AbstractRoute
              * if the uri is empty throw an exception
              */
             if ( empty($uri) ) {
-                throw new Exception_Route(sprintf(_('There is no Route entered %s'), $uri));
+                throw new RouteException(sprintf(_('There is no Route entered %s'), $uri));
             }
 
             // class for mapping
             $route = new Map($uri, $callback, $delimiter);
             $this->rootNode->appendToBranch($uri, $route, Map::DEFAULT_URL_DELIMITER);
 
-        }
-        catch ( Exception_Route $e )
-        {
+        } catch ( RouteException $e ) {
             throw $e;
         }
 

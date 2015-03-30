@@ -1,7 +1,7 @@
 <?php
 namespace chilimatic\lib\route;
 use chilimatic\lib\config\Config;
-use chilimatic\lib\exception\Exception_Route;
+use chilimatic\lib\exception\RouteException;
 
 /**
  * Class Validator
@@ -122,7 +122,7 @@ class Validator
             
             if ( empty($this->urlPart) || !$this->_valid_pattern($this->urlPart) )
             {
-                throw new Exception_Route('url part empty or not a valid pattern : ' . $this->urlPart);
+                throw new RouteException('url part empty or not a valid pattern : ' . $this->urlPart);
             }
             
             $array = $this->_extract();
@@ -131,10 +131,10 @@ class Validator
             
             if ( !class_exists($validator) )
             {
-                throw new Exception_Route('Class does not exist : ' . $validator);
+                throw new RouteException('Class does not exist : ' . $validator);
             }
         }
-        catch ( Exception_Route $e )
+        catch ( RouteException $e )
         {
             throw $e;
         }

@@ -66,7 +66,7 @@ abstract class AbstractNode {
     {
         $node = $this->mainNode->getByKey($var);
         if (empty($node)) return NULL;
-        return $node->getValue();
+        return $node->getData();
     }
 
     /**
@@ -79,7 +79,7 @@ abstract class AbstractNode {
     {
         $node = $this->mainNode->getById($id);
         if (empty($node)) return NULL;
-        return $node->getValue();
+        return $node->getData();
     }
 
     /**

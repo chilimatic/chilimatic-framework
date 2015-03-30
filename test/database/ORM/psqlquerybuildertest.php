@@ -9,7 +9,7 @@
  */
 
 require_once '../../../app/general/init.php';
-\chilimatic\lib\di\Factory::getInstance(
+\chilimatic\lib\di\ClosureFactory::getInstance(
     realpath('../../../app/config/serviceCollection.php')
 );
 

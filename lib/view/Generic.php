@@ -10,7 +10,7 @@ abstract class Generic implements ViewInterface
     /**
      * trait for inheritance
      */
-    use viewTrait;
+    use ViewTrait;
 
     /**
      * Engine (like Smarty and so on)
