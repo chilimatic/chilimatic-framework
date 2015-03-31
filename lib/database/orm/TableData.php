@@ -8,6 +8,7 @@
  * File: TableData.php
  */
 namespace chilimatic\lib\database\orm;
+use chilimatic\lib\database\AbstractDatabase;
 
 /**
  * Class TableData
@@ -41,6 +42,17 @@ class TableData
      */
     private $prefix;
 
+    /**
+     * @var AbstractDatabase
+     */
+    private $db;
+
+    /**
+     * @param AbstractDatabase $db
+     */
+    public function __construct(AbstractDatabase $db) {
+        $this->db = $db;
+    }
 
     /**
      * @param string $tableName
@@ -51,22 +63,55 @@ class TableData
         return substr(md5($tableName), 0, 4);
     }
 
+
+    private function fetchTableMetaData()
+    {
+        if (!$this->db || !$this->tableName) {
+            return;
+        }
+
+        /**
+         * @var \PDOStatement $stmt
+         */
+        $stmt = $this->db->getDb()->query('desc ' . $this->tableName);
+        $this->columnData = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+
     /**
-     * @param $propertyList
-     *
      * @return array
      */
-    public function getColumnsNamesWithPrefix($propertyList)
+    public function getColumnsNamesWithPrefix()
     {
         if (!empty($this->columnsNamesWithPrefix)) {
             return $this->columnsNamesWithPrefix;
         }
 
-        foreach ($propertyList as $key => $value) {
-            $this->columnsNamesWithPrefix[] = "`$this->prefix`.`$key`";
+        foreach ($this->getColumnData() as $value) {
+            $this->columnsNamesWithPrefix[] = "`$this->prefix`.`{$value['Field']}`";
         }
 
         return $this->columnsNamesWithPrefix;
+    }
+
+    /**
+     * @return AbstractDatabase
+     */
+    public function getDb()
+    {
+        return $this->db;
+    }
+
+    /**
+     * @param AbstractDatabase $db
+     *
+     * @return $this
+     */
+    public function setDb(AbstractDatabase $db)
+    {
+        $this->db = $db;
+
+        return $this;
     }
 
 
@@ -116,6 +161,10 @@ class TableData
      */
     public function getColumnData()
     {
+        if (!$this->columnData) {
+            $this->fetchTableMetaData();
+        }
+
         return $this->columnData;
     }
 

@@ -70,6 +70,9 @@ class EntityManager {
     {
         $this->db = $db;
         $this->queryBuilder = $queryBuilder;
+        if ($this->queryBuilder) {
+            $this->queryBuilder->setDb($db);
+        }
     }
 
     /**
@@ -165,7 +168,7 @@ class EntityManager {
      */
     public function findOneBy(AbstractModel $model, $param = [])
     {
-        $query = $this->queryBuilder->generateForModel($model, $param);
+        $query = $this->queryBuilder->generateSelectForModel($model, $param);
         $result = $this->executeQuery($model, $this->prepare($query, $param));
 
         if ($result instanceof AbstractModel) {
