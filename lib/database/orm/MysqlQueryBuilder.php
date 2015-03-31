@@ -10,7 +10,8 @@
 
 namespace chilimatic\lib\database\orm;
 use chilimatic\lib\cache\engine\CacheInterface;
-use chilimatic\lib\parser\ORMParser;
+use chilimatic\lib\database\AbstractDatabase;
+
 
 /**
  * Class MysqlQueryBuilder
@@ -48,11 +49,6 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
     private $relation;
 
     /**
-     * @var array
-     */
-    private $tableData;
-
-    /**
      * @var \chilimatic\lib\database\ORM\AbstractModel
      */
     private $model;
@@ -62,26 +58,17 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
      */
     private $cache;
 
-    /**
-     * @var array
-     */
-    private $param;
-
-    /**
-     * @var ORMParser
-     */
-    private $parser;
 
     /**
      * init cache connection
      *
      * @param CacheInterface $cache
+     * @param AbstractDatabase $db
      */
-    public function __construct(CacheInterface $cache = null)
+    public function __construct(CacheInterface $cache = null, AbstractDatabase $db)
     {
-        $this->parser = new ORMParser();
         $this->relation = new \SplFixedArray();
-        $this->tableData = new TableData();
+        parent::__construct($cache, $db);
     }
 
     /**
@@ -120,7 +107,12 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
     /**
      * @return string
      */
-    public function generateCondition() {
+    public function generateCondition()
+    {
+        if (empty($this->param)) {
+            return '';
+        }
+
         $str = ' WHERE ';
         foreach ($this->param as $key => $value) {
             if ($value) {
@@ -135,7 +127,7 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
 
     public function generateColumList()
     {
-        return ($this->propertyList ? implode(',', $this->tableData->getColumnsNamesWithPrefix($this->propertyList)) : '*');
+        return ($this->propertyList ? implode(',', $this->tableData->getColumnsNamesWithPrefix()) : '*');
     }
 
 
@@ -147,7 +139,7 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
             " ",
             [
                 "SELECT",
-                $this->generateColumList($this->tableData->getPrefix()),
+                $this->generateColumList(),
                 "FROM",
                 $this->tableData->getTableName(),
                 $this->tableData->getPrefix(),
@@ -301,26 +293,6 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
     /**
      * @return mixed
      */
-    public function getTableData()
-    {
-        return $this->tableData;
-    }
-
-    /**
-     * @param mixed $tableData
-     *
-     * @return $this
-     */
-    public function setTable($tableData)
-    {
-        $this->tableData = $tableData;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getModel()
     {
         return $this->model;
@@ -354,26 +326,6 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
     public function setCache(CacheInterface $cache)
     {
         $this->cache = $cache;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getParam()
-    {
-        return $this->param;
-    }
-
-    /**
-     * @param array $param
-     *
-     * @return $this
-     */
-    public function setParam($param)
-    {
-        $this->param = $param;
 
         return $this;
     }

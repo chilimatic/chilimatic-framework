@@ -697,7 +697,7 @@ class Mysql extends AbstractDatabase
     public function query( $query )
     {
         $db = $this->getDb();
-        if ( empty($query) || !$db->getDb() ) return false;
+        if ( empty($query) || !$db ) return false;
 
 
         // if the resource type is not a mysql link it should try to reconnect
