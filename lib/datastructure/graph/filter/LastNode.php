@@ -8,7 +8,7 @@
  * File: lastNode.php
  */
 namespace chilimatic\lib\datastructure\graph\filter;
-use chilimatic\lib\comperator\traits\StringValueBiggerThan;
+use chilimatic\lib\traits\comperator\StringValueBiggerThan;
 
 /**
  * returns the "deepest nested Node"

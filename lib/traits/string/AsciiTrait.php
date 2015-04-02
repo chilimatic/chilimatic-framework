@@ -7,12 +7,12 @@
  *
  * File: AsciiTrait.php
  */
-namespace chilimatic\lib\string\traits;
+namespace chilimatic\lib\traits\string;
 
 /**
  * Class AsciiTrait
  *
- * @package chilimatic\lib\string\traits
+ * @package chilimatic\lib\traits\string
  */
 Trait AsciiTrait
 {
