@@ -8,7 +8,7 @@
  * File: FirstNode.php
  */
 namespace chilimatic\lib\datastructure\graph\filter;
-use chilimatic\lib\comperator\traits\StringValueBiggerThan;
+use chilimatic\lib\traits\comperator\StringValueBiggerThan;
 
 /**
  * Class LastNode
