@@ -8,16 +8,16 @@
  * File: FunctionCall.php
  */
 
-namespace chilimatic\lib\parser;
+namespace chilimatic\lib\validator;
 
-use chilimatic\lib\interfaces\IFlyWeightParser;
+use chilimatic\lib\interfaces\IFlyWeightValidator;
 
 /**
  * Class DynamicFunctionNamePreTransformed
  *
  * @package chilimatic\lib\parser
  */
-class DynamicCallNamePreTransformed implements IFlyWeightParser{
+class DynamicCallNamePreTransformed implements IFlyWeightValidator{
     /**
      * the local Parser
      *
@@ -38,11 +38,21 @@ class DynamicCallNamePreTransformed implements IFlyWeightParser{
     private $errorMsg;
 
     /**
+     * @param mixed $value
+     *
+     * @return string
+     */
+    function __invoke($value)
+    {
+        return $this->validate($value);
+    }
+
+    /**
      * @param string $content
      *
      * @return string
      */
-    public function parse($content)
+    public function validate($content)
     {
         if (!$content) {
             return false;

@@ -4,6 +4,8 @@ namespace chilimatic\lib\route;
 use chilimatic\lib\cache\engine\Cache;
 use chilimatic\lib\config\Config;
 use chilimatic\lib\exception\RouteException;
+use chilimatic\lib\interfaces\IFlyWeightParser;
+use chilimatic\lib\route\parser\UrlParser;
 use chilimatic\lib\route\routesystem\RouteSystemFactory;
 
 /**
@@ -45,46 +47,40 @@ class Router
     const ROUTING_ERROR = 20;
 
     /**
-     * list of set delimiters
-     * 
-     * @var array
-     */
-    private $_delimiter_list = array(
-        Map::DEFAULT_URL_DELIMITER
-    );
-    
-    /**
      * Caching Object
      * 
      * @var object
      */
     private $_cache = null;
 
-
     /**
      * url parts
      * 
      * @var array
      */
-    public $urlPart = array();
-
+    protected $urlPart = array();
 
     /**
      * @var
      */
     private $routeSystem;
 
+    /**
+     * @var
+     */
+    private $urlParser;
+
 
     /**
-     * singelton contructor
+     * @param string
      *
      * @throws RouteException
      * @throws \Exception
      */
     public function __construct($type) {
+        $this->urlParser = new UrlParser();
         $this->routeSystem = RouteSystemFactory::make($type, $this->__getPath());
     }
-
 
 
     /**
@@ -99,78 +95,6 @@ class Router
         if ( !property_exists($this, $property) ) return false;
         
         return $this->$property;
-    }
-
-
-    /**
-     * returns a clean path
-     * 
-     * @param string $path
-     * 
-     * @return boolean|string|array
-     */
-    public function getCleanPath( $path )
-    {
-        // if there is no path it's not needed to try to get a clean one
-        if ( empty($path) ) return false;
-
-        // this delimiter is eventually going to be overwritten
-        $delimiter = Map::DEFAULT_URL_DELIMITER;
-
-        // loop through the delimiter list to find and "optional" setting
-        foreach ( $this->_delimiter_list as $delimiter )
-        {
-            if ( mb_strpos($path, $delimiter) === false ) continue;
-            // one hit means break and keep the delimiter
-            break;
-        }
-
-        // remove the first slash for safety reasons [delimitor mapping] based on the web-server Rewrite
-        if ( mb_strpos($path, $delimiter) === 0 )
-        {
-            $path = mb_substr($path, 1);
-        }
-
-        // if the last character is a delimiter remove it as well
-        if ( mb_strpos($path, $delimiter) == mb_strlen($path) - 1 )
-        {
-            $path = mb_substr($path, 0, -1);
-        }
-
-        //remove the get parameter so it's clean
-        if (($ppos = mb_strpos($path, '?')) && $ppos > 0) {
-            $path = mb_substr($path, 0, $ppos);
-        }
-
-        unset($ppos);
-        
-        // check if there is even a need for further checks
-        if ( mb_strpos($path, $delimiter) === false )
-        {
-            // set the root and the path
-            $pathParts = array(
-                                $delimiter,
-                                $path
-            );
-            return $pathParts;
-        }
-
-        // if theres a deeper path it's time to walk through it and clean the empty parts etc
-        $pathParts = explode($delimiter, $path);
-
-        // walk through the array and remove the empty entries
-        for ($i = 0, $c = count($pathParts); $i < $c; $i++ )
-        {
-            if ( empty($pathParts[$i]) ) unset($pathParts[$i]);
-        }
-
-        // path parts
-        sort($pathParts);
-        // prepend the default delimiter
-        array_unshift($pathParts, $delimiter);
-
-        // path parts
-        return $pathParts;
     }
 
 
@@ -192,7 +116,7 @@ class Router
 
         if ( empty($path) || $path == '/' ) $path = Map::DEFAULT_URL_DELIMITER;
         // get the clean path
-        $this->urlPart = static::getCleanPath($path);
+        $this->urlPart = $this->urlParser->parse($path);
 
 
         return $path;
@@ -219,8 +143,6 @@ class Router
     }
 
 
-
-
     /**
      * Saves the Routing list properly
      */
@@ -228,5 +150,27 @@ class Router
     {
         $this->_cache = Cache::getInstance(Config::get('cache_type'));
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUrlParser()
+    {
+        return $this->urlParser;
+    }
+
+    /**
+     * @param mixed $urlParser
+     *
+     * @return $this
+     */
+    public function setUrlParser(IFlyWeightParser $urlParser)
+    {
+        $this->urlParser = $urlParser;
+
+        return $this;
+    }
+
+
+
 }
-?>

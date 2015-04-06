@@ -16,6 +16,20 @@ namespace chilimatic\lib\route\validator;
  */
 class ValidatorNum extends AbstractValidator
 {
+    /**
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    public function validate($value) {
+        // generic pattern match if it's numeric [float/int/double]
+        if ( !preg_match( '/^\d{0,}[.,]?\d*$/', (string) $value ) ) return false;
+
+        $this->value = $value;
+
+        return true;
+    }
+
 
     /**
      * (non-PHPdoc)
@@ -24,34 +38,6 @@ class ValidatorNum extends AbstractValidator
      */
     public function __invoke( $value )
     {
-        // generic pattern match if it's numeric [float/int/double]
-        if ( !preg_match( '/^\d{0,}[.,]?\d*$/', (string) $value ) ) return false;
-        
-        $this->value = $this->get_typecast( $value );
-        
-        return true;
-    }
-
-    /**
-     * sets the typecast
-     * 
-     * @param mixed $value
-     * @return number|boolean
-     */
-    public function get_typecast( $value )
-    {
-
-        switch ( 1 )
-        {
-            case preg_match( '/^\d$/', $value ) :
-                return (int) $value;
-                break;
-            case preg_match( '/^\d{0,}[.,]?\d*$/', $value ) :
-                return (float) $value;
-                break;
-            default :
-                return (float) $value;
-                break;
-        }
+        return $this->validate($value);
     }
 }

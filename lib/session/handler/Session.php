@@ -101,12 +101,12 @@ class Session {
      * @param mixed $value
      *
      * @return $this
-     * @throws Exception_InvalidArgument
+     * @throws \InvalidArgumentException
      */
     public function set($key, $value)
     {
         if (!$key) {
-            throw new Exception_InvalidArgument('Missing Key in Session Set Method');
+            throw new \InvalidArgumentException('Missing Key in Session Set Method');
         }
         $this->sessionData[$key] = $value;
 
@@ -131,12 +131,12 @@ class Session {
      * @param $value
      *
      * @return $this
-     * @throws Exception_InvalidArgument
+     * @throws \InvalidArgumentException
      */
     public function setByNamespace($namespace, $key, $value)
     {
         if (!$key || !$namespace) {
-            throw new Exception_InvalidArgument('Missing Key in Session Set Method');
+            throw new \InvalidArgumentException('Missing Key in Session Set Method');
         }
 
         if (!$this->sessionNameSpaceData[$namespace]) {

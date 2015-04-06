@@ -18,6 +18,15 @@ interface IFlyWeightValidator {
      * abstract validation
      *
      * @param mixed $value
+     *
+     * @return bool
      */
-    function __invoke( $value );
+    public function __invoke( $value );
+
+    /**
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    public function validate($value);
 }

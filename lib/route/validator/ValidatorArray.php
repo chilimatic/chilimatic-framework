@@ -15,25 +15,34 @@ namespace chilimatic\lib\route\validator;
 class ValidatorArray extends AbstractValidator
 {
 
-
     /**
-     * (non-PHPdoc)
-     * @see \Route\Route_AbstractValidator::validate()
+     * @param mixed $value
+     *
+     * @return bool
      */
-    public function __invoke( $value )
+    public function validate($value)
     {
-
         if ( empty($value) ) return false;
-        
-        if ( stripos($value, $this->delimiter) !== false )
-        {
+
+        if ( stripos($value, $this->delimiter) !== false ) {
             $this->value = explode($this->delimiter, $value);
             return true;
         }
-        
+
         $this->value = array(
-                            $value
+            $value
         );
         return true;
+    }
+
+
+    /**
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    public function __invoke( $value )
+    {
+        return $this->validate($value);
     }
 }
