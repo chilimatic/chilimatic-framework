@@ -12,14 +12,15 @@ use chilimatic\lib\route\map\MapFactory;
 
 /**
  * Class RouteTrait
+ *
  * @package chilimatic\lib\route\routesystem
  */
-Trait RouteTrait {
-
+Trait RouteTrait
+{
     /**
      * @var string
      */
-    private $stdView = 'view\\View';
+    public $defaultModule = 'main';
 
     /**
      * @var string
@@ -34,7 +35,7 @@ Trait RouteTrait {
     /**
      * @var string
      */
-    private $methodSuffix = 'Action';
+    private $actionSuffix = 'Action';
 
     /**
      * @var string
@@ -44,7 +45,12 @@ Trait RouteTrait {
     /**
      * @var string
      */
-    private $defaultNameSpace = '\chilimatic\app\\controller\\';
+    private $defaultNameSpace = '\chilimatic\app\module';
+
+    /**
+     * @var string
+     */
+    private $defaultControllerPath = 'controller';
 
     /**
      * @var string
@@ -55,6 +61,7 @@ Trait RouteTrait {
      * @var \chilimatic\lib\route\map\MapFactory
      */
     private $mapFactory;
+
 
 
     /**
@@ -109,8 +116,8 @@ Trait RouteTrait {
      * @param $class
      * @return string
      */
-    private function generateClassName($namespace, $class) {
-        return $namespace . ucfirst(\chilimatic\lib\interpreter\Url::interpret($class));
+    private function generateClassName($namespace, $module, $controllerPath, $class) {
+        return [$namespace , $module, $controllerPath ,ucfirst(\chilimatic\lib\interpreter\Url::interpret($class))];
     }
 
 
@@ -127,11 +134,24 @@ Trait RouteTrait {
 
         // more than 1 part means class/method/[value or param{/value}]
         if (count($pathPart) >= 1) {
-            $class = $this->generateClassName($this->defaultNameSpace, empty($pathPart[0]) ? $this->defaultClass : $pathPart[0]);
-            $urlMethod = (string) empty($pathPart[1]) ? $this->defaultMethod : $pathPart[1] . $this->methodSuffix;
+            $module = empty($pathPart[0]) ? $this->defaultModule : $pathPart[0];
+            $class = implode ('\\',  $this->generateClassName(
+                $this->defaultNameSpace,
+                $module,
+                $this->defaultControllerPath,
+                empty($pathPart[1]) ? $this->defaultClass : $pathPart[1])
+            );
+
+            $urlMethod = (string) empty($pathPart[2]) ? $this->defaultMethod : $pathPart[2] . $this->actionSuffix;
             $method = \chilimatic\lib\interpreter\Url::interpret($urlMethod);
         } else {
-            $class = $this->generateClassName($this->defaultNameSpace, $this->defaultClass);
+            $class = implode ('\\',  $this->generateClassName(
+                $this->defaultNameSpace,
+                $this->defaultModule,
+                $this->defaultControllerPath ,
+                $this->defaultClass)
+            );
+
             $urlMethod = (string) $this->defaultMethod;
             $method = \chilimatic\lib\interpreter\Url::interpret($urlMethod);
         }
@@ -157,20 +177,25 @@ Trait RouteTrait {
         return null;
     }
 
+
     /**
      * @return string
      */
-    public function getStdView()
+    public function getActionSuffix()
     {
-        return $this->stdView;
+        return $this->actionSuffix;
     }
 
     /**
-     * @param string $stdView
+     * @param string $actionSuffix
+     *
+     * @return $this
      */
-    public function setStdView($stdView)
+    public function setActionSuffix($actionSuffix)
     {
-        $this->stdView = $stdView;
+        $this->actionSuffix = $actionSuffix;
+
+        return $this;
     }
 
     /**
@@ -268,7 +293,4 @@ Trait RouteTrait {
     {
         $this->defaultUrlDelimiter = $defaultUrlDelimiter;
     }
-
-
-
 }

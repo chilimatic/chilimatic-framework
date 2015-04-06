@@ -10,6 +10,9 @@ use chilimatic\lib\exception\RouteException;
  */
 class Validator
 {
+    /**
+     * @var string
+     */
     const VALIDATORPREFIX = 'Validator';
 
     /**
@@ -39,8 +42,7 @@ class Validator
     /**
      * constructor
      *
-     * @param $urlPart
-     * @internal param string $url_part
+     * @param string $urlPart
      */
     public function __construct( $urlPart )
     {
@@ -49,8 +51,7 @@ class Validator
         
         $this->urlPart = $urlPart;
         
-        if ( ($p = Config::get('url_validator_pattern')) != '' )
-        {
+        if ( ($p = Config::get('url_validator_pattern')) != '' ) {
             $this->_current_pattern = $p;
         }
         
@@ -65,7 +66,7 @@ class Validator
      * 
      * @return bool
      */
-    private function _valid_pattern( $string )
+    private function valid_pattern( $string )
     {
         return preg_match($this->_current_pattern, $string);
     }
@@ -79,7 +80,6 @@ class Validator
      */
     public function __get( $property )
     {
-
         if ( !property_exists($this, $property) ) return false;
         
         return $property;
@@ -89,16 +89,20 @@ class Validator
     /**
      * extract pattern
      * 
-     * @return boolean
+     * @return array
      */
-    private function _extract()
+    private function getMatches()
     {
 
-        if ( empty($this->urlPart) || !$this->_valid_pattern($this->urlPart) ) return false;
+        if ( empty($this->urlPart) || !$this->validate($this->urlPart) ) {
+            return [];
+        }
         
-        preg_match($this->_current_pattern, $this->urlPart, $result);
+        if (!preg_match($this->_current_pattern, $this->urlPart, $matches)) {
+            return [];
+        }
         
-        return $result;
+        return $matches;
     }
 
 
@@ -115,33 +119,27 @@ class Validator
 
         try
         {
-            if ( !empty($urlPart) && $this->_valid_pattern($urlPart) )
-            {
+            if ( !empty($urlPart) && $this->validate($urlPart) ) {
                 $this->urlPart = $urlPart;
             }
             
-            if ( empty($this->urlPart) || !$this->_valid_pattern($this->urlPart) )
-            {
+            if ( empty($this->urlPart) || !$this->validate($this->urlPart) ) {
                 throw new RouteException('url part empty or not a valid pattern : ' . $this->urlPart);
             }
             
-            $array = $this->_extract();
+            $array = $this->getMatches();
 
             $validator = (string) (get_class($this) . '\\' ). self::VALIDATORPREFIX  . ucfirst($array[1]);
             
-            if ( !class_exists($validator) )
-            {
+            if ( !class_exists($validator) ) {
                 throw new RouteException('Class does not exist : ' . $validator);
             }
-        }
-        catch ( RouteException $e )
-        {
+        } catch ( RouteException $e ) {
             throw $e;
         }
         
         $this->validator = new $validator();
-        if (isset($array[2]))
-        {
+        if (isset($array[2])) {
             $this->validator->delimiter = $array[2];
         }
         

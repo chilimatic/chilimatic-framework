@@ -36,7 +36,6 @@ class HTTPHandler extends GenericHandler
             throw new \LogicException('No Include Root has been passed along');
         }
         $this->includeRoot = $param['include-root'];
-        $this->init();
     }
 
     /**
@@ -74,13 +73,4 @@ class HTTPHandler extends GenericHandler
                 )
             );
     }
-
-    /**
-     *
-     */
-    public function init()
-    {
-
-    }
-
 }

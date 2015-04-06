@@ -13,8 +13,7 @@ abstract class AbstractValidator implements IFlyWeightValidator
 
     /**
      * current value inserted through the url
-     * 
-     * 
+     *
      * @var string
      */
     public $value = null;
@@ -30,9 +29,17 @@ abstract class AbstractValidator implements IFlyWeightValidator
 
 
     /**
-     * abstract validation
-     * 
      * @param mixed $value
+     *
+     * @return mixed
+     */
+    abstract function validate( $value );
+
+
+    /**
+     * @param mixed $value
+     *
+     * @return mixed
      */
     abstract function __invoke( $value );
 }

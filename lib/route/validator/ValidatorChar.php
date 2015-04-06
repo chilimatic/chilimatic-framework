@@ -16,16 +16,24 @@ namespace chilimatic\lib\route\validator;
 class ValidatorChar extends AbstractValidator
 {
 
+    /**
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    public function validate( $value )
+    {
+        return preg_match('/^\w{0,}$/', $value) && !preg_match('/^\d{0,}[.,]?\d*$/', $value);
+    }
+
 
     /**
-     * (non-PHPdoc)
-     * @see \Route\Route_AbstractValidator::validate()
+     * @param mixed $value
+     *
+     * @return bool
      */
     public function __invoke( $value )
     {
-
-        if ( preg_match('/^\w{0,}$/', $value) && !preg_match('/^\d{0,}[.,]?\d*$/', $value) ) return true;
-        
-        return false;
+        return $this->validate($value);
     }
 }
