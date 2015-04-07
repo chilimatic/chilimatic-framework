@@ -7,8 +7,10 @@
  */
 namespace chilimatic\lib\route\routesystem;
 
+use chilimatic\lib\interfaces\IFlyWeightTransformer;
 use chilimatic\lib\route\Map;
 use chilimatic\lib\route\map\MapFactory;
+use chilimatic\lib\transformer\string\DynamicFunctionCallName;
 
 /**
  * Class RouteTrait
@@ -62,7 +64,10 @@ Trait RouteTrait
      */
     private $mapFactory;
 
-
+    /**
+     * @var DynamicFunctionCallName
+     */
+    private $transformer;
 
     /**
      * gets the default route based on my framework scheme
@@ -112,12 +117,14 @@ Trait RouteTrait
     /**
      * declarative generator method
      *
-     * @param $namespace
-     * @param $class
+     * @param string $namespace
+     * @param string $module
+     * @param string $class
+     * @param string $controllerPath
      * @return string
      */
     private function generateClassName($namespace, $module, $controllerPath, $class) {
-        return [$namespace , $module, $controllerPath ,ucfirst(\chilimatic\lib\interpreter\Url::interpret($class))];
+        return [$namespace , $module, $controllerPath ,ucfirst($this->transformer->transform($class))];
     }
 
 
@@ -143,7 +150,7 @@ Trait RouteTrait
             );
 
             $urlMethod = (string) empty($pathPart[2]) ? $this->defaultMethod : $pathPart[2] . $this->actionSuffix;
-            $method = \chilimatic\lib\interpreter\Url::interpret($urlMethod);
+            $method = $this->transformer->transform($urlMethod);
         } else {
             $class = implode ('\\',  $this->generateClassName(
                 $this->defaultNameSpace,
@@ -153,7 +160,7 @@ Trait RouteTrait
             );
 
             $urlMethod = (string) $this->defaultMethod;
-            $method = \chilimatic\lib\interpreter\Url::interpret($urlMethod);
+            $method = $this->transformer->transform($urlMethod);
         }
 
         if (class_exists($class, true)) {
@@ -166,7 +173,7 @@ Trait RouteTrait
                     "/{$class}/{$method}",
                     [
                         'object' => $class,
-                        'method' => \chilimatic\lib\interpreter\Url::interpret($method),
+                        'method' => $this->transformer->transform($method),
                         'namespace' => null
                     ],
                     $this->defaultUrlDelimiter
@@ -293,4 +300,67 @@ Trait RouteTrait
     {
         $this->defaultUrlDelimiter = $defaultUrlDelimiter;
     }
+
+
+    /**
+     * @return string
+     */
+    public function getDefaultModule()
+    {
+        return $this->defaultModule;
+    }
+
+    /**
+     * @param string $defaultModule
+     *
+     * @return $this
+     */
+    public function setDefaultModule($defaultModule)
+    {
+        $this->defaultModule = $defaultModule;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultControllerPath()
+    {
+        return $this->defaultControllerPath;
+    }
+
+    /**
+     * @param string $defaultControllerPath
+     *
+     * @return $this
+     */
+    public function setDefaultControllerPath($defaultControllerPath)
+    {
+        $this->defaultControllerPath = $defaultControllerPath;
+
+        return $this;
+    }
+
+    /**
+     * @return DynamicFunctionCallName
+     */
+    public function getTransformer()
+    {
+        return $this->transformer;
+    }
+
+    /**
+     * @param IFlyWeightTransformer $transformer
+     *
+     * @return $this
+     */
+    public function setTransformer(IFlyWeightTransformer $transformer)
+    {
+        $this->transformer = $transformer;
+
+        return $this;
+    }
+
+
 }
