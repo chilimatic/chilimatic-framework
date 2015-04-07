@@ -8,6 +8,7 @@
 namespace chilimatic\lib\route\routesystem;
 use chilimatic\lib\route\Map;
 use chilimatic\lib\route\routesystem\noderoute\Node;
+use chilimatic\lib\transformer\string\DynamicFunctionCallName;
 
 /**
  * Class AbstractRoute
@@ -35,6 +36,7 @@ abstract class AbstractRoute
      */
     public function __construct($path){
         $this->path = $path;
+        $this->setTransformer(new DynamicFunctionCallName());
     }
 
 
