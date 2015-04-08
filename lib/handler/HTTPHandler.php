@@ -48,6 +48,7 @@ class HTTPHandler extends GenericHandler
         if (!$this->route) {
             return null;
         }
+
         $return = $this->route->call();
         $this->setView($return[1]->getView());
 

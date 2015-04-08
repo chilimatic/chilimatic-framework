@@ -7,6 +7,7 @@ namespace chilimatic\lib\route\map;
  * Date: 6/14/14
  * Time: 8:15 PM
  */
+use chilimatic\lib\interfaces\IFlyWeightParser;
 
 /**
  * Interface MapCallInterface
@@ -15,9 +16,10 @@ namespace chilimatic\lib\route\map;
 Interface MapCallInterface {
 
     /**
-     * @param $config
+     * @param mixed $config
+     * @param IFlyWeightParser $parser
      */
-    public function __construct($config);
+    public function __construct($config, IFlyWeightParser $parser = null);
 
     /**
      * @return mixed

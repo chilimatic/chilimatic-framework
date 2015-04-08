@@ -5,6 +5,7 @@ namespace chilimatic\lib\route;
 
 use \chilimatic\lib\exception\RouteException;
 use chilimatic\lib\route\map\StrategyFactory;
+use chilimatic\lib\route\parser\RouteMethodAnnotaionParser;
 
 
 /**
@@ -84,7 +85,6 @@ class Map
      */
     private $strategy = null;
 
-
     /**
      * general constructor
      *
@@ -99,7 +99,6 @@ class Map
         if ( empty( $uri ) ) return;
         
         $this->_delimiter = (!empty( $delimiter ) ? $delimiter : self::DEFAULT_URL_DELIMITER);
-        
         /**
          * inititalize the routing map
          */
@@ -116,7 +115,7 @@ class Map
      *
      * @return boolean Ambigous \Route\Route_Validator>
      */
-    private function __validate( $uri )
+    private function validate( $uri )
     {
 
         try
@@ -134,8 +133,7 @@ class Map
             for ($i = 0, $c = count($parts); $i < $c; $i++)
             {
                 if ( empty( $parts[$i] ) ) continue;
-                elseif ( (strpos( $parts[$i], self::VALIDATION_PREFIX )) === false ) // if there's no placeholder in use for a specific type
-                {
+                elseif ( (strpos( $parts[$i], self::VALIDATION_PREFIX )) === false ) { // if there's no placeholder in use for a specific type
                     $this->urlPart[] = $parts[$i];
                     continue;
                 }
@@ -181,8 +179,7 @@ class Map
              * check if there is a general type validation
              * can throw an exception
              */
-            $this->__validate($uri);
-
+            $this->validate($uri);
 
             switch ( true )
             {
@@ -191,7 +188,7 @@ class Map
                  */
                 case (is_array( $callback ) || (is_object( $callback ) && !is_callable( $callback ))) :
                     $this->setType(self::TYPE_O);
-                    $this->strategy = StrategyFactory::make(self::TYPE_O, $callback);
+                    $this->strategy = StrategyFactory::make(self::TYPE_O, $callback, new RouteMethodAnnotaionParser());
                     break;
                 
                 /**
@@ -201,8 +198,7 @@ class Map
                     $this->setType(self::TYPE_F);
                     $this->strategy = StrategyFactory::make(self::TYPE_F, $callback);
 
-                    if ( !function_exists( $callback ) )
-                    {
+                    if ( !function_exists( $callback ) ) {
                         throw new RouteException( sprintf( _( 'There is no such Function like %s' ), $callback ) );
                     }
                     break;
@@ -290,7 +286,9 @@ class Map
     }
 
     /**
-     * @param null $type
+     * @param $type
+     *
+     * @return $this
      */
     public function setType($type)
     {
@@ -308,11 +306,12 @@ class Map
 
     /**
      * @param array $urlPart
+     *
+     * @return $this
      */
     public function setUrlPart(array $urlPart)
     {
         $this->urlPart = $urlPart;
         return $this;
     }
-
 }
