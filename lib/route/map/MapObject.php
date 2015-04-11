@@ -70,7 +70,7 @@ class MapObject extends Generic
         }
         // invalid
         else {
-            throw new RouteException( sprintf( _( 'The Callback was not propper defined %s' ), print_r( $this->config, true ) ) );
+            throw new RouteException(sprintf( _( 'The Callback was not proper defined %s' ), print_r($this->config, true)));
         }
     }
 
@@ -94,12 +94,10 @@ class MapObject extends Generic
                 $return[0] = $object->{$this->method}(array_merge((array) $this->param, (array) $param));
                 return $return;
             }
-
             $return[0] = $object->{$this->method}();
             return $return;
         }
 
-        $return[1] = $object;
         return $return;
     }
 

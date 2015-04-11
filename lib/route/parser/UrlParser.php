@@ -31,12 +31,12 @@ class UrlParser implements IFlyWeightParser
     private function getCleanPath($path)
     {
         // remove the first slash for safety reasons [delimitor mapping] based on the web-server Rewrite
-        if ( mb_strpos($path, $this->delimiter) === 0 ) {
+        if (mb_strpos($path, $this->delimiter) === 0) {
             $path = mb_substr($path, 1);
         }
 
         // if the last character is a delimiter remove it as well
-        if ( mb_strpos($path, $this->delimiter) == mb_strlen($path) - 1 ) {
+        if (mb_strpos($path, $this->delimiter) == mb_strlen($path) - 1) {
             $path = mb_substr($path, 0, -1);
         }
 
@@ -64,7 +64,7 @@ class UrlParser implements IFlyWeightParser
         $path = $this->getCleanPath($content);
 
         // check if there is even a need for further checks
-        if ( mb_strpos($path, $this->delimiter) === false ) {
+        if (mb_strpos($path, $this->delimiter) === false) {
             if (!$path) {
                 return [$this->delimiter];
             }

@@ -6,7 +6,7 @@ use chilimatic\lib\interfaces\IFlyWeightParser;
  * Class Generic
  * @package chilimatic\lib\route\map
  */
-abstract class Generic implements MapCallInterface {
+abstract class Generic implements IMapStragey {
 
     /**
      * @var mixed

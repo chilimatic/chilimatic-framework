@@ -13,9 +13,8 @@ namespace chilimatic\lib\datastructure\graph;
  * Class Node
  * @package chilimatic\collections
  */
-class Node
+class Node implements INode
 {
-
     /**
      * this is the delimiter for multiple entries
      * since the ID should be unique so if you insert 2 or more nodes with the same
@@ -82,12 +81,12 @@ class Node
     /**
      * constructor
      *
-     * @param Node $parentNode
+     * @param INode $parentNode
      * @param $key
      * @param $data
      * @param string $comment
      */
-    public function __construct(Node $parentNode = null, $key, $data, $comment = '')
+    public function __construct(INode $parentNode = null, $key, $data, $comment = '')
     {
         // set the parent node
         $this->parentNode = $parentNode;
@@ -114,15 +113,7 @@ class Node
         $this->id = str_replace('..', '.', $this->id);
     }
 
-    /**
-     * gets the Data
-     *
-     * @return mixed|null
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
+
 
     /**
      * @return string
@@ -169,6 +160,16 @@ class Node
         return $this->children->getById($id);
     }
 
+
+    /**
+     * gets the Data
+     *
+     * @return mixed|null
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
 
     /**
      * set the current data

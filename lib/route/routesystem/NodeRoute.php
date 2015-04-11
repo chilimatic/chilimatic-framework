@@ -7,10 +7,9 @@
  */
 namespace chilimatic\lib\route\routesystem;
 
+use chilimatic\lib\datastructure\graph\tree\binary\BinaryTree;
 use chilimatic\lib\exception\RouteException;
-use chilimatic\lib\datastructure\graph\TreeNode;
 use chilimatic\lib\route\Map;
-use chilimatic\lib\route\routesystem\noderoute\Node;
 
 
 /**
@@ -23,32 +22,21 @@ class NodeRoute extends AbstractRoute
     /**
      * Main Node
      *
-     * @var Node
+     * @var BinaryTree
      */
-    private $rootNode;
+    private $binaryTree;
 
 
     /**
-     * @return Node
+     * @return BinaryTree
      * @throws \chilimatic\lib\exception\RouteException
      */
     public function getRoot() {
-        if (!$this->rootNode) {
-            $this->rootNode = new Node(null, '.', $this->getDefaultRoute(), 'Root Node');
+        if ($this->binaryTree->isEmpty()) {
+            $this->binaryTree->insert('/', $this->getDefaultRoute());
         }
 
-        return $this->rootNode;
-    }
-
-    /**
-     * @param $map
-     *
-     * @return $this
-     */
-    public function setRootNode($map)
-    {
-        $this->rootNode = new Node(null, '.', $map, 'Root Node');
-        return $this;
+        return $this->binaryTree->getRoot()->getData();
     }
 
     /**
@@ -63,13 +51,14 @@ class NodeRoute extends AbstractRoute
     public function getRoute( $path = null )
     {
 
-        $this->currentRoute = new TreeNode($this->getRoot(),$path, $this->getStandardRouting($path));
-
-        if (!$this->currentRoute) {
-            $this->currentRoute = $this->getRoot()->findTreeBranch($path, MAP::DEFAULT_URL_DELIMITER);
+        if (($map = $this->binaryTree->findByKey($path))) {
+            return $map;
         }
-
-        return $this->currentRoute->getData();
+        if (($map = $this->getStandardRouting($path))) {
+            return $map;
+        }
+        
+        return $this->binaryTree->getRoot()->getData();
     }
 
     /**

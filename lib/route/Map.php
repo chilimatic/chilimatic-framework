@@ -93,16 +93,17 @@ class Map
      * @param string $delimiter
      *
      */
-    public function __construct( $uri = null, $callback = null, $delimiter = '/' )
+    public function __construct($uri = null, $callback = null, $delimiter = '/')
     {
 
-        if ( empty( $uri ) ) return;
-        
+        if (empty($uri)) return;
+
         $this->_delimiter = (!empty( $delimiter ) ? $delimiter : self::DEFAULT_URL_DELIMITER);
+
         /**
          * inititalize the routing map
          */
-        $this->init( $uri, $callback );
+        $this->init($uri, $callback);
     }
 
     /**
@@ -112,20 +113,18 @@ class Map
      *
      * @throws RouteException
      *
-     *
      * @return boolean Ambigous \Route\Route_Validator>
      */
-    private function validate( $uri )
-    {
 
+    private function validate($uri)
+    {
         try
         {
             // set to false as default
             $validate = false;
             
             // check if there is the marker vor a special validation and or a / for complex routing
-            if ( strpos( $uri, self::VALIDATION_PREFIX ) === false && strpos( $uri, $this->getDelimiter() ) === false )
-            {
+            if (strpos($uri, self::VALIDATION_PREFIX) === false && strpos($uri, $this->getDelimiter()) === false ) {
                 return false;
             }
             
@@ -134,6 +133,7 @@ class Map
             {
                 if ( empty( $parts[$i] ) ) continue;
                 elseif ( (strpos( $parts[$i], self::VALIDATION_PREFIX )) === false ) { // if there's no placeholder in use for a specific type
+
                     $this->urlPart[] = $parts[$i];
                     continue;
                 }
@@ -141,12 +141,11 @@ class Map
                 // this is an option to map "polymorph" [differnt types differnt classes / methods]
                 $this->urlPart[] = $parts[$i];
                 // position within the route to be validated
-                $validate[] = new Validator( $parts[$i] );
+                $validate[] = new Validator($parts[$i]);
                 $this->validate = true;
             }
             unset($parts, $c, $i, $uri);
-        } catch ( RouteException $e )
-        {
+        } catch (RouteException $e) {
             throw $e;
         }
 
@@ -181,7 +180,7 @@ class Map
              */
             $this->validate($uri);
 
-            switch ( true )
+            switch (true)
             {
                 /**
                  * check if the routing maps to an object via array or class

@@ -13,7 +13,7 @@ use chilimatic\lib\interfaces\IFlyWeightParser;
  * Interface MapCallInterface
  * @package chilimatic\lib\route\map
  */
-Interface MapCallInterface {
+Interface IMapStragey {
 
     /**
      * @param mixed $config

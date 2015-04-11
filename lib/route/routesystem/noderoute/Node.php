@@ -32,7 +32,7 @@ class Node extends \chilimatic\lib\datastructure\graph\TreeNode
      * @param \chilimatic\lib\route\Map $map
      * @param string $comment
      */
-    public function __construct(Node $parentNode = null, $key, Map $map, $comment = '')
+    public function __construct(INode $parentNode = null, $key, Map $map, $comment = '')
     {
         // set the parent node
         $this->parentNode = $parentNode;
