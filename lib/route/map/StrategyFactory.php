@@ -1,6 +1,7 @@
 <?php
 namespace chilimatic\lib\route\map;
 use chilimatic\lib\exception\RouteException;
+use chilimatic\lib\interfaces\IFlyWeightParser;
 use chilimatic\lib\route\Map;
 
 class StrategyFactory implements StaticMapFactory {
@@ -8,12 +9,14 @@ class StrategyFactory implements StaticMapFactory {
     /**
      * @param $type
      * @param $config
-     * @return MapClosure|MapObject|MapFunction|mixed
+     * @param IFlyWeightParser $parser
+     *
+     * @return MapClosure|MapFunction|MapObject|mixed
      */
-    public static function make($type, $config) {
+    public static function make($type, $config, IFlyWeightParser $parser = null) {
         switch ($type) {
             case Map::TYPE_O:
-                return new MapObject($config);
+                return new MapObject($config, $parser);
             break;
             case Map::TYPE_F:
                 //return new MFunction($config);

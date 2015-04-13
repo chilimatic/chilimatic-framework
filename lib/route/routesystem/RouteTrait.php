@@ -32,7 +32,7 @@ Trait RouteTrait
     /**
      * @var string
      */
-    private $defaultMethod = 'indexAction';
+    private $defaultMethod = 'index';
 
     /**
      * @var string
@@ -81,7 +81,12 @@ Trait RouteTrait
             return $this->buildRouteMap(
                 $this->defaultUrlDelimiter,
                 [
-                    'object' => $this->defaultNameSpace . $this->defaultClass,
+                    'object' => implode ('\\',  $this->generateClassName(
+                        $this->defaultNameSpace,
+                        $this->defaultModule,
+                        $this->defaultControllerPath ,
+                        $this->defaultClass)
+                    ),
                     'method' => $this->defaultMethod
                 ],
                 $this->defaultUrlDelimiter
@@ -142,25 +147,30 @@ Trait RouteTrait
         // more than 1 part means class/method/[value or param{/value}]
         if (count($pathPart) >= 1) {
             $module = empty($pathPart[0]) ? $this->defaultModule : $pathPart[0];
-            $class = implode ('\\',  $this->generateClassName(
-                $this->defaultNameSpace,
-                $module,
-                $this->defaultControllerPath,
-                empty($pathPart[1]) ? $this->defaultClass : $pathPart[1])
-            );
+            $className = empty($pathPart[1]) ? $this->defaultClass : $pathPart[1];
 
-            $urlMethod = (string) empty($pathPart[2]) ? $this->defaultMethod : $pathPart[2] . $this->actionSuffix;
-            $method = $this->transformer->transform($urlMethod);
+            $class = implode ('\\',
+                $this->generateClassName(
+                    $this->defaultNameSpace,
+                    $module,
+                    $this->defaultControllerPath,
+                    $className
+                )
+            );
+            $urlMethod = (string) empty($pathPart[2]) ? $this->defaultMethod : $pathPart[2];
+            $method = $this->transformer->transform($urlMethod . $this->actionSuffix);
+
         } else {
+            $className = $this->defaultClass;
             $class = implode ('\\',  $this->generateClassName(
                 $this->defaultNameSpace,
                 $this->defaultModule,
-                $this->defaultControllerPath ,
+                $this->defaultControllerPath,
                 $this->defaultClass)
             );
 
             $urlMethod = (string) $this->defaultMethod;
-            $method = $this->transformer->transform($urlMethod);
+            $method = $this->transformer->transform($urlMethod . $this->actionSuffix);
         }
 
         if (class_exists($class, true)) {
@@ -170,7 +180,7 @@ Trait RouteTrait
                 }
 
                 return $this->mapFactory->make(
-                    "/{$class}/{$method}",
+                    strtolower("/{$module}/{$className}/{$urlMethod}"),
                     [
                         'object' => $class,
                         'method' => $this->transformer->transform($method),
