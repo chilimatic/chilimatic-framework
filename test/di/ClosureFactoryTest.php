@@ -21,4 +21,6 @@ class ClosureFactory_Test extends PHPUnit_Framework_TestCase
         $di->loadServiceFromFile(__DIR__ .'../lib/general/config/default-service-collection.php');
     }
 
+
+
 }
