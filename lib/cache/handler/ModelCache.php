@@ -21,18 +21,9 @@ class ModelCache
      */
     private $modelStorage;
 
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
-
-    /**
-     * @param CacheInterface $cache
-     */
-    public function __construct(CacheInterface $cache = null)
+    public function __construct()
     {
-        $this->cache = $cache;
-        $this->modelStorage = new ModelStorage();
+        $this->modelStorage = new \SplObjectStorage();
     }
 
     /**
@@ -49,12 +40,19 @@ class ModelCache
     /**
      * @param AbstractModel $model
      * @param null $param
+     *
+     * @return AbstractModel|null
      */
     public function get(AbstractModel $model, $param = null) {
         $this->modelStorage->rewind();
 
+        foreach ($this->modelStorage as $storedModel) {
+            if ($storedModel === $model) {
+                return $model;
+            }
+        }
 
-
+        return null;
     }
 
 }

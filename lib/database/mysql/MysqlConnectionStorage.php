@@ -50,7 +50,7 @@ class MysqlConnectionStorage
             'password' => $password,
             'database' => $database,
             'port' => $port,
-            'charset' => $port
+            'charset' => $charset
         ];
 
         $this->storage->attach(

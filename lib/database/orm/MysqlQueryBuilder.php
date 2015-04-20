@@ -10,6 +10,7 @@
 
 namespace chilimatic\lib\database\orm;
 use chilimatic\lib\cache\engine\CacheInterface;
+use chilimatic\lib\cache\handler\ModelCache;
 use chilimatic\lib\database\AbstractDatabase;
 
 
@@ -33,31 +34,6 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
      */
     const RELATION_PROPERTY = "fieldMapping";
 
-    /**
-     * @var \ReflectionClass
-     */
-    private $reflection;
-
-    /**
-     * @var array
-     */
-    private $propertyList;
-
-    /**
-     * @var \SPLFixedArray
-     */
-    private $relation;
-
-    /**
-     * @var \chilimatic\lib\database\ORM\AbstractModel
-     */
-    private $model;
-
-    /**
-     * @var \chilimatic\lib\cache\engine\shmop
-     */
-    private $cache;
-
 
     /**
      * init cache connection
@@ -68,8 +44,11 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
     public function __construct(CacheInterface $cache = null, AbstractDatabase $db)
     {
         $this->relation = new \SplFixedArray();
+        $this->modelDataCache = [];
+
         parent::__construct($cache, $db);
     }
+
 
     /**
      * @param AbstractModel $model
@@ -79,42 +58,24 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
      */
     public function generateSelectForModel(AbstractModel $model, $param)
     {
-        $this->reflection = new \ReflectionClass($model);
-        $this->model = $model;
-        $this->param = $param;
-        $this->extractRelations();
-        $this->checkRelations();
-
-        return $this->_generateSelect();
-    }
-
-    /**
-     *
-     */
-    public function getTableName()
-    {
-        $hd = $this->parser->parse($this->reflection->getDocComment());
-
-        if (!empty($hd[0])) {
-            $this->tableData->setTableName($hd[1]);
-            return;
-        } else {
-            $table = substr($this->reflection->getName(), strlen($this->reflection->getNamespaceName()));
-            $this->tableData->setTableName(strtolower(str_replace('\\', '', $table)));
+        $cacheData = $this->fetchCacheData($model);
+        if (isset($cacheData['relation'])) {
+            $this->checkRelations($cacheData['relation']);
         }
+        return $this->_generateSelect($cacheData, $param);
     }
 
     /**
      * @return string
      */
-    public function generateCondition()
+    public function generateCondition($param)
     {
-        if (empty($this->param)) {
+        if (empty($param)) {
             return '';
         }
 
         $str = ' WHERE ';
-        foreach ($this->param as $key => $value) {
+        foreach ($param as $key => $value) {
             if ($value) {
                 $str .= " $key = ? AND";
             } else {
@@ -125,25 +86,30 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
         return substr($str, 0, -3);
     }
 
-    public function generateColumList()
+    /**
+     * @param TableData $tableData
+     *
+     * @return string
+     */
+    public function generateColumList(TableData $tableData)
     {
-        return ($this->propertyList ? implode(',', $this->tableData->getColumnsNamesWithPrefix()) : '*');
+        return implode(',', $tableData->getColumnsNamesWithPrefix());
     }
 
 
     /**
      * @return string
      */
-    public function _generateSelect(){
+    public function _generateSelect(array $cacheData, $param = null){
         return implode(
             " ",
             [
                 "SELECT",
-                $this->generateColumList(),
+                $this->generateColumList($cacheData['tableData']),
                 "FROM",
-                $this->tableData->getTableName(),
-                $this->tableData->getPrefix(),
-                $this->generateCondition()
+                $cacheData['tableData']->getTableName(),
+                $cacheData['tableData']->getPrefix(),
+                $this->generateCondition($param)
             ]
         );
     }
@@ -152,49 +118,15 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
      * @return bool
      * @throws \ErrorException
      */
-    public function checkRelations()
+    public function checkRelations($relationList)
     {
-        if (!$this->relation) return true;
-        $this->relation->rewind();
-        while($this->relation->valid() && $entry = $this->relation->current()) {
+        if (!$relationList) return true;
+        $relationList->rewind();
+        foreach ($relationList as $entry) {
             if (!class_exists($entry[1])) {
                 throw new \ErrorException($entry[1]. ' Relations Class does not exist!');
             }
-            $this->relation->next();
         }
-        return true;
-    }
-
-    /**
-     * parses the doc header for relations
-     *
-     * @return bool
-     */
-    public function extractRelations()
-    {
-        $this->relation = new \SplFixedArray();
-        $this->getTableName();
-
-        $this->propertyList = $this->reflection->getDefaultProperties();
-
-        if ($this->cache && $res = $this->cache->get(md5(json_encode($this->propertyList)))) {
-            $this->relation = $res;
-            return true;
-        }
-
-        foreach ($this->propertyList as $name => $value) {
-            $d = $this->parser->parse($this->reflection->getProperty($name)->getDocComment());
-            if ( !$d ) {
-                continue;
-            }
-            $this->relation->setSize($this->relation->getSize() + 1);
-            $this->relation[$this->relation->count()-1] = $d;
-        }
-
-        if ($this->cache){
-            $this->cache->set(md5(json_encode($this->propertyList)), $this->relation, 300);
-        }
-
         return true;
     }
 
@@ -205,7 +137,18 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
      */
     public function generateInsertForModel(AbstractModel $model)
     {
-        // TODO: Implement generateInsertForModel() method.
+        $cacheData = $this->fetchCacheData($model);
+
+        $query = implode(
+            " ",
+            [
+                'INSERT INTO',
+                $cacheData['tableData']->getTableName(),
+            ]
+        );
+
+        $ret = $this->generateSetStatement($model, $cacheData);
+        return [$query . $ret['query'], $ret['param']];
     }
 
 
@@ -214,10 +157,57 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
      *
      * @return mixed
      */
-    public function generateUpdateForModel(AbstractModel $model)
+    public function generateUpdateForModel(AbstractModel $model, $diff = null)
     {
-        // TODO: Implement generateUpdateForModel() method.
+        $cacheData = $this->fetchCacheData($model);
+
+        return $this->_generateUpdateForModel($model, $cacheData);
     }
+
+    protected function _generateUpdateForModel(AbstractModel $model, $cacheData) {
+        $query = implode(
+            " ",
+            [
+                'UPDATE',
+                $cacheData['tableData']->getTableName(),
+            ]
+        );
+
+        $ret = $this->generateSetStatement($model, $cacheData, true);
+        return [$query . $ret['query'], $ret['param']];
+    }
+
+    /**
+     * @param AbstractModel $model
+     * @param $cacheData
+     *
+     * @return array
+     */
+    public function generateSetStatement(AbstractModel $model, $cacheData, $isUpdate = false)
+    {
+
+        $query = ' SET ';
+        $keyList = $cacheData['tableData']->getPrimaryKey();
+        $whereStmt = [];
+        $param = [];
+        foreach ($cacheData['tableData']->getColumnNames() as $column)
+        {
+            $reflection = new \ReflectionClass($model);
+            $reflectedProperty = $reflection->getProperty($column);
+            $reflectedProperty->setAccessible(true);
+            $value = $reflectedProperty->getValue($model);
+            $param[] = [":$column", $value];
+
+            $query .= " `$column`= :$column,";
+
+            if (in_array($reflectedProperty->getName(), $keyList)) {
+                $whereStmt[] = " `$column`= :$column";
+            }
+        }
+
+        return  ['query' => substr($query,0, -1) . ($isUpdate ?  ' WHERE ' . implode( ' AND ', $whereStmt) : ''), 'param' => $param];
+    }
+
 
     /**
      * @param AbstractModel $model
@@ -229,46 +219,6 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
         // TODO: Implement generateDeleteForModel() method.
     }
 
-
-    /**
-     * @return \ReflectionClass
-     */
-    public function getReflection()
-    {
-        return $this->reflection;
-    }
-
-    /**
-     * @param \ReflectionClass $reflection
-     *
-     * @return $this
-     */
-    public function setReflection($reflection)
-    {
-        $this->reflection = $reflection;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getPropertyList()
-    {
-        return $this->propertyList;
-    }
-
-    /**
-     * @param array $propertyList
-     *
-     * @return $this
-     */
-    public function setPropertyList($propertyList)
-    {
-        $this->propertyList = $propertyList;
-
-        return $this;
-    }
 
     /**
      * @return \SPLFixedArray
@@ -286,26 +236,6 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
     public function setRelation($relation)
     {
         $this->relation = $relation;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getModel()
-    {
-        return $this->model;
-    }
-
-    /**
-     * @param mixed $model
-     *
-     * @return $this
-     */
-    public function setModel($model)
-    {
-        $this->model = $model;
 
         return $this;
     }

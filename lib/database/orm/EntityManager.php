@@ -14,6 +14,7 @@
 
 namespace chilimatic\lib\database\orm;
 
+use chilimatic\lib\cache\handler\ModelCache;
 use chilimatic\lib\database\AbstractDatabase;
 
 /**
@@ -22,6 +23,19 @@ use chilimatic\lib\database\AbstractDatabase;
  * @package chilimatic\lib\database\ORM
  */
 class EntityManager {
+
+    /**
+     * code for update
+     * @var binary
+     */
+    const MODEL_UPDATE = 0b0001;
+
+    /**
+     * code for insert
+     *
+     * @var binary
+     */
+    const MODEL_INSERT = 0b0010;
 
     /**
      * @var string
@@ -57,7 +71,7 @@ class EntityManager {
      * cache to store already queried data within
      * -> the models will be filled by it but not stored within it
      *
-     * @var
+     * @var ModelCache
      */
     private $modelCache;
 
@@ -70,6 +84,8 @@ class EntityManager {
     {
         $this->db = $db;
         $this->queryBuilder = $queryBuilder;
+        $this->modelCache = new ModelCache();
+
         if ($this->queryBuilder) {
             $this->queryBuilder->setDb($db);
         }
@@ -144,21 +160,21 @@ class EntityManager {
     public function findBy(AbstractModel $model, $param = [])
     {
         if ($this->useCache && $this->modelCache) {
-            return $this->modelCache->get($model, $param);
+            if ($ret = $this->modelCache->get($model, $param))
+            {
+                return $ret;
+            }
         }
 
         $query = $this->queryBuilder->generateSelectForModel($model, $param);
         $res = $this->executeQuery($model, $this->prepare($query, $param));
 
         if ($this->useCache && $this->modelCache) {
-            $this->modelCache->storeInCache($model, $param, $res);
+            $this->modelCache->set($model, $param, $res);
         }
 
         return $res;
     }
-
-
-
 
     /**
      * @param AbstractModel $model
@@ -213,11 +229,11 @@ class EntityManager {
      */
     public function hydrateRelations(AbstractModel $model)
     {
-        if (!$this->queryBuilder->getRelation()) {
+        if (!$this->queryBuilder->fetchCacheData($model)) {
             return $model;
         }
 
-        foreach ($this->queryBuilder->getRelation() as $relation) {
+        foreach ($this->queryBuilder->fetchCacheData($model)['relationList'] as $relation) {
             $injectionModel = new $relation[1]();
             if (strpos($relation[1], '\\') !== false) {
                 $tmp = explode('\\', $relation[1]);
@@ -231,7 +247,7 @@ class EntityManager {
              * @todo implement dynamic mappings from doc head
              */
             if (!$this->lazyLoading) {
-                $this->queryBuilder->generateForModel($injectionModel, ['id' => $relation[0]]);
+                $this->queryBuilder->generateSelectForModel($injectionModel, ['id' => $relation[0]]);
             }
 
             $model->$m($injectionModel);
@@ -240,13 +256,30 @@ class EntityManager {
         return $model;
     }
 
-    public function persist(AbstractModel $model) {
-        if ($this->useCache && $this->modelCache) {
+    public function persist(AbstractModel $model)
+    {
 
+        // create a query based on if the model exists or not (update or insert)
+        if ($this->modelCache->get($model)) {
+            $data = $this->queryBuilder->generateUpdateForModel($model);
         } else {
-            $this->queryBuilder->generateUpdateForModel($model);
+            $data = $this->queryBuilder->generateInsertForModel($model);
         }
 
+        // add to the modelCache
+        $this->modelCache->set($model);
+        /**
+         * @var \PdoStatement $stmt
+         */
+        $stmt = $this->db->prepare($data[0]);
+
+        foreach ($data[1] as $set) {
+            $value = &$set[1];
+            $key = $set[0];
+            $stmt->bindParam($key, $value);
+        }
+
+        return $stmt->execute();
     }
 
     /**
