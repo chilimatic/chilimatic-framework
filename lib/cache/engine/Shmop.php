@@ -387,7 +387,6 @@ class Shmop implements CacheInterface
      */
     public function __destruct()
     {
-
         $this->saveCacheListing();
         // close the open shmop ids
         @shmop_close( $this->indexIdentifier );

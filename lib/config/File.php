@@ -10,7 +10,6 @@
 namespace chilimatic\lib\config;
 
 use chilimatic\lib\exception\ConfigException;
-use chilimatic\lib\exception\Exception_Config;
 
 
 /**
@@ -25,21 +24,6 @@ class File extends AbstractConfig
     const CONFIG_PATH_INDEX = 'config_path';
 
     /**
-     * default fallback path
-     *
-     * @var string
-     */
-    CONST INCLUDE_PATTERN = '/lib';
-
-    /**
-     * default pattern for the path only the config within shop_includes shall
-     * be used
-     *
-     * @var string
-     */
-    CONST PATH_PATTERN = '/app/config';
-
-    /**
      * extension for config files
      *
      * @var string
@@ -47,11 +31,11 @@ class File extends AbstractConfig
     CONST FILE_EXTENSION = 'cfg';
 
 
-
     /**
-     * constructor
-     *
      * @param array $param
+     *
+     * @throws ConfigException
+     * @throws \Exception
      */
     public function __construct($param = array())
     {
@@ -70,7 +54,7 @@ class File extends AbstractConfig
 
         // get the path of the config if the path has not been set
         if ( !$this->get(self::CONFIG_PATH_INDEX) ) {
-            throw new ConfigException();
+            throw new ConfigException('no path for configfiles has been set');
         }
 
         $this->_initHostId();
@@ -226,7 +210,7 @@ class File extends AbstractConfig
         if ( empty($config_set) && !($config_set = $this->_getConfigSet()))  {
             // set default config set for the default execution
             $config_set = array(
-                "{$config_path}" . (string) self::HIERACHY_PLACEHOLDER . (string) self::CONFIG_DELIMITER . ( string ) self::FILE_EXTENSION
+                realpath("{$config_path}/" . (string) self::HIERACHY_PLACEHOLDER . (string) self::CONFIG_DELIMITER . ( string ) self::FILE_EXTENSION)
             );
             $this->set('config_set', $config_set);
         }
@@ -293,7 +277,11 @@ class File extends AbstractConfig
         return $config;
     }
 
-
+    /**
+     * @param Node $node
+     *
+     * @return bool
+     */
     public function saveConfig(Node $node = null)
     {
         if (!empty($node)) return $this->saveNode($node);
@@ -301,6 +289,9 @@ class File extends AbstractConfig
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function saveNode(){
         return true;
     }

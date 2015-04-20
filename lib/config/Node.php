@@ -8,13 +8,14 @@
  */
 
 namespace chilimatic\lib\config;
+use chilimatic\lib\datastructure\graph\INode;
 
 /**
  * Class Node
  * @package chilimatic\lib\config
  */
-class Node extends \chilimatic\lib\datastructure\graph\Node{
-
+class Node extends \chilimatic\lib\datastructure\graph\Node
+{
     /**
      * Config Node if loaded
      * can be mixed since it should dynamic
@@ -26,12 +27,12 @@ class Node extends \chilimatic\lib\datastructure\graph\Node{
     /**
      * constructor
      *
-     * @param Node $parentNode
+     * @param INode $parentNode
      * @param $key
      * @param $data
      * @param string $comment
      */
-    public function __construct(\chilimatic\lib\config\Node $parentNode = null, $key, $data, $comment = '') {
+    public function __construct(INode $parentNode = null, $key, $data, $comment = '') {
         // get the current node
         $this->parentNode = $parentNode;
         // set the current key identifier

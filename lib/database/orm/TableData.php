@@ -25,12 +25,12 @@ class TableData
     /**
      * @var array
      */
-    private $columnsNames;
+    private $columnNames;
 
     /**
      * @var array
      */
-    private $columnsNamesWithPrefix;
+    private $columnNamesWithPrefix;
 
     /**
      * @var array
@@ -77,21 +77,37 @@ class TableData
         $this->columnData = $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    /**
+     * @return array
+     */
+    public function getPrimaryKey()
+    {
+        $ret = [];
+        foreach ($this->columnData as $data) {
+            if (!empty($data['Key']) && $data['Key'] == 'PRI') {
+                $ret[] = $data['Field'];
+            }
+        }
+
+        return $ret;
+    }
+
 
     /**
      * @return array
      */
     public function getColumnsNamesWithPrefix()
     {
-        if (!empty($this->columnsNamesWithPrefix)) {
-            return $this->columnsNamesWithPrefix;
+        if (!empty($this->columnNamesWithPrefix)) {
+            return $this->columnNamesWithPrefix;
         }
 
         foreach ($this->getColumnData() as $value) {
-            $this->columnsNamesWithPrefix[] = "`$this->prefix`.`{$value['Field']}`";
+            $this->columnNamesWithPrefix[] = "`$this->prefix`.`{$value['Field']}`";
+            $this->columnNames[] = $value['Field'];
         }
 
-        return $this->columnsNamesWithPrefix;
+        return $this->columnNamesWithPrefix;
     }
 
     /**
@@ -139,19 +155,19 @@ class TableData
     /**
      * @return array
      */
-    public function getColumnsNames()
+    public function getColumnNames()
     {
-        return $this->columnsNames;
+        return $this->columnNames;
     }
 
     /**
-     * @param array $columnsNames
+     * @param array $columnNames
      *
      * @return $this
      */
-    public function setColumnsNames($columnsNames)
+    public function setColumnsNames($columnNames)
     {
-        $this->columnsNames = $columnsNames;
+        $this->columnNames = $columnNames;
 
         return $this;
     }
