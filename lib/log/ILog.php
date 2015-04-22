@@ -8,7 +8,20 @@ namespace chilimatic\lib\log;
  */
 Interface ILog
 {
+    /**
+     * binary error code
+     */
+    const T_ERROR = 0b000001;
 
+    /**
+     * binary warning code
+     */
+    const T_WARNING = 0b000010;
+
+    /**
+     * binary info code
+     */
+    const T_INFO = 0b000011;
 
     /**
      * Default Log format

@@ -1,5 +1,5 @@
 <?php
-namespace chilimatic\lib\database\orm\querybuilder\strategy;
+namespace chilimatic\lib\database\orm\querybuilder;
 /**
  *
  * @author j

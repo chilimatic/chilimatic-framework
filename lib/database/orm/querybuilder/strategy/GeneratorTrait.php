@@ -56,7 +56,7 @@ Trait GeneratorTrait {
      * @return string
      */
     public function generateSetClause($fieldList) {
-        return "SET " . $this->generatePredicateList($fieldList);
+        return "SET " .  implode(', ',$this->generatePredicateList($fieldList));
     }
 
     /**
@@ -65,7 +65,9 @@ Trait GeneratorTrait {
      * @return string
      */
     public function generateWhereClause($fieldList) {
-        return "WHERE " . $this->generatePredicateList($fieldList);
+        $predicateList = $this->generatePredicateList($fieldList);
+
+        return ($predicateList) ? "WHERE " . implode(' AND ', $predicateList) : '';
     }
 
     /**
@@ -76,9 +78,9 @@ Trait GeneratorTrait {
     public function generatePredicateList($fieldList) {
         $predicateList = [];
         foreach ($fieldList as $name) {
-            $predicateList[] = "`$name` = :$name";
+            $predicateList[] = "$name = :" . md5($name);
         }
 
-        return implode(", ", $predicateList);
+        return $predicateList;
     }
 }

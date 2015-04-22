@@ -16,15 +16,16 @@ abstract class AbstractClient implements ClientInterface
     protected $format;
 
     /**
-     * @var array
+     * @var \SPLFixedArray
      */
-    protected $logMessages = [];
+    protected $logMessages;
 
     /**
      * @param \chilimatic\lib\formater\Log $format
      */
     public function __construct(\chilimatic\lib\formater\Log $format = null) {
         $this->format = $format;
+        $this->logMessages = new \SPLFixedArray();
     }
 
     function __toString()
@@ -39,6 +40,8 @@ abstract class AbstractClient implements ClientInterface
      */
     public function log($message, $data)
     {
+        $this->logMessages->setSize($this->logMessages->getSize() + 1);
+
         // TODO: Implement log() method.
         $this->logMessages[] = [
             'date' => date('Y-m-d H:i:s'),
@@ -55,8 +58,10 @@ abstract class AbstractClient implements ClientInterface
      */
     public function info($message, $data)
     {
+        $this->logMessages->setSize($this->logMessages->getSize() + 1);
         // TODO: Implement info() method.
         $this->logMessages[] = [
+            'prefix' => 'info',
             'date' => date('Y-m-d H:i:s'),
             'message' => $message,
             'data' => $data
@@ -71,8 +76,10 @@ abstract class AbstractClient implements ClientInterface
      */
     public function warn($message, $data)
     {
+        $this->logMessages->setSize($this->logMessages->getSize() + 1);
         // TODO: Implement warn() method.
         $this->logMessages[] = [
+            'prefix' => 'warn',
             'date' => date('Y-m-d H:i:s'),
             'message' => $message,
             'data' => $data
@@ -89,6 +96,7 @@ abstract class AbstractClient implements ClientInterface
     {
         // TODO: Implement error() method.
         $this->logMessages[] = [
+            'prefix' => 'error',
             'date' => date('Y-m-d H:i:s'),
             'message' => $message,
             'data' => $data

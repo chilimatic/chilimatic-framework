@@ -37,7 +37,7 @@ class MySQLSelectStrategy extends AbstractStrategy
     {
         return implode(' ', [
             $this->generateSelectClause($this->tableData),
-            $this->generateWhereClause($this->generateKeyList()),
+            $this->generateWhereClause($this->modelData),
         ]);
     }
 }

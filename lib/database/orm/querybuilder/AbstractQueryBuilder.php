@@ -26,6 +26,11 @@ abstract class AbstractQueryBuilder implements IQueryBuilder
      */
     const TABLE_DATA_INDEX = 'tableData';
 
+    /**
+     * @var string
+     */
+    const RELATION_INDEX = 'relationList';
+
 
     /**
      * @var ORMParser

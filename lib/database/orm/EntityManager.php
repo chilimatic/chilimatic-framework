@@ -16,7 +16,9 @@ namespace chilimatic\lib\database\orm;
 
 use chilimatic\lib\cache\handler\ModelCache;
 use chilimatic\lib\database\AbstractDatabase;
+use chilimatic\lib\database\ErrorLogTrait;
 use chilimatic\lib\database\ORM\querybuilder\AbstractQueryBuilder;
+use chilimatic\lib\log\ILog;
 
 /**
  * Class EntityManager
@@ -25,18 +27,7 @@ use chilimatic\lib\database\ORM\querybuilder\AbstractQueryBuilder;
  */
 class EntityManager {
 
-    /**
-     * code for update
-     * @var binary
-     */
-    const MODEL_UPDATE = 0b0001;
-
-    /**
-     * code for insert
-     *
-     * @var binary
-     */
-    const MODEL_INSERT = 0b0010;
+    use ErrorLogTrait;
 
     /**
      * @var string
@@ -111,7 +102,6 @@ class EntityManager {
             $stmt->bindParam($key, $value);
         }
 
-
         return $stmt;
     }
 
@@ -129,9 +119,9 @@ class EntityManager {
             }
             return $this->hydrate($model, $stmt->fetchObject());
         } else {
-            echo $stmt->errorCode();
-            var_dump($stmt->errorInfo());
+            $this->log(ILog::T_ERROR, implode(',', $stmt->errorInfo()));
         }
+
         return $model;
     }
 
@@ -169,7 +159,7 @@ class EntityManager {
         }
         $ret = [];
         foreach ($param as $key => $value) {
-            $ret[] = [$key, $value];
+            $ret[] = [':' . md5($key), $value];
         }
 
         return $ret;
@@ -191,7 +181,7 @@ class EntityManager {
         }
 
         $query = $this->queryBuilder->generateSelectForModel($model, $param);
-        $res = $this->executeQuery(
+        $result = $this->executeQuery(
             $model,
             $this->prepare(
                 $query,
@@ -200,10 +190,10 @@ class EntityManager {
         );
 
         if ($this->useCache && $this->modelCache) {
-            $this->modelCache->set($model, $param, $res);
+            $this->modelCache->set($model, $param, $result);
         }
 
-        return $res;
+        return $result;
     }
 
     /**
@@ -215,7 +205,13 @@ class EntityManager {
     public function findOneBy(AbstractModel $model, $param = [])
     {
         $query = $this->queryBuilder->generateSelectForModel($model, $param);
-        $result = $this->executeQuery($model, $this->prepare($query, $param));
+        $result = $this->executeQuery(
+            $model,
+            $this->prepare(
+                $query,
+                $this->prepareParam($param)
+            )
+        );
 
         if ($result instanceof AbstractModel) {
             return $result;

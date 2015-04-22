@@ -25,6 +25,11 @@ use chilimatic\lib\database\orm\querybuilder\strategy\MySQLUpdateStrategy;
 class MysqlQueryBuilder extends AbstractQueryBuilder {
 
     /**
+     * trait for the annotation checks
+     */
+    use ConsistencyTrait;
+
+    /**
      * orm table mapping field
      */
     const TABLE_INDEX = 'table';
@@ -62,13 +67,16 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
     public function generateSelectForModel(AbstractModel $model, $param)
     {
         $cacheData = $this->fetchCacheData($model);
-        if (isset($cacheData['relation'])) {
-            $this->checkRelations($cacheData['relation']);
+        if (isset($cacheData[self::RELATION_INDEX])) {
+            $this->checkRelations($cacheData[self::RELATION_INDEX]);
         }
 
+        /**
+         * select Strategy
+         */
         $strategy = new MySQLSelectStrategy(
             $cacheData[self::TABLE_DATA_INDEX],
-            $this->prepareModelData($model, $cacheData[self::TABLE_DATA_INDEX])
+            array_keys($param)
         );
 
         return $strategy->generateSQLStatement();
@@ -93,26 +101,6 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
         }
 
         return substr($str, 0, -3);
-    }
-
-
-
-
-    /**
-     * @return string
-     */
-    public function _generateSelect(array $cacheData, $param = null){
-        return implode(
-            " ",
-            [
-                "SELECT",
-                $this->generateColumList($cacheData[self::TABLE_DATA_INDEX]),
-                "FROM",
-                $cacheData[self::TABLE_DATA_INDEX]->getTableName(),
-                $cacheData[self::TABLE_DATA_INDEX]->getPrefix(),
-                $this->generateCondition($param)
-            ]
-        );
     }
 
     /**
