@@ -16,6 +16,7 @@ namespace chilimatic\lib\database\orm;
 
 use chilimatic\lib\cache\handler\ModelCache;
 use chilimatic\lib\database\AbstractDatabase;
+use chilimatic\lib\database\ORM\querybuilder\AbstractQueryBuilder;
 
 /**
  * Class EntityManager
@@ -48,7 +49,7 @@ class EntityManager {
     public $db;
 
     /**
-     * @var \chilimatic\lib\database\ORM\AbstractQueryBuilder
+     * @var \chilimatic\lib\database\ORM\querybuilder\AbstractQueryBuilder
      */
     public $queryBuilder;
 
@@ -100,16 +101,16 @@ class EntityManager {
     protected function prepare($query, $param)
     {
         /**
-         * @var \PDOStatement $stmt
+         * @var \PdoStatement $stmt
          */
         $stmt = $this->db->prepare($query);
-        $c = 0;
-        foreach ($param as $value) {
-            $c++;
-            $n = "key{$c}";
-            $$n = $value;
-            $stmt->bindParam($c, $$n);
+
+        foreach ($param as $set) {
+            $value = &$set[1];
+            $key = $set[0];
+            $stmt->bindParam($key, $value);
         }
+
 
         return $stmt;
     }
@@ -127,6 +128,9 @@ class EntityManager {
                 return $this->getList($model, $stmt);
             }
             return $this->hydrate($model, $stmt->fetchObject());
+        } else {
+            echo $stmt->errorCode();
+            var_dump($stmt->errorInfo());
         }
         return $model;
     }
@@ -152,6 +156,26 @@ class EntityManager {
     }
 
     /**
+     * this method is so the user can add the param list like this [ 'id' => 1, 'name' => 'bla' ]
+     * the other strategies are built different because of the update statement
+     *
+     * @param array $param
+     *
+     * @return array
+     */
+    public function prepareParam(array $param = null) {
+        if (!$param){
+            return [];
+        }
+        $ret = [];
+        foreach ($param as $key => $value) {
+            $ret[] = [$key, $value];
+        }
+
+        return $ret;
+    }
+
+    /**
      * @param AbstractModel $model
      * @param $param
      *
@@ -167,7 +191,13 @@ class EntityManager {
         }
 
         $query = $this->queryBuilder->generateSelectForModel($model, $param);
-        $res = $this->executeQuery($model, $this->prepare($query, $param));
+        $res = $this->executeQuery(
+            $model,
+            $this->prepare(
+                $query,
+                $this->prepareParam($param)
+            )
+        );
 
         if ($this->useCache && $this->modelCache) {
             $this->modelCache->set($model, $param, $res);
@@ -258,7 +288,6 @@ class EntityManager {
 
     public function persist(AbstractModel $model)
     {
-
         // create a query based on if the model exists or not (update or insert)
         if ($this->modelCache->get($model)) {
             $data = $this->queryBuilder->generateUpdateForModel($model);
@@ -268,17 +297,8 @@ class EntityManager {
 
         // add to the modelCache
         $this->modelCache->set($model);
-        /**
-         * @var \PdoStatement $stmt
-         */
-        $stmt = $this->db->prepare($data[0]);
 
-        foreach ($data[1] as $set) {
-            $value = &$set[1];
-            $key = $set[0];
-            $stmt->bindParam($key, $value);
-        }
-
+        $stmt = $this->prepare($data[0], $data[1]);
         return $stmt->execute();
     }
 
@@ -287,14 +307,14 @@ class EntityManager {
      *
      * @return $this
      */
-    public function setQueryBuilder(\chilimatic\lib\database\ORM\AbstractQueryBuilder $queryBuilder)
+    public function setQueryBuilder(AbstractQueryBuilder $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
         return $this;
     }
 
     /**
-     * @return \chilimatic\lib\database\ORM\AbstractQueryBuilder
+     * @return \chilimatic\lib\database\ORM\querybuilder\AbstractQueryBuilder
      */
     public function getQueryBuilder()
     {
