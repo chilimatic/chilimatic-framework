@@ -27,6 +27,11 @@ class NodeRoute extends AbstractRoute
     private $binaryTree;
 
 
+    public function __construct($path) {
+        $this->binaryTree = new BinaryTree();
+        parent::__construct($path);
+    }
+
     /**
      * @return BinaryTree
      * @throws \chilimatic\lib\exception\RouteException
@@ -36,7 +41,7 @@ class NodeRoute extends AbstractRoute
             $this->binaryTree->insert('/', $this->getDefaultRoute());
         }
 
-        return $this->binaryTree->getRoot()->getData();
+        return $this->binaryTree->getRoot();
     }
 
     /**
@@ -54,11 +59,12 @@ class NodeRoute extends AbstractRoute
         if (($map = $this->binaryTree->findByKey($path))) {
             return $map;
         }
+
         if (($map = $this->getStandardRouting($path))) {
             return $map;
         }
         
-        return $this->binaryTree->getRoot()->getData();
+        return $this->getRoot()->getData();
     }
 
     /**

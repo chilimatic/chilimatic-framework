@@ -65,6 +65,10 @@ class BinaryTree
      * @return mixed|null
      */
     public function findByKey($key) {
+        if (!$this->root) {
+            return null;
+        }
+
         return $this->root->findByKey($key);
     }
 
