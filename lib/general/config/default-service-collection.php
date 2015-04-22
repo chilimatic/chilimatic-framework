@@ -42,7 +42,7 @@
             return $em->setQueryBuilder(\chilimatic\lib\di\ClosureFactory::getInstance()->get('query-builder'));
         },
         'query-builder' => function($setting = []) {
-            $queryBuilder = new \chilimatic\lib\database\orm\MysqlQueryBuilder();
+            $queryBuilder = new \chilimatic\lib\database\orm\querybuilder\MysqlQueryBuilder();
             return $queryBuilder->setCache(\chilimatic\lib\di\ClosureFactory::getInstance()->get('cache', ['type' => 'shmop']));
         },
         'error-handler' => function($setting = []) {

@@ -7,7 +7,7 @@
  *
  * File: psqlquerybuilder.class.php
  */
-namespace chilimatic\lib\database\orm;
+namespace chilimatic\lib\database\orm\querybuilder;
 
 class PgsqlQueryBuilder extends AbstractQueryBuilder {
 

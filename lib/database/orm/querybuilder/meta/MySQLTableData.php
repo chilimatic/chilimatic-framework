@@ -5,9 +5,10 @@
  * Date: 3/30/15
  * Time: 10:14 PM
  *
- * File: TableData.php
+ * File: MySQLTableData.php
  */
-namespace chilimatic\lib\database\orm;
+namespace chilimatic\lib\database\orm\querybuilder\meta;
+
 use chilimatic\lib\database\AbstractDatabase;
 
 /**
@@ -15,7 +16,7 @@ use chilimatic\lib\database\AbstractDatabase;
  *
  * @package chilimatic\lib\database\orm
  */
-class TableData
+class MySQLTableData
 {
     /**
      * @var string
@@ -25,12 +26,12 @@ class TableData
     /**
      * @var array
      */
-    private $columnsNames;
+    private $columnNames;
 
     /**
      * @var array
      */
-    private $columnsNamesWithPrefix;
+    private $columnNamesWithPrefix;
 
     /**
      * @var array
@@ -46,6 +47,12 @@ class TableData
      * @var AbstractDatabase
      */
     private $db;
+
+    /**
+     * @var array
+     */
+    private $primaryKey = [];
+
 
     /**
      * @param AbstractDatabase $db
@@ -77,21 +84,66 @@ class TableData
         $this->columnData = $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    /**
+     * @return array
+     */
+    public function getPrimaryKey()
+    {
+        if ($this->primaryKey) {
+            return $this->primaryKey;
+        }
+
+
+        foreach ($this->getColumnData() as $data) {
+            if (!empty($data['Key']) && $data['Key'] == 'PRI') {
+                $this->primaryKey[] = $data['Field'];
+            }
+        }
+
+        return $this->primaryKey;
+    }
+
+    /**
+     * @param $columName
+     *
+     * @return null
+     */
+    public function getColumnNameWithPrefix($columName)
+    {
+        if (!isset($this->columnNamesWithPrefix[$columName])) {
+            return null;
+        }
+
+        return $this->columnNamesWithPrefix[$columName];
+    }
+
 
     /**
      * @return array
      */
-    public function getColumnsNamesWithPrefix()
+    public function getColumnNamesWithPrefix()
     {
-        if (!empty($this->columnsNamesWithPrefix)) {
-            return $this->columnsNamesWithPrefix;
+        if (empty($this->columnNamesWithPrefix)) {
+            $this->fetchLazy();
         }
 
+        return $this->columnNamesWithPrefix;
+    }
+
+    /**
+     * fills in the column data
+     */
+    private function fetchLazy()
+    {
+        if ($this->columnData && $this->columnNamesWithPrefix && $this->columnNames){
+            return;
+        }
+        $this->columnNames = [];
+        $this->columnNamesWithPrefix = [];
         foreach ($this->getColumnData() as $value) {
-            $this->columnsNamesWithPrefix[] = "`$this->prefix`.`{$value['Field']}`";
+            $this->columnNamesWithPrefix[$value['Field']] = "`$this->prefix`.`{$value['Field']}`";
+            $this->columnNames[] = $value['Field'];
         }
-
-        return $this->columnsNamesWithPrefix;
     }
 
     /**
@@ -114,6 +166,9 @@ class TableData
         return $this;
     }
 
+    public function getTableNameWithPrefix() {
+        return "$this->tableName `$this->prefix`";
+    }
 
     /**
      * @return mixed
@@ -139,19 +194,24 @@ class TableData
     /**
      * @return array
      */
-    public function getColumnsNames()
+    public function getColumnNames()
     {
-        return $this->columnsNames;
+        if (!$this->columnNames) {
+            $this->getColumnData();
+            $this->fetchLazy();
+        }
+
+        return $this->columnNames;
     }
 
     /**
-     * @param array $columnsNames
+     * @param array $columnNames
      *
      * @return $this
      */
-    public function setColumnsNames($columnsNames)
+    public function setColumnsNames($columnNames)
     {
-        $this->columnsNames = $columnsNames;
+        $this->columnNames = $columnNames;
 
         return $this;
     }

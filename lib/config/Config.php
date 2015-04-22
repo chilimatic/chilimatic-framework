@@ -43,7 +43,7 @@ class Config implements ISingelton
     /**
      * singelton constructor
      *
-     * @param null|\stdClass $param
+     * @param array $param
      *
      * @return AbstractConfig
      */

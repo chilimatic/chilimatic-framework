@@ -14,7 +14,9 @@
 
 namespace chilimatic\lib\database\orm;
 
+use chilimatic\lib\cache\handler\ModelCache;
 use chilimatic\lib\database\AbstractDatabase;
+use chilimatic\lib\database\ORM\querybuilder\AbstractQueryBuilder;
 
 /**
  * Class EntityManager
@@ -22,6 +24,19 @@ use chilimatic\lib\database\AbstractDatabase;
  * @package chilimatic\lib\database\ORM
  */
 class EntityManager {
+
+    /**
+     * code for update
+     * @var binary
+     */
+    const MODEL_UPDATE = 0b0001;
+
+    /**
+     * code for insert
+     *
+     * @var binary
+     */
+    const MODEL_INSERT = 0b0010;
 
     /**
      * @var string
@@ -34,7 +49,7 @@ class EntityManager {
     public $db;
 
     /**
-     * @var \chilimatic\lib\database\ORM\AbstractQueryBuilder
+     * @var \chilimatic\lib\database\ORM\querybuilder\AbstractQueryBuilder
      */
     public $queryBuilder;
 
@@ -57,7 +72,7 @@ class EntityManager {
      * cache to store already queried data within
      * -> the models will be filled by it but not stored within it
      *
-     * @var
+     * @var ModelCache
      */
     private $modelCache;
 
@@ -70,6 +85,8 @@ class EntityManager {
     {
         $this->db = $db;
         $this->queryBuilder = $queryBuilder;
+        $this->modelCache = new ModelCache();
+
         if ($this->queryBuilder) {
             $this->queryBuilder->setDb($db);
         }
@@ -84,16 +101,16 @@ class EntityManager {
     protected function prepare($query, $param)
     {
         /**
-         * @var \PDOStatement $stmt
+         * @var \PdoStatement $stmt
          */
         $stmt = $this->db->prepare($query);
-        $c = 0;
-        foreach ($param as $value) {
-            $c++;
-            $n = "key{$c}";
-            $$n = $value;
-            $stmt->bindParam($c, $$n);
+
+        foreach ($param as $set) {
+            $value = &$set[1];
+            $key = $set[0];
+            $stmt->bindParam($key, $value);
         }
+
 
         return $stmt;
     }
@@ -111,6 +128,9 @@ class EntityManager {
                 return $this->getList($model, $stmt);
             }
             return $this->hydrate($model, $stmt->fetchObject());
+        } else {
+            echo $stmt->errorCode();
+            var_dump($stmt->errorInfo());
         }
         return $model;
     }
@@ -136,6 +156,26 @@ class EntityManager {
     }
 
     /**
+     * this method is so the user can add the param list like this [ 'id' => 1, 'name' => 'bla' ]
+     * the other strategies are built different because of the update statement
+     *
+     * @param array $param
+     *
+     * @return array
+     */
+    public function prepareParam(array $param = null) {
+        if (!$param){
+            return [];
+        }
+        $ret = [];
+        foreach ($param as $key => $value) {
+            $ret[] = [$key, $value];
+        }
+
+        return $ret;
+    }
+
+    /**
      * @param AbstractModel $model
      * @param $param
      *
@@ -144,21 +184,27 @@ class EntityManager {
     public function findBy(AbstractModel $model, $param = [])
     {
         if ($this->useCache && $this->modelCache) {
-            return $this->modelCache->get($model, $param);
+            if ($ret = $this->modelCache->get($model, $param))
+            {
+                return $ret;
+            }
         }
 
         $query = $this->queryBuilder->generateSelectForModel($model, $param);
-        $res = $this->executeQuery($model, $this->prepare($query, $param));
+        $res = $this->executeQuery(
+            $model,
+            $this->prepare(
+                $query,
+                $this->prepareParam($param)
+            )
+        );
 
         if ($this->useCache && $this->modelCache) {
-            $this->modelCache->storeInCache($model, $param, $res);
+            $this->modelCache->set($model, $param, $res);
         }
 
         return $res;
     }
-
-
-
 
     /**
      * @param AbstractModel $model
@@ -213,11 +259,11 @@ class EntityManager {
      */
     public function hydrateRelations(AbstractModel $model)
     {
-        if (!$this->queryBuilder->getRelation()) {
+        if (!$this->queryBuilder->fetchCacheData($model)) {
             return $model;
         }
 
-        foreach ($this->queryBuilder->getRelation() as $relation) {
+        foreach ($this->queryBuilder->fetchCacheData($model)['relationList'] as $relation) {
             $injectionModel = new $relation[1]();
             if (strpos($relation[1], '\\') !== false) {
                 $tmp = explode('\\', $relation[1]);
@@ -231,7 +277,7 @@ class EntityManager {
              * @todo implement dynamic mappings from doc head
              */
             if (!$this->lazyLoading) {
-                $this->queryBuilder->generateForModel($injectionModel, ['id' => $relation[0]]);
+                $this->queryBuilder->generateSelectForModel($injectionModel, ['id' => $relation[0]]);
             }
 
             $model->$m($injectionModel);
@@ -240,13 +286,20 @@ class EntityManager {
         return $model;
     }
 
-    public function persist(AbstractModel $model) {
-        if ($this->useCache && $this->modelCache) {
-
+    public function persist(AbstractModel $model)
+    {
+        // create a query based on if the model exists or not (update or insert)
+        if ($this->modelCache->get($model)) {
+            $data = $this->queryBuilder->generateUpdateForModel($model);
         } else {
-            $this->queryBuilder->generateUpdateForModel($model);
+            $data = $this->queryBuilder->generateInsertForModel($model);
         }
 
+        // add to the modelCache
+        $this->modelCache->set($model);
+
+        $stmt = $this->prepare($data[0], $data[1]);
+        return $stmt->execute();
     }
 
     /**
@@ -254,14 +307,14 @@ class EntityManager {
      *
      * @return $this
      */
-    public function setQueryBuilder(\chilimatic\lib\database\ORM\AbstractQueryBuilder $queryBuilder)
+    public function setQueryBuilder(AbstractQueryBuilder $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
         return $this;
     }
 
     /**
-     * @return \chilimatic\lib\database\ORM\AbstractQueryBuilder
+     * @return \chilimatic\lib\database\ORM\querybuilder\AbstractQueryBuilder
      */
     public function getQueryBuilder()
     {
