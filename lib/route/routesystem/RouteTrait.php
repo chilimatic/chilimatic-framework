@@ -87,7 +87,7 @@ Trait RouteTrait
                         $this->defaultControllerPath ,
                         $this->defaultClass)
                     ),
-                    'method' => $this->defaultMethod
+                    'method' => $this->defaultMethod . $this->actionSuffix
                 ],
                 $this->defaultUrlDelimiter
             );
