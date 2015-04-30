@@ -51,12 +51,12 @@ class Collection
      */
     public function addNode(Node $node)
     {
-        if (isset($this->idList[$node->getId()])) {
+        if (isset($this->idList[$node->id])) {
             $node->setId($this->getNextPossibleIdinContext($node));
         }
 
-        $this->list[$node->getKey()] = $node;
-        $this->idList[$node->getId()] = $node;
+        $this->list[$node->key] = $node;
+        $this->idList[$node->id] = $node;
 
         return $this;
     }
@@ -71,12 +71,12 @@ class Collection
      */
     public function getNextPossibleIdInContext(Node $node)
     {
-        if (!isset($this->idList[$node->getId()])) {
-            return $node->getId();
+        if (!isset($this->idList[$node->id])) {
+            return $node->id;
         }
 
         $newId = false;
-        $id = $node->getId();
+        $id = $node->id;
         for ($i = 0; $newId == false; $i++) {
             $newId = $id . Node::MULTIPLE_ID_ENTRY_DELIMITER . "$i";
 
@@ -99,7 +99,7 @@ class Collection
     public function moveNode(Node $node, Node $parent)
     {
         $node->setParent($parent)->updateId();
-        $this->idList[$node->getId()] = $node;
+        $this->idList[$node->id] = $node;
 
         return $this;
     }
@@ -158,23 +158,29 @@ class Collection
     public function getFirstByKey($key)
     {
         if (count($this->list) == 0) return null;
+
+        if (($set = $this->getByIdFuzzy($key))) {
+            foreach ($set as $node) {
+                return $node;
+            }
+        }
         /**
          * @var Node $node
          */
         foreach ($this->list as $node) {
-            if ($node->getKey() == $key) {
+            if ($node->key == $key) {
                 return $node;
             }
 
             /**
              * @var Node $cnode
              */
-            foreach ($node->getChildren()->getList() as $cnode) {
-                if ($cnode->getKey() == $key) {
+            foreach ($node->children->getList() as $cnode) {
+                if ($cnode->key == $key) {
                     return $cnode;
                 }
 
-                if (($rnode = $cnode->getChildren()->getFirstByKey($key)) !== null) {
+                if (($rnode = $cnode->children->getFirstByKey($key)) !== null) {
                     return $rnode;
                 }
             }
@@ -203,7 +209,7 @@ class Collection
          * @var Node $node
          */
         foreach ($this->list as $node) {
-            if ($node->getKey() == $key && !$result->contains($node)) {
+            if ($node->key == $key && !$result->contains($node)) {
                 $result->attach($node);
             }
 

@@ -51,7 +51,7 @@ abstract class AbstractNode {
     {
         $node = $this->mainNode->getByKey($key);
         if (empty($node)) return $this->mainNode;
-        $this->mainNode->getChildren()->removeNode($node);
+        $this->mainNode->children->removeNode($node);
         unset($node);
         return $this->mainNode;
     }

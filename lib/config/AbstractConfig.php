@@ -75,7 +75,7 @@ abstract class AbstractConfig implements IConfig {
     public function delete($key = ''){
         $node = $this->mainNode->getFirstByKey($key);
         if (empty($node)) return $this->mainNode;
-        $this->mainNode->getChildren()->removeNode($node);
+        $this->mainNode->children->removeNode($node);
         unset($node);
         return $this->mainNode;
     }

@@ -26,21 +26,21 @@ class Handler extends \stdClass implements RequestInterface {
      *
      * @var \chilimatic\lib\request\Post
      */
-    public $post;
+    private $post;
 
     /**
      * Get object
      *
      * @var \chilimatic\lib\request\Get
      */
-    public $get;
+    private $get;
 
     /**
      * File object
      *
      * @var \chilimatic\lib\request\File
      */
-    public $file;
+    private $file;
 
     /**
      * CLI object ($argv)
@@ -48,26 +48,25 @@ class Handler extends \stdClass implements RequestInterface {
      *
      * @var \chilimatic\lib\request\Cli
      */
-    public $cli;
+    private $cli;
 
     /**
      * Request object
      *
      * @var \chilimatic\lib\request\Request|null
      */
-    public $request;
+    private $request;
 
     /**
      * @var
      */
-    public $raw;
+    private $raw;
     /**
      * singelton instance
      *
      * @var \chilimatic\lib\request\Handler
      */
     public static $instance;
-
 
     /**
      * server path
@@ -82,41 +81,7 @@ class Handler extends \stdClass implements RequestInterface {
      */
     private function __construct()
     {
-        if (($data = file_get_contents('php://input'))) {
-            $this->raw = Raw::getInstance($this->parseRawData($data));
-        }
-
-        if (!empty($_GET))
-        {
-            $this->get = Get::getInstance($_GET);
-            // remove the $_GET so no one is tempted!
-            unset ($_GET);
-        }
-
-        if (!empty($_POST))
-        {
-            $this->post = Post::getInstance($_POST);
-            // remove the $_POST so no one is tempted
-            unset ($_POST);
-        }
-
-        if (!empty($_FILES))
-        {
-            $this->file = File::getInstance($_FILES);
-            // remove the $_FILES so no one is tempted
-            unset ($_FILES);
-        }
-
-        if (!empty($argv))
-        {
-            $this->cli = CLI::getInstance($argv);
-        }
-
-        if (!empty($_REQUEST))
-        {
-            $this->request = Request::getInstance($_REQUEST);
-            unset($_REQUEST);
-        }
+        // singelton constructor
     }
 
     /**
@@ -126,11 +91,11 @@ class Handler extends \stdClass implements RequestInterface {
      */
     private function parseRawData($data) {
         switch (true) {
-            case strpos($data, '{') == 0:
+            case strpos($data, '{') === 0:
                 return json_decode($data, true);
                 break;
             default:
-                return $data;
+                return [$data];
                 break;
         }
     }
@@ -167,6 +132,12 @@ class Handler extends \stdClass implements RequestInterface {
      */
     public function getCli()
     {
+        if (!$this->cli === null && isset($GLOBALS['argv'])) {
+            $this->cli = CLI::getInstance($GLOBALS['argv']);
+        } else {
+            $this->cli = CLI::getInstance();
+        }
+
         return $this->cli;
     }
 
@@ -186,6 +157,12 @@ class Handler extends \stdClass implements RequestInterface {
      */
     public function getFile()
     {
+        if ($this->file === null) {
+            $this->file = File::getInstance((array) $_FILES);
+            // remove the $_FILES so no one is tempted
+            unset ($_FILES);
+        }
+
         return $this->file;
     }
 
@@ -205,6 +182,12 @@ class Handler extends \stdClass implements RequestInterface {
      */
     public function getGet()
     {
+        if ($this->get === null) {
+            $this->get = Get::getInstance((array) $_GET);
+            // remove the $_GET so no one is tempted!
+            unset ($_GET);
+        }
+
         return $this->get;
     }
 
@@ -224,6 +207,12 @@ class Handler extends \stdClass implements RequestInterface {
      */
     public function getPost()
     {
+        if ($this->post === null) {
+            $this->post = Post::getInstance((array) $_POST);
+            // remove the $_POST so no one is tempted
+            unset ($_POST);
+        }
+
         return $this->post;
     }
 
@@ -243,6 +232,12 @@ class Handler extends \stdClass implements RequestInterface {
      */
     public function getRequest()
     {
+        if ($this->request === null)
+        {
+            $this->request = Request::getInstance((array) $_REQUEST);
+            unset($_REQUEST);
+        }
+
         return $this->request;
     }
 
@@ -282,6 +277,12 @@ class Handler extends \stdClass implements RequestInterface {
      */
     public function getRaw()
     {
+        if ($this->raw === null && ($data = file_get_contents('php://input'))) {
+            $this->raw = Raw::getInstance((array) $this->parseRawData($data));
+        } else {
+            $this->raw = Raw::getInstance();
+        }
+
         return $this->raw;
     }
 

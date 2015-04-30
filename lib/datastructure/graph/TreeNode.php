@@ -33,13 +33,13 @@ class TreeNode extends Node {
     private function searchTree($depth = 0)
     {
         $this->depth = $depth;
-        foreach ($this->getChildren()->getList() as $node)
+        foreach ($this->children->getList() as $node)
         {
             if ($depth > count($this->treePath)) {
                 break;
             }
 
-            if ($this->treePath[$depth] != $node->getKey()) {
+            if ($this->treePath[$depth] != $node->key) {
                 continue;
             }
 

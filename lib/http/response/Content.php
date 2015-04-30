@@ -78,6 +78,11 @@ class Content {
     public $css;
 
     /**
+     * @var string
+     */
+    public $jsExecute;
+
+    /**
      * @return string
      */
     public function getHtml()
@@ -257,5 +262,43 @@ class Content {
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getCss()
+    {
+        return $this->css;
+    }
 
+    /**
+     * @param array $css
+     *
+     * @return $this
+     */
+    public function setCss($css)
+    {
+        $this->css = $css;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJsExecute()
+    {
+        return $this->jsExecute;
+    }
+
+    /**
+     * @param string $jsExecute
+     *
+     * @return $this
+     */
+    public function setJsExecute($jsExecute)
+    {
+        $this->jsExecute = $jsExecute;
+
+        return $this;
+    }
 }

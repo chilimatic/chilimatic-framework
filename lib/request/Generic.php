@@ -61,8 +61,7 @@ abstract class Generic extends \stdClass implements JsonSerializable, ISingelton
      * @return \chilimatic\lib\request\Generic
      */
     protected function __construct(array $param = null){
-
-        $this->param = array_merge((array) $_REQUEST, (array) $param);
+        $this->param = $param;
     }
 
 
@@ -129,6 +128,6 @@ abstract class Generic extends \stdClass implements JsonSerializable, ISingelton
      */
     public function jsonSerialize()
     {
-        return;
+        return $this->param;
     }
 }

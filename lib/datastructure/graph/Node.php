@@ -48,7 +48,7 @@ class Node implements INode
      *
      * @var string
      */
-    protected $id;
+    public $id;
 
     /**
      * key identifier -> this is basically the
@@ -56,7 +56,7 @@ class Node implements INode
      *
      * @var string
      */
-    protected $key;
+    public $key;
 
     /**
      * Config Node if loaded
@@ -64,7 +64,7 @@ class Node implements INode
      *
      * @var mixed
      */
-    protected $data;
+    public $data;
 
     /**
      * @var string
@@ -76,7 +76,7 @@ class Node implements INode
      *
      * @var Collection
      */
-    protected $children = null;
+    public $children = null;
 
     /**
      * constructor
