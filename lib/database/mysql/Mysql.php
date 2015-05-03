@@ -844,4 +844,3 @@ class Mysql extends AbstractDatabase
         if ( is_resource($this->slaveConnection) ) mysqli_close($this->slaveConnection->getDb());
     }
 }
-?>

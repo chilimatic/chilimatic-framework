@@ -32,20 +32,21 @@ class Node extends \chilimatic\lib\datastructure\graph\Node
      * @param $data
      * @param string $comment
      */
-    public function __construct(INode $parentNode = null, $key, $data, $comment = '') {
+    public function __construct(INode $parentNode = null, $key, $data, $comment = '')
+    {
         // get the current node
         $this->parentNode = $parentNode;
         // set the current key identifier
         $this->key = $key;
         // set the current value of the node
-        $this->_initType($data);
+        if ($data) {
+            $this->initType($data);
+        }
 
         if ( empty($this->parentNode->key))
         {
             $this->id = "{$key}";
-        }
-        else
-        {
+        } else {
             $this->id = "{$this->parentNode->key}.{$key}";
         }
 
@@ -53,9 +54,13 @@ class Node extends \chilimatic\lib\datastructure\graph\Node
 
         // optional comment
         $this->comment = $comment;
-
-        $this->children = new Collection();
+        if ($this->parentNode) {
+            $this->children = new Collection($parentNode->children->idList);
+        } else {
+            $this->children = new Collection();
+        }
     }
+
 
     /**
      * method to set the current type and initializes it
@@ -64,36 +69,36 @@ class Node extends \chilimatic\lib\datastructure\graph\Node
      *
      * @return bool
      */
-    private function _initType($data)
+    private function initType($data)
     {
         if ( !is_string($data) ) return true;
+        $data = trim($data);
 
         switch (true) {
             // check if it's not a json array or object
-            case (strpos(trim($data), '[' ) === 0 || strpos(trim($data), '{' ) === 0):
-                $this->data = json_decode(trim($data));
+            case (($res = @json_decode($data))):
+                $this->data = $res;
                 break;
-            // check if it's a string with quotes on the outside
-            case ((preg_match('/^["|\']{1}(.*)["|\']{1}$/', trim($data), $match)) === 1):
-                $this->data = (string) $match[1];
-                break;
-            case (!is_numeric(trim($data)) && preg_match('/^(true|false){1}$/', trim($data))):
+            case (!is_numeric($data) && in_array($data, ['true', 'false'])):
                 $this->data = (bool) (strpos($data, 'true') !== false) ? true : false;
                 break;
-            case (($tmp = @unserialize($data) !== false)):
+            case ($tmp = @unserialize($data) !== false):
                 $this->data = $tmp;
                 break;
-            case !is_numeric(trim($data)):
-                $this->data = (string) trim($data);
+            case !is_numeric($data):
+                // check if it's a string with quotes on the outside
+                if((preg_match('/^["|\']{1}(.*)["|\']{1}$/', $data, $match)) === 1) {
+                    $this->data = (string) $match[1];
+                } else {
+                    $this->data = (string) $data;
+                }
                 break;
             default:
                 // integer
                 if (is_numeric($data) && strpos($data, '.') === false) {
-                    $this->data = (int) trim($data);
-                }
-                // english notation for float
-                elseif (is_numeric($data) && strpos($data, '.') > 1) {
-                    $this->data = (float) trim($data);
+                    $this->data = (int) $data;
+                } else {
+                    $this->data = (float) $data;
                 }
                 break;
         }

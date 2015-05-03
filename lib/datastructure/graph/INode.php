@@ -42,5 +42,5 @@ interface INode {
      *
      * @return mixed
      */
-    public function getFirstByKey($key);
+    public function getLastByKey($key);
 }

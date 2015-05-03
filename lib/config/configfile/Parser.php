@@ -62,7 +62,8 @@ class Parser
 
         foreach ($this->_comment_character_list as $comment_char)
         {
-            if (strpos( trim( $line ), $comment_char ) !== false && strpos( trim( $line ), $comment_char ) <= 3) {
+            $line = trim($line);
+            if (strpos($line, $comment_char) !== false && strpos($line , $comment_char ) <= 3) {
                 $is_comment = true;
                 break;
             }
@@ -83,7 +84,9 @@ class Parser
 
         // loop through all lines
         for ($i = 0, $count = (int) count($currentConfig); $i < $count; $i++) {
-            if ($this->isComment($currentConfig[$i])) {
+            if (!$currentConfig[$i]) {
+                continue;
+            } elseif ($this->isComment($currentConfig[$i])) {
                 $currentComment .= $currentConfig[$i];
                 continue;
             }

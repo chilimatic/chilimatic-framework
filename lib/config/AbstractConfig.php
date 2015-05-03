@@ -73,7 +73,7 @@ abstract class AbstractConfig implements IConfig {
      * @return mixed
      */
     public function delete($key = ''){
-        $node = $this->mainNode->getFirstByKey($key);
+        $node = $this->mainNode->getLastByKey($key);
         if (empty($node)) return $this->mainNode;
         $this->mainNode->children->removeNode($node);
         unset($node);
@@ -92,7 +92,7 @@ abstract class AbstractConfig implements IConfig {
              return null;
          }
 
-         $node = $this->mainNode->getFirstByKey($var);
+         $node = $this->mainNode->getLastByKey($var);
          if (empty($node)) return NULL;
          return $node->getData();
      }

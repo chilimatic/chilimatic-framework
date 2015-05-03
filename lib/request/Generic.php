@@ -124,7 +124,7 @@ abstract class Generic extends \stdClass implements JsonSerializable, ISingelton
      * you need to change this functions in the CHILD OBJECTS
      * please note that the name "generic" was used for a reason ! ;)
      *
-     * @return void
+     * @return mixed
      */
     public function jsonSerialize()
     {

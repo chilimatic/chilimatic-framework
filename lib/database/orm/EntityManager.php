@@ -25,8 +25,11 @@ use chilimatic\lib\log\ILog;
  *
  * @package chilimatic\lib\database\ORM
  */
-class EntityManager {
-
+class EntityManager
+{
+    /**
+     * @trait
+     */
     use ErrorLogTrait;
 
     /**

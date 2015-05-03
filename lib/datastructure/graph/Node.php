@@ -76,7 +76,7 @@ class Node implements INode
      *
      * @var Collection
      */
-    public $children = null;
+    public $children;
 
     /**
      * constructor
@@ -95,7 +95,13 @@ class Node implements INode
         $this->data = $data;
         // optional comment
         $this->comment = $comment;
-        $this->children = new Collection();
+
+        if ($this->parentNode) {
+            new Collection($parentNode->children->idList);
+        } else {
+            new Collection();
+        }
+
         $this->updateId();
     }
 
@@ -141,9 +147,9 @@ class Node implements INode
      *
      * @return Node|null
      */
-    public function getFirstByKey($key) {
+    public function getLastByKey($key) {
         if ($this->key == $key ) return $this;
-        return $this->children->getFirstByKey($key);
+        return $this->children->getLastByKey($key);
     }
 
 
@@ -254,13 +260,14 @@ class Node implements INode
     /**
      * adds/replace a node to node children list
      *
-     * @param Node $node
+     * @param INode $node
      *
      * @return $this
      */
-    public function addChild(Node $node)
+    public function addChild(INode $node)
     {
         $this->children->addNode($node);
+
         return $this;
     }
 

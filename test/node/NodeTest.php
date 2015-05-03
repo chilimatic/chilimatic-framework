@@ -67,7 +67,7 @@ class NodeTest extends PHPUnit_Framework_TestCase
     public function getChildValueByKey() {
         $node = new \chilimatic\lib\datastructure\graph\Node(null, '.', '');
         $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 23));
-        $this->assertEquals(23, $node->getFirstByKey('test')->getData());
+        $this->assertEquals(23, $node->getLastByKey('test')->getData());
     }
 
     /**
@@ -86,7 +86,7 @@ class NodeTest extends PHPUnit_Framework_TestCase
         $node = new \chilimatic\lib\datastructure\graph\Node(null, '.', '');
         $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 23));
         $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 24));
-        $this->assertEquals(24, $node->getFirstByKey('test')->getData());
+        $this->assertEquals(24, $node->getLastByKey('test')->getData());
     }
 
     /**

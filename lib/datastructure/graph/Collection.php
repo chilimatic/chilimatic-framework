@@ -19,20 +19,26 @@ class Collection
      * list of all nodes
      * @var array|null
      */
-    private $list = null;
+    public $list = null;
 
     /**
-     * list of all ids
+     * list of all ids WITHIN ALL CHILD AN PARENT NODES !!!! this is a reference ! :)
      * @var array|null
      */
-    private $idList = null;
+    public $idList = null;
 
     /**
-     * @return Collection
+     * the id list is an reference through the whole graph system
+     *
+     * @param null $idList
      */
-    public function __construct(){
-        $this->list = [];
-        $this->idList = [];
+    public function __construct(&$idList = null) {
+
+        if ($idList !== null) {
+            $this->idList = &$idList;
+        } else {
+            $this->idList = [];
+        }
     }
 
     /**
@@ -130,7 +136,7 @@ class Collection
      * -> it's a strpos comparison so every hit is returned
      *
      * @param $key
-     * @return \SplObjectStorage|null
+     * @return \SplDoublyLinkedList()|null
      */
     public function getByIdFuzzy($key)
     {
@@ -138,11 +144,10 @@ class Collection
             return null;
         }
 
-        $hit_array = null;
-        $resultSet = new \SplObjectStorage();
+        $resultSet = new \SplDoublyLinkedList();
         foreach ($this->idList as $id => $node) {
             if (strpos($id, $key) !== false) {
-                $resultSet->attach($node);
+                $resultSet->push($node);
             }
         }
         return $resultSet;
@@ -155,35 +160,12 @@ class Collection
      *
      * @return mixed
      */
-    public function getFirstByKey($key)
+    public function getLastByKey($key)
     {
         if (count($this->list) == 0) return null;
 
-        if (($set = $this->getByIdFuzzy($key))) {
-            foreach ($set as $node) {
-                return $node;
-            }
-        }
-        /**
-         * @var Node $node
-         */
-        foreach ($this->list as $node) {
-            if ($node->key == $key) {
-                return $node;
-            }
-
-            /**
-             * @var Node $cnode
-             */
-            foreach ($node->children->getList() as $cnode) {
-                if ($cnode->key == $key) {
-                    return $cnode;
-                }
-
-                if (($rnode = $cnode->children->getFirstByKey($key)) !== null) {
-                    return $rnode;
-                }
-            }
+        if (($set = $this->getByIdFuzzy($key)) && count($set)) {
+            return $set->pop();
         }
 
         return null;

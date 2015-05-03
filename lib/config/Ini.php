@@ -8,7 +8,7 @@
 
 namespace chilimatic\lib\config;
 
-use chilimatic\lib\exception\Exception_Config;
+use chilimatic\lib\exception\ConfigException;
 
 /**
  * Class Config_Ini
@@ -39,27 +39,26 @@ class Ini extends AbstractConfig
     public $processSections = null;
 
     /**
-     * loads the config based on the type / source
+     * @param null $param
      *
-     * @param mixed $param
-     *
-     * @throws \chilimatic\lib\exception\Exception_Config
+     * @throws ConfigException
      * @throws \Exception
-     * @return mixed
+     *
+     * @return void
      */
     public function load( $param = null ){
         try
         {
             if ( empty($param['file']) ) {
-                throw new Exception_Config(_('No config file was give please, the parameter '. $param, 0, 1, __METHOD__, __LINE__));
+                throw new ConfigException(_('No config file was give please, the parameter '. $param, 0, 1, __METHOD__, __LINE__));
             }
-            $this->config_file = (string) $param['file'];
+            $this->configFile = (string) $param['file'];
 
             if ( isset($param['process-sections']) ) {
-                $this->process_sections = (bool) $param['process-sections'];
+                $this->processSections = (bool) $param['process-sections'];
             }
             if ( isset($param['scanner-mode']) ) {
-                $this->scanner_mode = (int) $param['scanner-mode'];
+                $this->scannerMode = (int) $param['scanner-mode'];
             }
 
             $data = parse_ini_file($this->configFile, $this->processSections, $this->scannerMode);
@@ -84,7 +83,7 @@ class Ini extends AbstractConfig
                 $this->mainNode->addChild($newNode);
             }
         }
-        catch (Exception_Config $e)
+        catch (ConfigException $e)
         {
             throw $e;
         }

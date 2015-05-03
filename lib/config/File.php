@@ -32,6 +32,12 @@ class File extends AbstractConfig
 
 
     /**
+     * @var string
+     */
+    private $config_path;
+
+
+    /**
      * @param array $param
      *
      * @throws ConfigException
@@ -53,7 +59,7 @@ class File extends AbstractConfig
         }
 
         // get the path of the config if the path has not been set
-        if ( !$this->get(self::CONFIG_PATH_INDEX) ) {
+        if ( !($this->config_path = $this->get(self::CONFIG_PATH_INDEX)) ) {
             throw new ConfigException('no path for configfiles has been set');
         }
 
@@ -131,13 +137,13 @@ class File extends AbstractConfig
         $count = (int) count( $id_part_list ) + 1;
         $i = 0;
 
-        $config_path = $this->get(self::CONFIG_PATH_INDEX);
+
         // we don't need to rebuild this standard strings all the time
         $config_del = self::HIERACHY_PLACEHOLDER . ( string ) self::CONFIG_DELIMITER;
         $extension = self::CONFIG_DELIMITER . self::FILE_EXTENSION;
 
         // the first config is the current host id + .cfg
-        $self = (string)  $config_path . '/' . (string) implode(self::CONFIG_DELIMITER , $id_part_list) . (string) $extension;
+        $self = (string)  $this->config_path . '/' . (string) implode(self::CONFIG_DELIMITER , $id_part_list) . (string) $extension;
 
         do
         {
@@ -150,7 +156,7 @@ class File extends AbstractConfig
             }
 
             $file_name = (string) (count($id_part_list) > 0  ? implode( self::CONFIG_DELIMITER , $id_part_list ) .(string) $extension : self::FILE_EXTENSION ) ;
-            $self = (string) $this->get(self::CONFIG_PATH_INDEX) . '/' . ( string ) $config_del . $file_name ;
+            $self = (string) $this->config_path . '/' . ( string ) $config_del . $file_name ;
             ++$i;
         } while ( $i < $count );
 
@@ -197,20 +203,16 @@ class File extends AbstractConfig
      */
     public function load()
     {
-        // check if the config path has been set
-        if ( !$this->get(self::CONFIG_PATH_INDEX) ) return false;
-
         // if there already has been a config set it means it already
         // has been loaded so why bother retrying ! this is not a dynamic language !
-        if ( count((array) $this->get('config_set')) > 0 ) return true;
-        $config_path = $this->get(self::CONFIG_PATH_INDEX);
         $config_set = $this->get('config_set');
+        if ( count((array) $config_set) > 0 ) return true;
 
         // if the config set already exists don't parse it
         if ( empty($config_set) && !($config_set = $this->_getConfigSet()))  {
             // set default config set for the default execution
             $config_set = array(
-                realpath("{$config_path}/" . (string) self::HIERACHY_PLACEHOLDER . (string) self::CONFIG_DELIMITER . ( string ) self::FILE_EXTENSION)
+                realpath("{$this->config_path}/" . (string) self::HIERACHY_PLACEHOLDER . (string) self::CONFIG_DELIMITER . ( string ) self::FILE_EXTENSION)
             );
             $this->set('config_set', $config_set);
         }
@@ -222,7 +224,7 @@ class File extends AbstractConfig
         {
             if ( empty( $config_set ) || !is_readable( $config_set [0] ) )
             {
-                throw new ConfigException( "No default config file declared {$config_path}/" . self::HIERACHY_PLACEHOLDER . (string) self::CONFIG_DELIMITER . ( string ) self::FILE_EXTENSION );
+                throw new ConfigException( "No default config file declared {$this->config_path}/" . self::HIERACHY_PLACEHOLDER . (string) self::CONFIG_DELIMITER . ( string ) self::FILE_EXTENSION );
             }
 
             $configParser = new \chilimatic\lib\config\configfile\Parser();
