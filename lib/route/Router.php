@@ -32,20 +32,8 @@ use chilimatic\lib\route\routesystem\RouteSystemFactory;
  * 
  * @author j
  */
-class Router
+class Router implements IRouter
 {
-    /**
-     * @var string
-     */
-    const DEFAULT_ROUTING_TYPE = 'Node';
-
-    /**
-     * routing error code
-     * 
-     * @var int
-     */
-    const ROUTING_ERROR = 20;
-
     /**
      * Caching Object
      * 
@@ -81,22 +69,6 @@ class Router
         $this->urlParser = new UrlParser();
         $this->routeSystem = RouteSystemFactory::make($type, $this->__getPath());
     }
-
-
-    /**
-     * get a property
-     * 
-     * @param string $property
-     * 
-     * @return mixed
-     */
-    public function get( $property )
-    {
-        if ( !property_exists($this, $property) ) return false;
-        
-        return $this->$property;
-    }
-
 
     /**
      * if no path has been specified get a fallback path

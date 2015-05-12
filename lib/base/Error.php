@@ -15,7 +15,7 @@ class Error
      *
      * @var int
      */
-    const SEVERITY_LOW = 0;
+    const SEVERITY_LOW = 0b0000;
 
 
     /**
@@ -23,7 +23,7 @@ class Error
      *
      * @var int
      */
-    const SEVERITY_MED = 1;
+    const SEVERITY_MED = 0b0001;
 
 
     /**
@@ -31,7 +31,7 @@ class Error
      *
      * @var int
      */
-    const SEVERITY_HIGH = 2;
+    const SEVERITY_HIGH = 0b0010;
 
 
     /**
@@ -39,5 +39,5 @@ class Error
      *
      * @var int
      */
-    const SEVERITY_CRIT = 3;
+    const SEVERITY_CRIT = 0b0011;
 }

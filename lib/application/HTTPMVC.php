@@ -33,12 +33,12 @@ class HTTPMVC {
     /**
      * @var \chilimatic\lib\request\Handler
      */
-    protected $requestControl;
+    protected $requestHandler;
 
     /**
      * @var \chilimatic\lib\handler\httphandler
      */
-    protected $handle;
+    protected $applicationHandler;
 
     /**
      * @var \chilimatic\lib\di\ClosureFactory
@@ -80,9 +80,9 @@ class HTTPMVC {
      */
     public function init()
     {
-        $this->getHandle()
+        $this->getHandler()
             ->setRoute($this->getRouter()->getRoute())
-            ->setRequest($this->requestControl);
+            ->setRequest($this->requestHandler);
     }
 
     /**
@@ -90,11 +90,11 @@ class HTTPMVC {
      */
     public function getRequestControl()
     {
-        if (!$this->requestControl) {
-            $this->requestControl = $this->di->get('request-handler');
+        if (!$this->requestHandler) {
+            $this->requestHandler = $this->di->get('request-handler');
         }
 
-        return $this->requestControl;
+        return $this->requestHandler;
     }
 
     /**
@@ -111,23 +111,23 @@ class HTTPMVC {
     /**
      * @return mixed
      */
-    public function getHandle()
+    public function getHandler()
     {
-        if (!$this->handle) {
-            $this->handle = $this->di->get('application-handler');
+        if (!$this->applicationHandler) {
+            $this->applicationHandler = $this->di->get('application-handler');
         }
 
-        return $this->handle;
+        return $this->applicationHandler;
     }
 
     /**
-     * @param $handle
+     * @param $applicationHandler
      *
      * @return $this
      */
-    public function setHandle($handle)
+    public function setHandler($applicationHandler)
     {
-        $this->handle = $handle;
+        $this->applicationHandler = $applicationHandler;
         return $this;
     }
 
