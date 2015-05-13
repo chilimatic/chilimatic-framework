@@ -29,7 +29,10 @@ abstract class HTTPController {
     /**
      *
      */
-    public function __construct() {
+    public function __construct($viewType) {
+        if (!$viewType) {
+            throw new \LogicException("viewType needs to be specified");
+        }
         $this->view = ClosureFactory::getInstance()->get(self::VIEWSERVICE_INDEX);
     }
 

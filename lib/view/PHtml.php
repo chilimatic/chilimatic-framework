@@ -11,7 +11,7 @@ namespace chilimatic\lib\view;
  * Class PHtml
  * @package chilimatic\lib\view
  */
-class PHtml extends \chilimatic\lib\view\Generic
+class PHtml extends AbstractView
 {
     /**
      * default rendering file extension

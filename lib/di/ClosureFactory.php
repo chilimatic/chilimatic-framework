@@ -30,10 +30,10 @@ class ClosureFactory
     private $pseudoSingeltonList;
 
     /**
-     * @param null $path
-     * @param $services
+     * @param string|null $path
+     * @param array|null $serviceList
      */
-    private function __construct($path = null, $services = null)
+    private function __construct($path = null, $serviceList = null)
     {
 
         $this->serviceCollection = [];
@@ -42,43 +42,81 @@ class ClosureFactory
             $this->loadServiceFromFile($path);
         }
 
-        if (!$services) return;
-
-        foreach ($services as $key => $closure) {
-            $this->set($key, $closure);
+        if ($serviceList) {
+            $this->setServiceList($serviceList);
         }
 
         $this->pseudoSingeltonList = [];
     }
 
     /**
+     * sets services to the closure factory
+     *
+     * @param array $serviceList
+     *
      * @return void
      */
-    private function __clone() {
-        return;
+    public function setServiceList($serviceList = [])
+    {
+        if (!$serviceList) return;
+
+        foreach ($serviceList as $key => $closure) {
+            $this->set($key, $closure);
+        }
     }
+
+
+    /**
+     * @return void
+     */
+    private function __clone() {}
 
     /**
      * @param string $path
      */
     public function loadServiceFromFile($path) {
-        $serviceList = @require $path;
+        if (!$path) {
+            return;
+        }
+
+        $serviceList = @require (string) $path;
         $this->serviceCollection = array_merge((array) $this->serviceCollection, (array) $serviceList);
     }
 
     /**
-     * @param null $path
-     * @param $services
+     * @param string|null $path
+     * @param array|null $serviceList
      *
      * @return self::$instance
      */
-    public static function getInstance($path = null, $services = null) {
+    public static function getInstance($path = null, $serviceList = null) {
         if (!self::$instance instanceof self) {
-            self::$instance = new self($path, $services);
+            self::$instance = new self($path, $serviceList);
+        }
+
+        if ($path) {
+            self::$instance->loadServiceFromFile($path);
+        }
+
+        if ($serviceList) {
+            self::$instance->setServiceList($serviceList);
         }
 
         return self::$instance;
     }
+
+    /**
+     * the set null is to avoid the php GC
+     *
+     * it remove the singelton instance so the next get instance rebuilds it from scratch
+     *
+     * @return void
+     */
+    public static function destroyInstance() {
+        self::$instance = null;
+    }
+
+
 
     /**
      * @param string $key
@@ -98,6 +136,8 @@ class ClosureFactory
      */
     public function remove($key) {
         unset($this->serviceCollection[$key]);
+        unset($this->pseudoSingeltonList[$key]);
+
         return $this;
     }
 
@@ -121,7 +161,7 @@ class ClosureFactory
     public function get($key, $setting = [], $singelton = false)
     {
         if (!isset($this->serviceCollection[$key])) {
-            throw new \BadFunctionCallException($key . 'function is missing');
+            throw new \BadFunctionCallException($key . ' closure is missing');
         }
 
         /**
@@ -143,7 +183,6 @@ class ClosureFactory
          * if the service never has been initiated before initiate it
          */
         $this->pseudoSingeltonList[$key] = $this->serviceCollection[$key]($setting);
-
 
         return $this->pseudoSingeltonList[$key];
     }

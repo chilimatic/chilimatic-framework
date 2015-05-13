@@ -8,10 +8,10 @@
             return new PDO($setting['dns']);
         },
         'request-handler' => function($setting = []) {
-            return \chilimatic\lib\request\Handler::getInstance();
+            return \chilimatic\lib\request\Handler::getInstance($setting);
         },
         'application-handler' => function($setting = []) {
-            return new chilimatic\lib\handler\HTTPHandler();
+            return new chilimatic\lib\handler\HTTPHandler($setting);
         },
         'routing' => function($setting = []) {
             return new \chilimatic\lib\route\Router($setting['type']);

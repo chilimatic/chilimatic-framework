@@ -73,26 +73,22 @@ class Node extends \chilimatic\lib\datastructure\graph\Node
     {
         if ( !is_string($data) ) return true;
         $data = trim($data);
-
         switch (true) {
-            // check if it's not a json array or object
-            case (($res = @json_decode($data))):
-                $this->data = $res;
-                break;
-            case (!is_numeric($data) && in_array($data, ['true', 'false'])):
+            case (in_array($data, ['true', 'false'])):
                 $this->data = (bool) (strpos($data, 'true') !== false) ? true : false;
                 break;
-            case ($tmp = @unserialize($data) !== false):
-                $this->data = $tmp;
-                break;
             case !is_numeric($data):
-                // check if it's a string with quotes on the outside
-                if((preg_match('/^["|\']{1}(.*)["|\']{1}$/', $data, $match)) === 1) {
+                if ($res = json_decode($data)) {
+                    $this->data = $res;
+                } else if (($res = @unserialize($data)) !== false) {
+                    $this->data = $res;
+                } else if ((preg_match('/^["|\']{1}(.*)["|\']{1}$/', $data, $match)) === 1) {
                     $this->data = (string) $match[1];
                 } else {
                     $this->data = (string) $data;
                 }
                 break;
+
             default:
                 // integer
                 if (is_numeric($data) && strpos($data, '.') === false) {

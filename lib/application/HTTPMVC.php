@@ -11,6 +11,7 @@
 namespace chilimatic\lib\application;
 
 use chilimatic\lib\config\AbstractConfig;
+use chilimatic\lib\di\ClosureFactory;
 use chilimatic\lib\route\Router;
 
 /**
@@ -38,10 +39,10 @@ class HTTPMVC {
     /**
      * @var \chilimatic\lib\handler\httphandler
      */
-    protected $applicationHandler;
+    protected $httpHandler;
 
     /**
-     * @var \chilimatic\lib\di\ClosureFactory
+     * @var ClosureFactory
      */
     protected $di;
 
@@ -55,10 +56,10 @@ class HTTPMVC {
     ];
 
     /**
-     * @param \chilimatic\lib\di\ClosureFactory $di
-     * @param AbstractConfig               $config
+     * @param ClosureFactory $di
+     * @param AbstractConfig $config
      */
-    public function __construct(\chilimatic\lib\di\ClosureFactory $di = null, AbstractConfig $config = null)
+    public function __construct(ClosureFactory $di = null, AbstractConfig $config = null)
     {
         if (!$di) return;
 
@@ -88,7 +89,7 @@ class HTTPMVC {
     /**
      * @return mixed
      */
-    public function getRequestControl()
+    public function getRequestHandler()
     {
         if (!$this->requestHandler) {
             $this->requestHandler = $this->di->get('request-handler');
@@ -98,13 +99,13 @@ class HTTPMVC {
     }
 
     /**
-     * @param $requestControl
+     * @param $requestHandler
      *
      * @return $this
      */
-    public function setRequestControl($requestControl)
+    public function setRequestHandler($requestHandler)
     {
-        $this->requestControl = $requestControl;
+        $this->requestHandler = $requestHandler;
         return $this;
     }
 
@@ -113,21 +114,27 @@ class HTTPMVC {
      */
     public function getHandler()
     {
-        if (!$this->applicationHandler) {
-            $this->applicationHandler = $this->di->get('application-handler');
+        if (!$this->httpHandler) {
+            $this->httpHandler = $this->di->get(
+                'application-handler',
+                [
+                    'include-root' => $this->config->get('include-root'),
+                    'application-namespace' => $this->config->get('application-namespace')
+                ]
+            );
         }
 
-        return $this->applicationHandler;
+        return $this->httpHandler;
     }
 
     /**
-     * @param $applicationHandler
+     * @param $httpHandler
      *
      * @return $this
      */
-    public function setHandler($applicationHandler)
+    public function setHandler($httpHandler)
     {
-        $this->applicationHandler = $applicationHandler;
+        $this->httpHandler = $httpHandler;
         return $this;
     }
 

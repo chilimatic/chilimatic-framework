@@ -5,7 +5,7 @@ namespace chilimatic\lib\view;
  * Interface ViewInterface
  * @package chilimatic\lib\view
  */
-Interface ViewInterface
+Interface IView
 {
 
     /**

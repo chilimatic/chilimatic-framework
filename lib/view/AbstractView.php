@@ -5,7 +5,7 @@ namespace chilimatic\lib\view;
  * Class Generic
  * @package chilimatic\lib\view
  */
-abstract class Generic implements ViewInterface
+abstract class AbstractView implements IView
 {
     /**
      * trait for inheritance

@@ -97,9 +97,9 @@ class Node implements INode
         $this->comment = $comment;
 
         if ($this->parentNode) {
-            new Collection($parentNode->children->idList);
+            $this->children = new Collection($parentNode->children->idList);
         } else {
-            new Collection();
+            $this->children = new Collection();
         }
 
         $this->updateId();

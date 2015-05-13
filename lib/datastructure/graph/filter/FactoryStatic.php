@@ -8,6 +8,8 @@
  * File: FactoryStatic.php
  */
 namespace chilimatic\lib\datastructure\graph\filter;
+use chilimatic\lib\interfaces\IFlyWeightValidator;
+use chilimatic\lib\interfaces\IFlyWeightTransformer;
 
 /**
  * Class FactoryStatic
@@ -17,14 +19,14 @@ namespace chilimatic\lib\datastructure\graph\filter;
 class FactoryStatic {
 
     /**
-     * @var null|\chilimatic\lib\interfaces\IFlyWeightTransformer
+     * @var null|IFlyWeightTransformer
      */
     private static $transformer;
 
     /**
-     * @var null|\chilimatic\lib\interfaces\IFlyWeightParser
+     * @var null|IFlyWeightValidator
      */
-    private static $parser;
+    private static $validator;
 
 
     /**
@@ -34,7 +36,7 @@ class FactoryStatic {
      */
     public static function make($filterName)
     {
-        if (self::$parser && !self::$parser->parse($filterName)) {
+        if (self::$validator && !self::$validator->validate($filterName)) {
             return null;
         }
 
@@ -52,7 +54,7 @@ class FactoryStatic {
     }
 
     /**
-     * @return \chilimatic\lib\interfaces\IFlyWeightTransformer|null
+     * @return IFlyWeightTransformer|null
      */
     public static function getTransformer()
     {
@@ -60,26 +62,26 @@ class FactoryStatic {
     }
 
     /**
-     * @param \chilimatic\lib\interfaces\IFlyWeightTransformer|null $transformer
+     * @param IFlyWeightTransformer|null $transformer
      */
-    public static function setTransformer($transformer)
+    public static function setTransformer(IFlyWeightTransformer $transformer = null)
     {
         self::$transformer = $transformer;
     }
 
     /**
-     * @return \chilimatic\lib\interfaces\IFlyWeightParser|null
+     * @return IFlyWeightValidator|null
      */
-    public static function getParser()
+    public static function getValidator()
     {
-        return self::$parser;
+        return self::$validator;
     }
 
     /**
-     * @param \chilimatic\lib\interfaces\IFlyWeightParser|null $parser
+     * @param IFlyWeightValidator|null $validator
      */
-    public static function setParser($parser)
+    public static function setValidator(IFlyWeightValidator $validator = null)
     {
-        self::$parser = $parser;
+        self::$validator = $validator;
     }
 }

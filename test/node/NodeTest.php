@@ -123,7 +123,7 @@ class NodeTest extends PHPUnit_Framework_TestCase
     public function getMultiResultByKeyPreFiltered()
     {
         $filterFactory = new \chilimatic\lib\datastructure\graph\filter\Factory();
-        $filterFactory->setParser(new chilimatic\lib\parser\DynamicCallNamePreTransformed());
+        $filterFactory->setValidator(new chilimatic\lib\validator\DynamicCallNamePreTransformed());
         $filterFactory->setTransformer(new chilimatic\lib\transformer\string\DynamicObjectCallName());
 
         $this->initNodes();

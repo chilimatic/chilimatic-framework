@@ -1,4 +1,6 @@
 <?php
+use chilimatic\lib\validator\DynamicCallNamePreTransformed;
+
 /**
  *
  * @author j
@@ -9,53 +11,53 @@
  *
  * Class DynamicFunctionNamePreTransformedTransformerTest
  */
-class DynamicFunctionNamePreTransformedTransformerTest extends PHPUnit_Framework_TestCase
+class DynamicCallNamePreTransformedValidatorTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
     public function testInterface() {
-        $this->assertInstanceOf('\chilimatic\lib\interfaces\IFlyWeightTransformer', new \chilimatic\lib\transformer\string\DynamicFunctionCallName());
+        $this->assertInstanceOf('\chilimatic\lib\interfaces\IFlyWeightValidator', new DynamicCallNamePreTransformed());
     }
 
     /**
      * @test
      */
     public function wrongCharacterAtBeginningSyntax() {
-        $tranformer = new \chilimatic\lib\transformer\string\DynamicFunctionCallName();
-        $this->assertEquals(false, $tranformer->transform('-methodname'));
+        $tranformer = new DynamicCallNamePreTransformed();
+        $this->assertEquals(false, $tranformer->validate('-methodname'));
     }
 
     /**
      * @test
      */
     public function wrongCharacterAtEndSyntax() {
-        $tranformer = new \chilimatic\lib\transformer\string\DynamicFunctionCallName();
-        $this->assertEquals(false, $tranformer->transform('methodname-'));
+        $tranformer = new DynamicCallNamePreTransformed();
+        $this->assertEquals(false, $tranformer->validate('methodname-'));
     }
 
     /**
      * @test
      */
     public function wrongCaseCharacterInCallNameSyntax() {
-        $tranformer = new \chilimatic\lib\transformer\string\DynamicFunctionCallName();
-        $this->assertEquals(false, $tranformer->transform('Methodname'));
+        $tranformer = new DynamicCallNamePreTransformed();
+        $this->assertEquals(false, $tranformer->validate('Methodname'));
     }
 
     /**
      * @test
      */
     public function wrongCharactInCallNameSyntax() {
-        $tranformer = new \chilimatic\lib\transformer\string\DynamicFunctionCallName();
-        $this->assertEquals(false, $tranformer->transform('$method'));
+        $tranformer = new DynamicCallNamePreTransformed();
+        $this->assertEquals(false, $tranformer->validate('$method'));
     }
 
     /**
      * @test
      */
     public function getErrorMessage() {
-        $tranformer = new \chilimatic\lib\transformer\string\DynamicFunctionCallName();
-        $this->assertEquals(false, $tranformer->transform('$method'));
+        $tranformer = new DynamicCallNamePreTransformed();
+        $this->assertEquals(false, $tranformer->validate('$method'));
         $this->assertEquals($tranformer->getInvalidCharacters() . ' are not allowed to be in the callname', $tranformer->getErrorMsg());
     }
 
@@ -63,15 +65,15 @@ class DynamicFunctionNamePreTransformedTransformerTest extends PHPUnit_Framework
      * @test
      */
     public function correctComplexCallSyntax() {
-        $tranformer = new \chilimatic\lib\transformer\string\DynamicFunctionCallName();
-        $this->assertEquals(true, $tranformer->transform('my-method-name'));
+        $tranformer = new DynamicCallNamePreTransformed();
+        $this->assertEquals(true, $tranformer->validate('my-method-name'));
     }
 
     /**
      * @test
      */
     public function correctSimpleCallSyntax() {
-        $tranformer = new \chilimatic\lib\transformer\string\DynamicFunctionCallName();
-        $this->assertEquals(true, $tranformer->transform('method'));
+        $tranformer = new DynamicCallNamePreTransformed();
+        $this->assertEquals(true, $tranformer->validate('method'));
     }
 }

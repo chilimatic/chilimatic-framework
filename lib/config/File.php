@@ -11,7 +11,6 @@ namespace chilimatic\lib\config;
 
 use chilimatic\lib\exception\ConfigException;
 
-
 /**
  * Class self
  * @package chilimatic\lib\config

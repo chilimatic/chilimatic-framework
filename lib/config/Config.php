@@ -43,17 +43,23 @@ class Config implements ISingelton
     /**
      * singelton constructor
      *
+     * the $param['type'] is for the factory to create the correct Config
+     *
      * @param array $param
      *
      * @return AbstractConfig
      */
     public static function getInstance($param = null)
     {
-        $configname = (string) __NAMESPACE__ . '\\' . (string) (!empty($param['type']) ?  $param['type'] : self::DEFAULT_CONFIG_TYPE);
+        if (isset($param['type'])) {
+            $type = $param['type'];
+            unset($param['type']);
+        } else {
+            throw new \LogicException('Config Type was not specified in the param array $param[\'type\']');
+        }
 
-        if ( self::$instance === null)
-        {
-            self::$instance = new $configname($param);
+        if ( self::$instance === null) {
+            self::$instance = ConfigFactory::make($type, $param);
         }
 
         // return singelton instance

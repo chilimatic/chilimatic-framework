@@ -14,7 +14,7 @@ namespace chilimatic\lib\handler;
 interface IHandler {
 
     /**
-     * @return self
+     * @param null $param
      */
     public function __construct($param = null);
 
@@ -36,6 +36,8 @@ interface IHandler {
     public function getRequest();
 
     /**
+     * @param $route
+     *
      * @return mixed
      */
     public function setRoute($route);

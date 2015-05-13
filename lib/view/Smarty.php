@@ -6,7 +6,7 @@ namespace chilimatic\lib\view;
  * Class Smarty
  * @package chilimatic\lib\view
  */
-final class Smarty extends Generic
+final class Smarty extends AbstractView
 {
 
     public function __construct()

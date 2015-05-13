@@ -17,9 +17,9 @@ namespace chilimatic\lib\datastructure\graph\filter;
 class Factory
 {
     /**
-     * @var null|\chilimatic\lib\interfaces\IFlyWeightParser
+     * @var null|\chilimatic\lib\interfaces\IFlyWeightValidator
      */
-    private $parser;
+    private $validator;
 
     /**
      * @var null|\chilimatic\lib\interfaces\IFlyWeightTransformer
@@ -33,7 +33,7 @@ class Factory
      */
     public function make($filterName)
     {
-        if ($this->parser && !$this->parser->parse($filterName)) {
+        if ($this->validator && !$this->validator->validate($filterName)) {
             return null;
         }
 
@@ -51,21 +51,21 @@ class Factory
     }
 
     /**
-     * @return \chilimatic\lib\interfaces\IFlyWeightParser|null
+     * @return \chilimatic\lib\interfaces\IFlyWeightValidator|null
      */
-    public function getParser()
+    public function getValidator()
     {
-        return $this->parser;
+        return $this->validator;
     }
 
     /**
-     * @param \chilimatic\lib\interfaces\IFlyWeightParser $parser
+     * @param \chilimatic\lib\interfaces\IFlyWeightValidator $validator
      *
      * @return $this
      */
-    public function setParser(\chilimatic\lib\interfaces\IFlyWeightParser $parser)
+    public function setValidator(\chilimatic\lib\interfaces\IFlyWeightValidator $validator)
     {
-        $this->parser = $parser;
+        $this->validator = $validator;
 
         return $this;
     }

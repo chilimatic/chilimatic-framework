@@ -17,7 +17,7 @@ class NodeFilterFactoryTest extends PHPUnit_Framework_TestCase
 
     public function testNodeFilterFactoryStaticMakeWithParserAndTransformer()
     {
-        \chilimatic\lib\datastructure\graph\filter\FactoryStatic::setParser(new chilimatic\lib\parser\DynamicCallNamePreTransformed());
+        \chilimatic\lib\datastructure\graph\filter\FactoryStatic::setValidator(new chilimatic\lib\validator\DynamicCallNamePreTransformed());
         \chilimatic\lib\datastructure\graph\filter\FactoryStatic::setTransformer(new chilimatic\lib\transformer\string\DynamicObjectCallName());
 
         $this->assertEquals(null, \chilimatic\lib\datastructure\graph\filter\FactoryStatic::make('lastNode'));
@@ -32,7 +32,7 @@ class NodeFilterFactoryTest extends PHPUnit_Framework_TestCase
     public function testNodeFilterFactoryMakeWithParserAndTransformer()
     {
         $filterFactory = new \chilimatic\lib\datastructure\graph\filter\Factory();
-        $filterFactory->setParser(new chilimatic\lib\parser\DynamicCallNamePreTransformed());
+        $filterFactory->setValidator(new chilimatic\lib\validator\DynamicCallNamePreTransformed());
         $filterFactory->setTransformer(new chilimatic\lib\transformer\string\DynamicObjectCallName());
 
         $this->assertEquals(null, $filterFactory->make('lastNode'));
@@ -48,7 +48,7 @@ class NodeFilterFactoryTest extends PHPUnit_Framework_TestCase
 
     public function testNodeFilterFactoryStaticMake()
     {
-        \chilimatic\lib\datastructure\graph\filter\FactoryStatic::setParser(null);
+        \chilimatic\lib\datastructure\graph\filter\FactoryStatic::setValidator(null);
         \chilimatic\lib\datastructure\graph\filter\FactoryStatic::setTransformer(null);
         $this->assertEquals(null, \chilimatic\lib\datastructure\graph\filter\FactoryStatic::make('last-node'));
         $this->assertInstanceOf('\chilimatic\lib\datastructure\graph\filter\AbstractFilter', \chilimatic\lib\datastructure\graph\filter\FactoryStatic::make('lastNode'));
