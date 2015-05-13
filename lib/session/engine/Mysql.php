@@ -37,7 +37,9 @@ class Mysql extends GenericEngine {
     public function __construct($config = [])
     {
         // checks if the table exists
-        if ( !$this->init() ) return;
+        if ( !$this->init($config) ) {
+            return;
+        }
 
 
         // Read the maxlifetime setting from PHP
@@ -74,11 +76,11 @@ class Mysql extends GenericEngine {
      *
      * @return bool;
      */
-    public function init()
+    public function init($config = [])
     {
         $this->__init_database();
 
-        $this->_db_name = (string) (($db = Config::get('session_db_name')) ? $db : Config::get('db_name'));
+        $this->_db_name = (string) (($db = $config['session_db_name']) ? $db : $config['db_name']);
 
         if ( !($this->db instanceof MysqlDb) )
         {

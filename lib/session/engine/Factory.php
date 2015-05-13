@@ -16,12 +16,12 @@ class Factory
 {
     /**
      * @param string $engineName
-     * @param mixed $param
+     * @param array $config
      *
      * @return GenericEngine|null
      * @throws InvalidArgumentException
      */
-    public static function make ($engineName, $param = null) {
+    public static function make ($engineName, $config = null) {
 
         // namespace needed for dynamic loading ;) php is sometime pretty weird
         $session_name =  (string) __NAMESPACE__ . (string) '\\'  . (string) ucfirst($engineName);
@@ -30,6 +30,6 @@ class Factory
             throw new InvalidArgumentException('Session Engine ' .$session_name . ' does not exist');
         }
 
-        return new $session_name($param);
+        return new $session_name($config);
     }
 }

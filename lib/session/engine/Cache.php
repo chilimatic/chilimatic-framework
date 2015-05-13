@@ -34,13 +34,19 @@ class Cache extends GenericEngine {
      *
      * @return mixed
      */
-    public function init(){
+    public function init($config = []){
+
+        if (isset($config['session_cache'])){
+            $session_type = $config['session_cache'];
+        } else {
+            $session_type = $config['cache_type'];
+        }
 
         /**
          * initialize the current Cache
          */
         $param = new \stdClass();
-        $param->type = (string) (!($s = Config::get('session_cache')) ? Config::get('cache_type') : $s);
+        $param->type = (string) $session_type;
         $param->credentials = (($s = Config::get('session_cache_settings') == '') ? Config::get('cache_settings') : $s);
         // write it to the cache
         $this->engine = CacheManager::getInstance($param);
@@ -56,7 +62,8 @@ class Cache extends GenericEngine {
      * @param $sessionId
      * @return mixed
      */
-    public function session_read( $sessionId ){
+    public function session_read( $sessionId )
+    {
         // assign the current session id
         $this->sessionId = (string) $sessionId;
         $this->sessionData = $this->engine->get($this->sessionKey . $sessionId);

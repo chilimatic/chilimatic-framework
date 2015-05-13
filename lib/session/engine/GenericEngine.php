@@ -58,7 +58,7 @@ abstract class GenericEngine implements SessionEngineInterface, \SplSubject
 
         // init script
         $this->initTrait();
-        if ( !$this->init() ) return;
+        if ( !$this->init($config) ) return;
 
 
         // Read the maxlifetime setting from PHP
@@ -94,9 +94,10 @@ abstract class GenericEngine implements SessionEngineInterface, \SplSubject
     /**
      * init method to add tables or other needed behaviour
      *
+     * @param array $config
      * @return mixed
      */
-    abstract public function init();
+    abstract public function init($config = []);
 
     /**
      * reads a specific session

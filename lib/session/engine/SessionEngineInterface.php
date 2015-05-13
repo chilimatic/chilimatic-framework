@@ -29,9 +29,10 @@ Interface SessionEngineInterface {
     /**
      * init method to add tables or other needed behaviour
      *
+     * @param array $config
      * @return mixed
      */
-    public function init();
+    public function init($config = []);
 
     /**
      * reads a specific session
