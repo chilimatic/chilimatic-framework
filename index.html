@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Chilimatic-framework by chilimatic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Chilimatic-framework</h1>
+      <h2 class="project-tagline"></h2>
+      <a href="https://github.com/chilimatic/chilimatic-framework" class="btn">View on GitHub</a>
+      <a href="https://github.com/chilimatic/chilimatic-framework/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/chilimatic/chilimatic-framework/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="chilimatic-framework" class="anchor" href="#chilimatic-framework" aria-hidden="true"><span class="octicon octicon-link"></span></a>chilimatic-framework</h1>
+
+<p>this is for feedback :) fork it, use it if you find something usefull steal it :)
+let me know what you think about it</p>
+
+<h1>
+<a id="config" class="anchor" href="#config" aria-hidden="true"><span class="octicon octicon-link"></span></a>Config</h1>
+
+<p>it's a domain based system for the configuration</p>
+
+<ul>
+<li>*.cfg</li>
+<li>*.example.com.cfg</li>
+<li>subdomain.example.com.cfg</li>
+</ul>
+
+<p>the *.cfg is the root configuration it will be the first setting overwritten by *.example.com this will 
+be overwritten by the subdomain.example.com.cfg</p>
+
+<p>as example</p>
+
+<hr>
+
+<pre><code>   use \chilimatic\lib\config\Config;
+   Config::getInstance(
+   [
+      'type' =&gt; 'File',
+      &lt;path/to/folder/withconfigfiles&gt;
+   ]
+   );
+</code></pre>
+
+<p>content of the *.cfg</p>
+
+<pre><code>   # page settings
+   default_timezone = 'Europe/Vienna'
+   default_page_encoding = 'utf-8'
+
+   #cache settings
+   cache_type = 'memcached'
+   cache_settings = { "server_list" : [{"host" : "127.0.0.1", "port" : "11211", "weight" : 1 }] }
+
+   #Session data
+   session_type = "Cache"
+   session_cache = 'Memcached'
+</code></pre>
+
+<p>content of *.example.com</p>
+
+<pre><code>session_type = "Mysql"
+</code></pre>
+
+<p>so the if you use on the domain example.com</p>
+
+<pre><code>Config::get('session_type'); // returns Mysql
+Config::get('cache_settings') // return \stdClass containing the json 
+</code></pre>
+
+<p>this is a simple example how to use the config object</p>
+
+<h1>
+<a id="di" class="anchor" href="#di" aria-hidden="true"><span class="octicon octicon-link"></span></a>DI</h1>
+
+<p>so let's think about the service collection the default service collection can be found at</p>
+
+<pre><code>lib/general/config/default-service-collection.php
+</code></pre>
+
+<p>this is just ment as an example. I took the closure approach so it's easier to add a service
+as an example</p>
+
+<pre><code>    $dispatcher = \chilimatic\lib\di\ClosureFactory::getInstance(
+        realpath('&lt;path to your closure collection&gt;');
+    );
+    // set a db object
+    $dispatcher-&gt;set('db', function() use ($dispatcher) {
+        $config = $dispatcher-&gt;get('config');
+
+        $mysqlStorage = new \chilimatic\lib\database\mysql\MysqlConnectionStorage();
+        $mysqlStorage-&gt;addConnection(
+            $config-&gt;get('mysql_db_host'),
+            $config-&gt;get('mysql_db_user'),
+            $config-&gt;get('mysql_db_password'),
+            $config-&gt;get('mysql_db_name'),
+            null
+        );
+
+        return $mysqlStorage;
+    });
+
+    $dispatcher-&gt;set('entity-manager', function() use ($dispatcher) {
+        $mysqlStorage = $dispatcher-&gt;get('db');
+        $master = $mysqlStorage-&gt;getConnection(0);
+        $queryBuilder = $dispatcher-&gt;get('query-builder', ['db' =&gt; new \chilimatic\lib\database\mysql\Mysql($master)]);
+
+        $em = new \chilimatic\lib\database\orm\EntityManager(
+            new \chilimatic\lib\database\mysql\Mysql($master),
+            $queryBuilder
+        );
+        return $em;
+    });
+
+
+    // get a new instance 
+    $dispatcher-&gt;get('db', []);
+    // get it as "singelton"
+    $dispatcher-&gt;get('em', [], true);
+</code></pre>
+
+<p>but lets start with a basic application example so you can try it out.
+You create the "basic" structure</p>
+
+<pre><code>&lt;docroot&gt;
+ - app
+   - config
+     - *.cfg
+     - *.example.com.cfg
+     - www.example.com.cfg
+   - module
+     - main [default]
+       - controller
+         - Index.php
+       - view
+         - index.phtml
+ - public [Docroot]
+   - index.php
+ - vendor/chilimatic/framewor/lib [framework]
+</code></pre>
+
+<p>content of public/index.php</p>
+
+<pre><code>&lt;?php
+
+require_once '../vendor/autoload.php';
+
+define('APPLICATION_PATH', realpath('../'));
+
+try {
+    use chilimatic\lib\config\Config;
+
+    date_default_timezone_set('Europe/Vienna');
+    define('INCLUDE_ROOT', '/var/www/chilimatic.com' );
+
+    set_exception_handler(function($e)
+    {
+        echo $e-&gt;getMessage();
+        echo $e-&gt;getTraceAsString();
+    });
+
+    $dispatcher = \chilimatic\lib\di\ClosureFactory::getInstance(
+        realpath('../app/config/serviceCollection.php')
+    );
+
+    /**
+     * Create the config
+     */
+    $config = $dispatcher-&gt;get('config', [
+        'type' =&gt; 'File',
+        \chilimatic\lib\config\File::CONFIG_PATH_INDEX =&gt; INCLUDE_ROOT . '/app/config/'
+    ]);
+
+    /**
+     * Set default timezone based on the config
+     */
+    date_default_timezone_set((string) $config-&gt;get('default_timezone'));
+
+    if (!$config-&gt;get((string) 'document_root')) {
+        $config-&gt;set((string) 'document_root', (string) INCLUDE_ROOT);
+    }
+
+    $config-&gt;set('app_root', (string) $config-&gt;get('document_root') . (string) "/app");
+    $config-&gt;set('lib_root', (string) $config-&gt;get('document_root') . (string) $config-&gt;get('lib_dir' ));
+
+    $application = new \chilimatic\lib\application\HTTPMVC($dispatcher, $dispatcher-&gt;get('config'));
+    // this is step so people can inject
+    $application-&gt;init();
+    // returns the rendered result
+    echo $application-&gt;getHandler()-&gt;getContent();
+}
+catch (Exception $e)
+{
+    // show error trace
+    if (isset($dispatcher) &amp;&amp; $dispatcher-&gt;get('error-handler', null, true)-&gt;getClient()-&gt;showError()) {
+        $dispatcher-&gt;get('error-handler', null, true)-&gt;getClient()-&gt;log($e-&gt;getMessage(), $e-&gt;getTraceAsString())-&gt;send();
+    } else {
+        echo 'nothing to concern you with :)';
+    }
+</code></pre>
+
+<p>content of app/module/main/controller/Index.php</p>
+
+<pre><code>namespace chilimatic\app\module\main\controller;
+
+/**
+ * Class Index
+ * @package \chilimatic\app\default\controller
+ */
+class Index
+{
+    /**
+     * Class Index
+     * @view \chilimatic\lib\view\PHtml()
+     */
+    public function indexAction(){
+        $this-&gt;view-&gt;pageTitle = 'myPage';
+    }
+}
+</code></pre>
+
+<p>content of app/module/main/view/index.phtml</p>
+
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head lang="en"&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;title&gt;&lt;?php echo $this-&gt;pageTitle; ?&gt;&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h1>
+<a id="datastructures" class="anchor" href="#datastructures" aria-hidden="true"><span class="octicon octicon-link"></span></a>DataStructures</h1>
+
+<p>Normal "Nodes"</p>
+
+<pre><code>$node = new \chilimatic\lib\datastructure\graph\Node(null, '.', '');
+$node-&gt;addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 23));
+$node-&gt;getChildren(); // return [\chilimatic\lib\datastructure\graph\Node($node, 'test', 23)]
+$node-&gt;getLastByKey("test"); // return \chilimatic\lib\datastructure\graph\Node($node, 'test', 23)
+$node-&gt;getLastByKey("test")-&gt;getData(); // return 23
+</code></pre>
+
+<p>Binary Tree</p>
+
+<pre><code>$bt = \chilimatic\lib\datastructure\graph\tree\binary\BinaryTree();
+$bt-&gt;insert(\chilimatic\lib\datastructure\graph\tree\binary\BinaryNode('key', [1,2,3]));
+$bt-&gt;insert(\chilimatic\lib\datastructure\graph\tree\binary\BinaryNode('key1', [1,2,3]));
+
+$bt-&gt;findByKey('key1'); // returns \chilimatic\lib\datastructure\graph\tree\binary\BinaryNode('key1', [1,2,3])
+</code></pre>
+
+<h1>
+<a id="session" class="anchor" href="#session" aria-hidden="true"><span class="octicon octicon-link"></span></a>Session</h1>
+
+<p>you can easily implement your own session storage system</p>
+
+<pre><code>// uses memcached as session storage
+$session = new chilimatic\lib\session\handler\Session(
+                chilimatic\lib\session\engine\Factory::make('Cache', ['type' =&gt; 'memcached'])
+            );
+$session-&gt;set('value', 'data');
+$session-&gt;get('value'); // returns data
+</code></pre>
+
+<h1>
+<a id="routing" class="anchor" href="#routing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Routing</h1>
+
+<p>possible types are </p>
+
+<ul>
+<li>stdclass</li>
+<li>array numeric</li>
+<li>array assoc</li>
+<li>lambda function</li>
+<li>function call</li>
+<li>static content</li>
+</ul>
+
+<p>the routing is store in binary trees so i hope it performs
+you can always fallback to the common routing</p>
+
+<pre><code> \chilimatic\route\Router::register('/test/(:num)', array('job', 'load'), '/');
+ \chilimatic\route\Router::register('/user/add/(:num)', array('object' =&gt; 'user', 'method' =&gt; 'add', 'namespace' =&gt; '\\user\\', 'param' =&gt; array(true, false)));
+ \chilimatic\route\Route::register('/test/(:char)', array('object' =&gt; 'user', 'method' =&gt; 'add', 'namespace' =&gt; '\\user\\', 'param' =&gt; array(true, false)));
+\chilimatic\route\Route::register('/mytest/(:array)[|]',  function($num) { foreach($num as $val) {  echo $val . ': this is a test'; }});
+</code></pre>
+
+<h1>
+<a id="caching" class="anchor" href="#caching" aria-hidden="true"><span class="octicon octicon-link"></span></a>Caching</h1>
+
+<pre><code>$cache = \chilimatic\lib\cache\engine\CacheFactory::make('memcached', []);
+// this will get you a memcached I added a listing for memcached so you can actually see 
+$cache-&gt;set('myData', [], $ttl = 10)
+$cache-&gt;listCache(); // returns ['myData', {'data'}]
+$cache-&gt;delete('myData'); // returns true
+$cache-&gt;listCache(); // returns []
+</code></pre>
+
+<h1>
+<a id="orm--database" class="anchor" href="#orm--database" aria-hidden="true"><span class="octicon octicon-link"></span></a>ORM / database</h1>
+
+<pre><code>// you can have multiple connections in the storage -&gt; if you just want to use pdo / mysqli
+$mysqlStorage = new \chilimatic\lib\database\mysql\MysqlConnectionStorage();
+$mysqlStorage-&gt;addConnection('localhost','username', 'password', 'database';
+$master = $mysqlStorage-&gt;getConnection(0);
+
+// the entity manager
+$em = new \chilimatic\lib\database\orm\EntityManager(new \chilimatic\lib\database\mysql\Mysql($master));
+// the entityManager needs the corret QueryBuilder -&gt; atm there is only MySQL supportet
+$queryBuilder = new \chilimatic\lib\database\orm\querybuilder\MysqlQueryBuilder();
+$queryBuilder-&gt;setCache(\chilimatic\lib\di\ClosureFactory::getInstance()-&gt;get('cache', ['type' =&gt; 'shmop']));
+$em-&gt;setQueryBuilder($queryBuilder);
+
+
+/**
+ * Class Model
+ *
+ * @package \app\model
+ */
+class Model1 extends AbstractModel {
+
+    /**
+     * @var int
+     */
+    protected $id;
+
+    /**
+     * @var int
+     */
+    protected $model2_id;
+
+    /**
+     * maps it to the model2 id and adds the model here
+     * @ORM model2_id = \Model2;
+     */
+    protected $model2;
+
+    /**
+     * @param int $id
+     */
+    public function setModel1($id) {
+        $this-&gt;model1 = (int) $id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setModel2($id) {
+        $this-&gt;model2 = (int) $id;
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize() {
+        return [
+          'id' =&gt; $id,
+          'model2_id' =&gt; $model2_id
+        ];
+    }
+}
+
+/**
+ * Class Model2
+ * @ORM table=database.anyTable;
+ */
+class Model2 extends AbstractModel {
+    /**
+     * @var int
+     */
+    protected $id;
+}
+// returns the model
+$model1 = $em-&gt;findOneBy(new Model1(), [
+    'id' =&gt; 1
+]);
+
+$model1-&gt;setModel2(3);
+$em-&gt;persist($model1); // updates the model
+
+
+// create a new entry
+$newModel = new Model1();
+$newModel-&gt;setModel1(2);
+$newModel-&gt;setModel2(3);
+
+// creates a new table entry
+$em-&gt;persist($newModel);  
+</code></pre>
+
+<p>The whole Framework is mainly academic but if you find a nice app you wanna use it for or you just want see some concepts or give me some usefull feedback. I would be happy</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/chilimatic/chilimatic-framework">Chilimatic-framework</a> is maintained by <a href="https://github.com/chilimatic">chilimatic</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
+
