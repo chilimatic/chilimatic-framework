@@ -25,7 +25,7 @@ class Memcached extends \Memcached implements CacheInterface
      *
      * @return \chilimatic\lib\cache\engine\Memcached
      */
-    public function __construct(\stdClass $param = null )
+    public function __construct($param = null )
     {
 
         parent::__construct( ( isset($param->persistent_id) ) ? $param->persistent_id : NULL, isset($param->callback) ? $param->callback : null );

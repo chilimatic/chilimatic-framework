@@ -43,7 +43,7 @@ class CacheFactory
      *
      * @return mixed
      */
-    public static function make( $name, $credentials = array() )
+    public static function make($name, $credentials = array())
     {
         if (!$name && !$credentials) {
             return null;

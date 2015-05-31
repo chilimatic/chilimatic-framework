@@ -1,9 +1,9 @@
 <?php
 
-namespace chilimatic\lib\cache\engine\shmop;
+namespace chilimatic\lib\handler\memory\Shmop;
 
-use chilimatic\lib\cache\engine\Shmop;
-use chilimatic\lib\exception\CacheException;
+use chilimatic\lib\exception\MemoryException;
+use chilimatic\lib\handler\memory\Shmop;
 
 /**
  * Class Entry
@@ -53,35 +53,35 @@ class Entry
      *
      * @var int
      */
-    protected $key = null;
+    protected $key;
 
     /**
      * permission
      *
      * @var int
      */
-    protected $permission = Shmop::DEFAULT_PERMISSIONS;
+    protected $permission;
 
     /**
      * mode
      *
      * @var string
      */
-    protected $mode = Shmop::WRITE_MOD;
+    protected $mode;
 
     /**
      * size
      *
      * @var int
      */
-    protected $size = Shmop::DEFAULT_SIZE;
+    protected $size;
 
     /**
      * offset
      *
      * @var int
      */
-    protected $offset = Shmop::DEFAULT_OFFSET;
+    protected $offset = 0;
 
     /**
      * start
@@ -120,24 +120,33 @@ class Entry
 
 
     /**
-     * @param null $id
-     * @throws CacheException
-     * @throws \Exception
+     * Opens a shared memory block
+     *
+     *
+     *
+     *
+     * @param int $id
+     * @param string $mode
+     * @param int $permission
+     * @param int $size
      */
-    public function __construct($id = null)
+    public function __construct($id = null, $mode = null, $permission = null, $size = null)
     {
         try
         {
-            $this->id = $id;
-
-            if ( !function_exists('shmop_open') ) {
-                throw new CacheException(__METHOD__ .' - shmop_open does not exist please install the module or change the caching module', self::ERR_SHMOP_MISSING, 10, __FILE__, __LINE__);
+            if (!function_exists('shmop_open')) {
+                throw new MemoryException(__METHOD__ .' - shmop_open does not exist please install the module or change the caching module', self::ERR_SHMOP_MISSING, 10, __FILE__, __LINE__);
             }
 
-            if ( !empty($this->id) ) $this->load();
-        }
-        catch (CacheException $e)
-        {
+            $this->id = (int) $id;
+            $this->mode = $mode;
+            $this->permission = $permission;
+            $this->size = $size;
+
+            if ($this->id) {
+                $this->load();
+            }
+        } catch (MemoryException $e) {
             throw $e;
         }
     }
@@ -151,11 +160,11 @@ class Entry
     public function save()
     {
 
-        if ( empty( $this->id ) ) {
-            $this->id = shmop_open( $this->key, $this->mode, $this->permission, $this->size );
+        if ($this->id) {
+            $this->id = shmop_open($this->key, $this->mode, $this->permission, $this->size);
         }
         
-        @shmop_write( $this->id, serialize( $this->data ), $this->offset );
+        @shmop_write($this->id, serialize($this->data), $this->offset);
         
         return true;
     }
@@ -163,30 +172,29 @@ class Entry
 
     /**
      * @return bool
-     * @throws CacheException
-     * @throws \Exception
+     * @throws MemoryException
      */
     public function load()
     {
         try {
             if (empty($this->key)) {
-                throw new CacheException(__METHOD__ . ' - no key exists', self::ERR_SHMOP_NOT_OPEN, 1, __FILE__, __LINE__ );
+                throw new MemoryException(__METHOD__ . ' - no key exists', self::ERR_SHMOP_NOT_OPEN, 1, __FILE__, __LINE__ );
             }
 
             if (empty($this->permission)) {
-                throw new CacheException( __METHOD__ . ' - no permission set', self::ERR_SHMOP_NOT_OPEN, 1, __FILE__, __LINE__ );
+                throw new MemoryException( __METHOD__ . ' - no permission set', self::ERR_SHMOP_NOT_OPEN, 1, __FILE__, __LINE__ );
             }
 
             // switch to read
             if (! ($this->id = shmop_open( $this->key, Shmop::READ_MOD, $this->permission, $this->size ))) {
-                throw new CacheException(__METHOD__ . ' - shmop_open not working', self::ERR_SHMOP_NOT_OPEN, 1, __FILE__, __LINE__ );
+                throw new MemoryException(__METHOD__ . ' - shmop_open not working', self::ERR_SHMOP_NOT_OPEN, 1, __FILE__, __LINE__ );
             }
 
             $data = @shmop_read( $this->id, $this->start, $this->count );
 
             $this->data = $data;
         }
-        catch(CacheException $e)
+        catch(MemoryException $e)
         {
             throw $e;
         }

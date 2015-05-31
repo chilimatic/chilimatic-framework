@@ -16,11 +16,11 @@ Interface CacheInterface
      * Constructor in every cache abstractor should get the
      * parameters as an array so the usual parameter problems wont be there
      *
-     * @param array|\stdClass $param
+     * @param array $param
      *
      * @return \chilimatic\lib\cache\engine\CacheInterface
      */
-    public function __construct(\stdClass $param = null );
+    public function __construct($param = null);
 
 
     /**
@@ -38,7 +38,7 @@ Interface CacheInterface
      * 
      * @return boolean
      */
-    public function get( $key = null );
+    public function get($key = null);
 
 
     /**
@@ -52,7 +52,7 @@ Interface CacheInterface
      *
      * @return boolean
      */
-    public function set( $key , $value = null , $expiration = 0 );
+    public function set($key, $value = null, $expiration = 0);
 
 
     /**
@@ -71,7 +71,7 @@ Interface CacheInterface
      * @return
      * @internal param int $ttl
      */
-    public function delete( $key , $time = 0 );
+    public function delete($key , $time = 0);
 
 
     /**
@@ -79,7 +79,7 @@ Interface CacheInterface
      * 
      * @param array $key_array
      */
-    public function deleteFromList( $key_array = array() );
+    public function deleteFromList($key_array = []);
 
     /**
      * gets the status of the cache

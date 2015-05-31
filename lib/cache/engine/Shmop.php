@@ -32,26 +32,7 @@ class Shmop implements CacheInterface
      */
     const ERROR_CACHE_MISSING = 2;
 
-    /**
-     * write mod
-     *
-     * @var string
-     */
-    const WRITE_MOD = 'w';
 
-    /**
-     * read mod
-     *
-     * @var string
-     */
-    const READ_MOD = 'a';
-
-    /**
-     * create mod
-     * 
-     * @var string
-     */
-    const CREATE_MOD = 'c';
 
     /**
      * time to live is unlimited
@@ -60,90 +41,45 @@ class Shmop implements CacheInterface
      */
     const TTL_UNLIMITED = 0;
 
-    /**
-     * default shared memory permission
-     *
-     * @var int
-     */
-    const DEFAULT_PERMISSIONS = 0664;
+
+
 
     /**
-     * default offset for the shared memory
+     * @param \stdClass $param
      *
-     * @var int
+     * @throws CacheException
+     * @throws \Exception
      */
-    const DEFAULT_OFFSET = 0;
-
-    /**
-     * the default memory block for the
-     * list of all keys
-     *
-     * @var int
-     */
-    const INDEX_LIST = 2424;
-
-    /**
-     * size of the cache index list (2MB)
-     * it's way to big but hey .
-     *
-     * ...
-     *
-     * @var int
-     */
-    const INDEX_SIZE = 2048;
-
-    /**
-     * Default size is 1 MB
-     *
-     * @var int
-     */
-    const DEFAULT_SIZE = 1024;
-
-    /**
-     * the current opened cache identifier
-     *
-     * @var int
-     */
-    private $currentIdentifier = null;
-
-    /**
-     * for easier read and write purposes the index
-     * has its own pointer
-     *
-     * @var int
-     */
-    private $indexIdentifier = null;
-
-    /**
-     * mode for opening the index memory block
-     *
-     * @var string
-     */
-    private $indexMode = 'w';
-
-   
-
-    /**
-     * constructor
-     */
-    public function __construct(\stdClass $param = null)
+    public function __construct($param = null)
     {
         $this->indexMode = self::CREATE_MOD;
-        $this->init();
+        $this->init($param);
+    }
+
+    /**
+     * @param array $param
+     */
+    public function setOptions($param = [])
+    {
+
     }
 
     /**
      * initializes the cache
      *
-     * @throws CacheException
+     * @param null $param
      *
      * @return bool
+     * @throws CacheException
+     * @throws \Exception
      */
-    public function init()
+    public function init($param = null)
     {
+
+        $this->setOptions($param);
+
         try
         {
-
             $this->readIndexList();
             // load the cache into the memory for faster access
             if ( !empty( $this->cacheListing ) ) {
