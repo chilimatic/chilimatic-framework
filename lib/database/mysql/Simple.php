@@ -242,5 +242,3 @@ final class Simple extends Mysql
         parent::__destruct();
     }
 }
-
-?>

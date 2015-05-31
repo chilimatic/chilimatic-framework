@@ -119,4 +119,3 @@ class MysqlStatistic extends Mysql
         }
     }
 }
-?>
