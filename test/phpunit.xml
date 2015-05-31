@@ -18,5 +18,8 @@
         <testsuite name="transformer">
             <directory>transformer</directory>
         </testsuite>
+	<testsuite name="config">
+	    <directory>config</directory>
+	</testsuite>
     </testsuites>
 </phpunit>

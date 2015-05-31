@@ -11,13 +11,11 @@
 define('INCLUDE_ROOT', realpath(__DIR__.'/../'));
 /**
  * @param $file
- * @return bool
  */
 function rq_file($file)
 {
     if (!file_exists($file) || !is_readable($file)) return false;
     require_once $file;
-    return true;
 }
 
 
@@ -35,18 +33,12 @@ function main_loader( $class_name )
     $class_name = preg_replace('|chilimatic/|', '/', $class_name);
     $file_name = $class_name . '.php';
 
-
-
     unset($part);
 
-    $base_path[] = realpath(INCLUDE_ROOT . "/$file_name");
+    $base_path = realpath(INCLUDE_ROOT . "/$file_name");
     unset($class_name, $file_name, $folder_name);
 
-    while ($class = array_pop($base_path)) {
-        if ( rq_file($class) ) break;
-    }
-
-    return;
+    rq_file($base_path);
 }
 
 spl_autoload_register('main_loader');
