@@ -114,7 +114,5 @@ class Shmop
         return new Entry($id, $mode, $permission, $size);
     }
 
-    public function
-
 
 }

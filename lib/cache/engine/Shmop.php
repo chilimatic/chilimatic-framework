@@ -4,10 +4,10 @@ namespace chilimatic\lib\cache\engine;
 
 
 use chilimatic\lib\base\Error;
-use chilimatic\lib\cache\engine\shmop\Entry;
 use chilimatic\lib\exception\CacheException;
+use chilimatic\lib\handler\memory\Shmop\Entry;
 use chilimatic\lib\traits\RandomDataGenerator;
-
+use chilimatic\lib\handler\memory\Shmop as MemoryHandler;
 /**
  * Class Shmop
  *
@@ -52,7 +52,7 @@ class Shmop implements CacheInterface
      */
     public function __construct($param = null)
     {
-        $this->indexMode = self::CREATE_MOD;
+        $this->indexMode = MemoryHandler::CREATE_MOD;
         $this->init($param);
     }
 
@@ -103,8 +103,8 @@ class Shmop implements CacheInterface
             throw new CacheException( _('Shared memory functions are not available'), self::ERROR_CACHE_MISSING, Error::SEVERITY_CRIT, __FILE__, __LINE__ );
         }
 
-        $id = shmop_open( self::INDEX_LIST, $this->indexMode, self::DEFAULT_PERMISSIONS, self::INDEX_SIZE );
-        $tmp = shmop_read( $id, self::DEFAULT_OFFSET, self::INDEX_SIZE );
+        $id = shmop_open( MemoryHandler::INDEX_LIST, $this->indexMode, MemoryHandler::DEFAULT_PERMISSIONS, MemoryHandler::INDEX_SIZE );
+        $tmp = shmop_read( $id, MemoryHandler::DEFAULT_OFFSET, MemoryHandler::INDEX_SIZE );
         $cacheListing = strlen(trim($tmp)) > 1 ? unserialize( $tmp ) : array();
 
         $this->cacheListing = (!is_array($cacheListing)) ? array() : $cacheListing;
@@ -172,8 +172,8 @@ class Shmop implements CacheInterface
     public function saveCacheListing()
     {
         $s = serialize( $this->cacheListing );
-        $id = shmop_open(self::INDEX_LIST, self::WRITE_MOD, self::DEFAULT_PERMISSIONS, strlen($s));
-        return shmop_write( $id, $s,self::DEFAULT_OFFSET);
+        $id = shmop_open(MemoryHandler::INDEX_LIST, MemoryHandler::WRITE_MOD, MemoryHandler::DEFAULT_PERMISSIONS, strlen($s));
+        return shmop_write( $id, $s,MemoryHandler::DEFAULT_OFFSET);
     }
 
 
@@ -222,10 +222,10 @@ class Shmop implements CacheInterface
         $entry->setKeyName($key);
         $entry->setKey($this->getRandomInt());
 
-        $entry->setPermission(self::DEFAULT_PERMISSIONS);
-        $entry->setMode(self::CREATE_MOD);
-        $entry->setSize((int) self::DEFAULT_SIZE);
-        $entry->setOffset((int) self::DEFAULT_OFFSET);
+        $entry->setPermission(MemoryHandler::DEFAULT_PERMISSIONS);
+        $entry->setMode(MemoryHandler::CREATE_MOD);
+        $entry->setSize((int) MemoryHandler::DEFAULT_SIZE);
+        $entry->setOffset((int) MemoryHandler::DEFAULT_OFFSET);
         $entry->setStart((int) 0);
         $entry->setCount((int) 0);
         $entry->setTtl((int) $expiration);

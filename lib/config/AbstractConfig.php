@@ -55,7 +55,7 @@ abstract class AbstractConfig implements IConfig {
             }
         }
 
-        $this->load();
+        $this->load($param);
     }
 
 
