@@ -361,3 +361,28 @@ $em->persist($newModel);
 
 
 The whole Framework is mainly academic but if you find a nice app you wanna use it for or you just want see some concepts or give me some usefull feedback. I would be happy
+
+
+
+# Node Filters
+this was an approach I took from Doctrine It's a basic filter system. 
+
+```
+$filterFactory = new \chilimatic\lib\datastructure\graph\filter\Factory();
+// the validator checks if the name is conform to the convetions this-will-be
+$filterFactory->setValidator(new chilimatic\lib\validator\DynamicCallNamePreTransformed());
+// the transformer will change the this-will-be string to ThisWillBe
+$filterFactory->setTransformer(new chilimatic\lib\transformer\string\DynamicObjectCallName());
+$filterLastNode = $filterFactory->make('lastNode');
+$filterFirstNode = $filterFactory->make('firstNode');
+
+
+// so lets create a bunch of nodes
+$mainNode = new \chilimatic\lib\datastructure\graph\Node($node, 'test', null);
+for ($i = 0; $i < 10; $i++) {
+   $mainNode->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', $i))
+}
+
+$mainNode->getByKey('test', $filterLastNode); // this should return the node with the value 10
+$mainNode->getByKey('test', $filterFirstNode); // this should return the node with the value 0 
+``` 
