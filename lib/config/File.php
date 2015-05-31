@@ -64,7 +64,7 @@ class File extends AbstractConfig
 
         $this->_initHostId();
 
-        $this->load();
+        $this->load($param);
     }
 
 
@@ -200,7 +200,7 @@ class File extends AbstractConfig
      *
      * @return bool
      */
-    public function load()
+    public function load( $param = null )
     {
         // if there already has been a config set it means it already
         // has been loaded so why bother retrying ! this is not a dynamic language !

@@ -10,6 +10,10 @@
 
 namespace chilimatic\lib\config;
 
+/**
+ * Class ConfigFactory
+ * @package chilimatic\lib\config
+ */
 class ConfigFactory
 {
 
@@ -28,13 +32,13 @@ class ConfigFactory
     public static function make($type, $param = null)
     {
         if (!$type) {
-            throw new \LogicException("The Config Type has to be specified ... $type is empty");
+            throw new \LogicException("The Config Type has to be specified ... \$type is empty");
         }
 
         $className = (string) __NAMESPACE__ . '\\' . (string) ucfirst($type);
 
         if (!class_exists( $className , true)) {
-            throw new \LogicException("The Config Type has to be specified ... $className is empty");
+            throw new \LogicException("The Config class has to be implemented and accessible ... $className is not found");
         }
 
         return new $className($param);

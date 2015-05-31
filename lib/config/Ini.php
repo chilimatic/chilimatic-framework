@@ -46,11 +46,12 @@ class Ini extends AbstractConfig
      *
      * @return void
      */
-    public function load( $param = null ){
+    public function load( $param = null )
+    {
         try
         {
             if ( empty($param['file']) ) {
-                throw new ConfigException(_('No config file was give please, the parameter '. $param, 0, 1, __METHOD__, __LINE__));
+                throw new ConfigException(_('No config file was give please, the parameter '), 0, 1, __METHOD__, __LINE__);
             }
             $this->configFile = (string) $param['file'];
 
@@ -63,7 +64,7 @@ class Ini extends AbstractConfig
 
             $data = parse_ini_file($this->configFile, $this->processSections, $this->scannerMode);
 
-            $this->mainNode = new Node(null, IConfig::MAIN_NODE_KEY);
+            $this->mainNode = new Node(null, IConfig::MAIN_NODE_KEY, 'main node');
             foreach ($data as $key => $group)
             {
                 if( !is_array($group) )
@@ -108,6 +109,5 @@ class Ini extends AbstractConfig
      * @return mixed
      */
     function saveConfig(Node $node = null){
-
     }
 }

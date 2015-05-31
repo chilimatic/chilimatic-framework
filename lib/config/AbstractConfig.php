@@ -55,7 +55,7 @@ abstract class AbstractConfig implements IConfig {
             }
         }
 
-        $this->load();
+        $this->load($param);
     }
 
 
@@ -64,7 +64,7 @@ abstract class AbstractConfig implements IConfig {
      *
      * @return mixed
      */
-    abstract public function load();
+    abstract public function load($param = null);
 
     /**
      * deletes a config
