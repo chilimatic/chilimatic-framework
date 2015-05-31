@@ -43,14 +43,13 @@ class Node extends \chilimatic\lib\datastructure\graph\Node
             $this->initType($data);
         }
 
-        if ( empty($this->parentNode->key))
-        {
-            $this->id = "{$key}";
+        if (!$this->parentNode || !$this->parentNode->key) {
+            $this->id = (string) self::DEFAULT_KEY_DELIMITER . $key . self::DEFAULT_KEY_DELIMITER;
         } else {
-            $this->id = "{$this->parentNode->key}.{$key}";
+            $this->id = (string) $this->parentNode->key. self::DEFAULT_KEY_DELIMITER . $key . self::DEFAULT_KEY_DELIMITER;
         }
 
-        $this->id = str_replace('..', '.', $this->id);
+        $this->id = preg_replace('/[#]{2,}/', self::DEFAULT_KEY_DELIMITER, $this->id);
 
         // optional comment
         $this->comment = $comment;

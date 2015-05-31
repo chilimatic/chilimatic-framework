@@ -31,7 +31,7 @@ class Node implements INode
     /**
      * @var string
      */
-    const DEFAULT_KEY_DELIMITER = '.';
+    const DEFAULT_KEY_DELIMITER = '#';
 
     /**
      * parent node -> objects are references
@@ -69,7 +69,7 @@ class Node implements INode
     /**
      * @var string
      */
-    protected $keyDelimiter = self::DEFAULT_KEY_DELIMITER;
+    public $keyDelimiter = self::DEFAULT_KEY_DELIMITER;
 
     /**
      * contains the list of children
@@ -112,11 +112,11 @@ class Node implements INode
     public function updateId()
     {
         if ( empty($this->parentNode->key)) {
-            $this->id = $this->key;
+            $this->id = "{$this->keyDelimiter}$this->key{$this->keyDelimiter}";
         } else {
-            $this->id = "{$this->parentNode->id}$this->keyDelimiter{$this->key}";
+            $this->id = "{$this->parentNode->id}$this->keyDelimiter{$this->key}$this->keyDelimiter";
         }
-        $this->id = str_replace('..', '.', $this->id);
+        $this->id = preg_replace('/[#]{2,}/', self::DEFAULT_KEY_DELIMITER, $this->id);
     }
 
 

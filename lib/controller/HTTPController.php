@@ -8,7 +8,7 @@
 namespace chilimatic\lib\controller;
 
 use chilimatic\lib\di\ClosureFactory;
-use chilimatic\lib\request\Request;
+use chilimatic\lib\view\AbstractView;
 
 /**
  * Class HTTPController
@@ -17,23 +17,15 @@ use chilimatic\lib\request\Request;
 abstract class HTTPController {
 
     /**
-     * @var string
-     */
-    const VIEWSERVICE_INDEX = 'view';
-
-    /**
-     * @var mixed
+     * @var AbstractView mixed
      */
     protected $view;
 
     /**
-     *
+     * @param AbstractView|null $view
      */
-    public function __construct($viewType) {
-        if (!$viewType) {
-            throw new \LogicException("viewType needs to be specified");
-        }
-        $this->view = ClosureFactory::getInstance()->get(self::VIEWSERVICE_INDEX);
+    public function __construct(AbstractView $view = null) {
+        $this->view = $view;
     }
 
     /**
@@ -41,6 +33,10 @@ abstract class HTTPController {
      */
     public function getView()
     {
+        if (!$this->view) {
+            $this->view = ClosureFactory::getInstance()->get('view');
+        }
+
         return $this->view;
     }
 

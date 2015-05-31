@@ -118,7 +118,7 @@ class HTTPMVC {
             $this->httpHandler = $this->di->get(
                 'application-handler',
                 [
-                    'include-root' => $this->config->get('include-root'),
+                    'include-root' => $this->config->get('document_root'),
                     'application-namespace' => $this->config->get('application-namespace')
                 ]
             );

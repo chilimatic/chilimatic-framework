@@ -85,10 +85,10 @@ class File extends AbstractConfig
             {
                 if (strpos($param, IConfig::CLI_COMMAND_DELIMITER) === false) continue;
                 // split the input into a key value pair
-                $inp = ( array ) explode( IConfig::CLI_COMMAND_DELIMITER , $param );
-                if ( strtolower( trim( $inp [0] ) ) == IConfig::CLI_HOST_VARIABLE )
+                $inp = (array) explode( IConfig::CLI_COMMAND_DELIMITER , $param );
+                if ( strtolower(trim($inp[0])) == IConfig::CLI_HOST_VARIABLE )
                 {
-                    $this->mainNode->addChild(new Node($this->mainNode, 'host_id', ( string ) trim( $inp [1] )));
+                    $this->mainNode->addChild(new Node($this->mainNode, 'host_id', (string) trim($inp[1])));
                     break;
                 }
             }
@@ -105,9 +105,8 @@ class File extends AbstractConfig
     protected function _getConfigSet()
     {
 
-        if ( empty( $_SERVER ) && empty( $GLOBALS ['argv'] ) )
-        {
-            return array();
+        if (empty($_SERVER) && empty($GLOBALS['argv'])) {
+            return [];
         }
 
         // default config for all of them
@@ -154,8 +153,8 @@ class File extends AbstractConfig
                 $_config_set [] = (string) $self;
             }
 
-            $file_name = (string) (count($id_part_list) > 0  ? implode( self::CONFIG_DELIMITER , $id_part_list ) .(string) $extension : self::FILE_EXTENSION ) ;
-            $self = (string) $this->config_path . '/' . ( string ) $config_del . $file_name ;
+            $file_name = (string) (count($id_part_list) > 0  ? implode(self::CONFIG_DELIMITER , $id_part_list ) .(string) $extension : self::FILE_EXTENSION) ;
+            $self = (string) $this->config_path . '/' . (string) $config_del . $file_name ;
             ++$i;
         } while ( $i < $count );
 
@@ -169,22 +168,22 @@ class File extends AbstractConfig
          *
          * @return int
          */
-        uasort( $_config_set, function ( $a, $b )
+        uasort($_config_set, function($a, $b)
         {
             // include to the normal namespace
 
-            if ( substr_count( $a, self::CONFIG_DELIMITER ) == substr_count( $a, self::CONFIG_DELIMITER ) )
+            if (substr_count($a, self::CONFIG_DELIMITER) == substr_count($a, self::CONFIG_DELIMITER))
             {
-                if ( strpos( $a, self::HIERACHY_PLACEHOLDER ) == true && strpos( $b, self::HIERACHY_PLACEHOLDER ) == false ) {
+                if (strpos($a, self::HIERACHY_PLACEHOLDER) == true && strpos($b, self::HIERACHY_PLACEHOLDER) == false) {
                     return -1;
                 }
-                elseif ( strpos( $a, self::HIERACHY_PLACEHOLDER ) == false && strpos( $b, self::HIERACHY_PLACEHOLDER ) == true ) {
+                elseif (strpos($a, self::HIERACHY_PLACEHOLDER) == false && strpos($b, self::HIERACHY_PLACEHOLDER) == true) {
                     return 1;
                 }
 
                 return 0;
             }
-            return (substr_count( $a, self::CONFIG_DELIMITER ) > substr_count( $b, self::CONFIG_DELIMITER ) ? -1 : 1);
+            return (substr_count($a, self::CONFIG_DELIMITER) > substr_count($b, self::CONFIG_DELIMITER) ? -1 : 1);
         } );
 
         return $_config_set;
@@ -200,19 +199,19 @@ class File extends AbstractConfig
      *
      * @return bool
      */
-    public function load( $param = null )
+    public function load($param = null)
     {
         // if there already has been a config set it means it already
         // has been loaded so why bother retrying ! this is not a dynamic language !
         $config_set = $this->get('config_set');
-        if ( count((array) $config_set) > 0 ) return true;
+        if (count((array) $config_set) > 0) return true;
 
         // if the config set already exists don't parse it
-        if ( empty($config_set) && !($config_set = $this->_getConfigSet()))  {
+        if (empty($config_set) && !($config_set = $this->_getConfigSet()))  {
             // set default config set for the default execution
-            $config_set = array(
-                realpath("{$this->config_path}/" . (string) self::HIERACHY_PLACEHOLDER . (string) self::CONFIG_DELIMITER . ( string ) self::FILE_EXTENSION)
-            );
+            $config_set = [
+                realpath("{$this->config_path}/" . (string) self::HIERACHY_PLACEHOLDER . (string) self::CONFIG_DELIMITER . (string) self::FILE_EXTENSION)
+            ];
             $this->set('config_set', $config_set);
         }
 
@@ -221,9 +220,9 @@ class File extends AbstractConfig
          */
         try
         {
-            if ( empty( $config_set ) || !is_readable( $config_set [0] ) )
+            if (empty($config_set) || !is_readable($config_set[0]) )
             {
-                throw new ConfigException( "No default config file declared {$this->config_path}/" . self::HIERACHY_PLACEHOLDER . (string) self::CONFIG_DELIMITER . ( string ) self::FILE_EXTENSION );
+                throw new ConfigException("No default config file declared {$this->config_path}/" . self::HIERACHY_PLACEHOLDER . (string) self::CONFIG_DELIMITER . (string) self::FILE_EXTENSION);
             }
 
             $configParser = new \chilimatic\lib\config\configfile\Parser();

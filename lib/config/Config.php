@@ -51,14 +51,14 @@ class Config implements ISingelton
      */
     public static function getInstance($param = null)
     {
-        if (isset($param['type'])) {
-            $type = $param['type'];
-            unset($param['type']);
-        } else {
-            throw new \LogicException('Config Type was not specified in the param array $param[\'type\']');
-        }
-
         if ( self::$instance === null) {
+            if (isset($param['type'])) {
+                $type = $param['type'];
+                unset($param['type']);
+            } else {
+                throw new \LogicException('Config Type was not specified in the param array $param[\'type\']');
+            }
+
             self::$instance = ConfigFactory::make($type, $param);
         }
 

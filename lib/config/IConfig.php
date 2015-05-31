@@ -23,7 +23,7 @@ Interface IConfig {
      *
      * @var string
      */
-    const MAIN_NODE_KEY = '.';
+    const MAIN_NODE_KEY = '*';
 
     /**
      * default placeholder for hierachy

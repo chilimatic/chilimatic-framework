@@ -14,7 +14,6 @@ namespace chilimatic\lib\config;
  * Class ConfigFactory
  * @package chilimatic\lib\config
  */
-
 class ConfigFactory
 {
 
@@ -38,7 +37,7 @@ class ConfigFactory
 
         $className = (string) __NAMESPACE__ . '\\' . (string) ucfirst($type);
 
-        if (!class_exists( $className , true)) {
+        if (!class_exists($className, true)) {
             throw new \LogicException("The Config class has to be implemented and accessible ... $className is not found");
         }
 

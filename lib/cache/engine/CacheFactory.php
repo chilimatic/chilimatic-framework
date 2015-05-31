@@ -43,7 +43,7 @@ class CacheFactory
      *
      * @return mixed
      */
-    public static function make($name, $credentials = array())
+    public static function make($name, $credentials = [])
     {
         if (!$name && !$credentials) {
             return null;
@@ -51,7 +51,7 @@ class CacheFactory
 
         try
         {
-            $cacheName = ( empty( $name ) ) ? self::CACHE_DEFAULT_TYPE : $name;
+            $cacheName = (empty($name)) ? self::CACHE_DEFAULT_TYPE : $name;
             $c = '\\'.__NAMESPACE__.'\\'. ucfirst($cacheName);
             // check if the class exists or can be loaded
             if ( !class_exists( $c , true ) ) {
