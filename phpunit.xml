@@ -1,0 +1,25 @@
+<phpunit bootstrap="./test/bootstrap.php">
+    <testsuites>
+        <testsuite name="cache">
+            <directory>./test/cache</directory>
+        </testsuite>
+        <testsuite name="database">
+            <directory>./test/database</directory>
+        </testsuite>
+        <testsuite name="di">
+            <directory>./test/di</directory>
+        </testsuite>
+        <testsuite name="node">
+            <directory>./test/node</directory>
+        </testsuite>
+        <testsuite name="parser">
+            <directory>./test/parser</directory>
+        </testsuite>
+        <testsuite name="transformer">
+            <directory>./test/transformer</directory>
+        </testsuite>
+        <testsuite name="config">
+            <directory>./test/config</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
