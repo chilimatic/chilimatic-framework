@@ -201,26 +201,14 @@ class Collection
 
         $result = new \SplObjectStorage();
 
-        if (count($this->list) == 0) return $result;
+        if (count($this->keyList) == 0) return $result;
 
         /**
          * @var Node $node
          */
-        foreach ($this->list as $node) {
-            if ($node->key == $key && !$result->contains($node)) {
+        foreach ($this->keyList[$key] as $node) {
+            if (!$result->contains($node)) {
                 $result->attach($node);
-            }
-
-
-            if ($subSet = $node->getByKey($key, $filter))
-            {
-                if (!$subSet->count()) continue;
-
-                foreach ($subSet as $cNode) {
-                    if (!$result->contains($cNode)) {
-                        $result->attach($cNode);
-                    }
-                }
             }
         }
 
@@ -229,6 +217,46 @@ class Collection
         }
 
         return $result;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getIdList()
+    {
+        return $this->idList;
+    }
+
+    /**
+     * @param array|null $idList
+     *
+     * @return $this
+     */
+    public function setIdList($idList)
+    {
+        $this->idList = $idList;
+
+        return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getKeyList()
+    {
+        return $this->keyList;
+    }
+
+    /**
+     * @param array|null $keyList
+     *
+     * @return $this
+     */
+    public function setKeyList($keyList)
+    {
+        $this->keyList = $keyList;
+
+        return $this;
     }
 
     /**
