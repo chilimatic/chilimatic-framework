@@ -7,6 +7,7 @@
  */
 
 namespace chilimatic\lib\route\routesystem\noderoute;
+use chilimatic\lib\datastructure\graph\INode;
 use chilimatic\lib\route\Map;
 
 /**
@@ -27,7 +28,7 @@ class Node extends \chilimatic\lib\datastructure\graph\TreeNode
     private $comment = '';
 
     /**
-     * @param \chilimatic\lib\route\routesystem\noderoute\Node $parentNode
+     * @param Inode|null $parentNode
      * @param $key
      * @param \chilimatic\lib\route\Map $map
      * @param string $comment
@@ -61,7 +62,7 @@ class Node extends \chilimatic\lib\datastructure\graph\TreeNode
         /**
          * add a Route_NodeList for the children
          */
-        $this->children = new NodeCollection();
+        $this->initChildren();
     }
 
     public function getMap() {

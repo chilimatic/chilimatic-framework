@@ -97,11 +97,17 @@ class Node implements INode
         $this->comment = $comment;
 
         $this->updateId();
+        $this->initChildren();
+    }
 
+    /**
+     * DRY :) so it initializes the children the same way
+     */
+    public function initChildren(){
         if ($this->parentNode) {
             $this->children = new Collection(
-                $parentNode->children->idList, // idlist as reference
-                $parentNode->children->keyList // keylist as reference
+                $this->parentNode->children->idList, // idlist as reference
+                $this->parentNode->children->keyList // keylist as reference
             );
         } else {
             $this->children = new Collection();

@@ -53,11 +53,7 @@ class Node extends \chilimatic\lib\datastructure\graph\Node
 
         // optional comment
         $this->comment = $comment;
-        if ($this->parentNode) {
-            $this->children = new Collection($parentNode->children->idList);
-        } else {
-            $this->children = new Collection();
-        }
+        $this->initChildren();
     }
 
 
