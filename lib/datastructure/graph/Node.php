@@ -99,7 +99,10 @@ class Node implements INode
         $this->updateId();
 
         if ($this->parentNode) {
-            $this->children = new Collection($parentNode->children->idList);
+            $this->children = new Collection(
+                $parentNode->children->idList, // idlist as reference
+                $parentNode->children->keyList // keylist as reference
+            );
         } else {
             $this->children = new Collection();
         }

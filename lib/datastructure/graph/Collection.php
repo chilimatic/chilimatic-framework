@@ -28,16 +28,30 @@ class Collection
     public $idList = null;
 
     /**
+     * array with all keys as SPLDoublyLinkedList
+     *
+     * @var array|null
+     */
+    public $keyList = null;
+
+    /**
      * the id list is an reference through the whole graph system
      *
-     * @param null $idList
+     * @param null|array $idList
+     * @param null|array $keyList
      */
-    public function __construct(&$idList = null) {
+    public function __construct(&$idList = null, &$keyList = null) {
 
         if ($idList !== null) {
             $this->idList = &$idList;
         } else {
             $this->idList = [];
+        }
+
+        if ($keyList !== null) {
+            $this->keyList = &$keyList;
+        } else {
+            $this->keyList = [];
         }
     }
 
@@ -62,6 +76,14 @@ class Collection
              * @todo -> fix this behavior so the get last is working again
              */
             $node->setId($this->getNextPossibleIdinContext($node));
+        }
+
+        // add to the keylist for iterations
+        if (isset($this->keyList[$node->key])) {
+            $this->keyList[$node->key]->push($node);
+        } else {
+            $this->keyList[$node->key] = new \SplDoublyLinkedList();
+            $this->keyList[$node->key]->push($node);
         }
 
         $this->list[$node->key] = $node;
@@ -158,14 +180,11 @@ class Collection
      */
     public function getLastByKey($key)
     {
-        if (count($this->list) == 0) return null;
-
-        if (($set = $this->getByIdFuzzy($key)) && count($set)) {
-
-            return $set->pop();
+        if (!isset($this->keyList[$key])) {
+            return null;
         }
-
-        return null;
+        // returns the last entry
+        return $this->keyList[$key]->top();
     }
 
 

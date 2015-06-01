@@ -85,10 +85,9 @@ class NodeTest extends PHPUnit_Framework_TestCase
      */
     public function getDuplicatedChildValueByKeyBehaviour() {
         $node = new \chilimatic\lib\datastructure\graph\Node(null, '.', '');
-        $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 24));
         $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 23));
-        var_dump($node->children);
-        $this->assertEquals(24, $node->getLastByKey('testa')->getData());
+        $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 24));
+        $this->assertEquals(24, $node->getLastByKey('test')->getData());
     }
 
     /**
