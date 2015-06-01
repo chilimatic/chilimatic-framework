@@ -58,6 +58,9 @@ class Collection
     public function addNode(Node $node)
     {
         if (isset($this->idList[$node->id])) {
+            /**
+             * @todo -> fix this behavior so the get last is working again
+             */
             $node->setId($this->getNextPossibleIdinContext($node));
         }
 
@@ -84,7 +87,7 @@ class Collection
         $newId = false;
         $id = $node->id;
         for ($i = 0; $newId == false; $i++) {
-            $newId = $id . Node::MULTIPLE_ID_ENTRY_DELIMITER . "$i";
+            $newId = rtrim($id, $node->keyDelimiter) . Node::MULTIPLE_ID_ENTRY_DELIMITER . "$i{$node->keyDelimiter}";
 
             if ($id > 100) {
                 throw new \Exception('Are you crazy? 1000 child elements with the same ID ?');
@@ -121,13 +124,6 @@ class Collection
         if (isset($this->idList[$id])) {
             return $this->idList[$id];
         }
-
-        foreach($this->idList as $node)
-        {
-            /* @var $node Node */
-            if ( ($ret = $node->getById($id)) !== null) return $ret;
-        }
-
         return null;
     }
 
@@ -165,6 +161,7 @@ class Collection
         if (count($this->list) == 0) return null;
 
         if (($set = $this->getByIdFuzzy($key)) && count($set)) {
+
             return $set->pop();
         }
 

@@ -18,11 +18,11 @@ class NodeTest extends PHPUnit_Framework_TestCase
      */
     public function initNodes() {
         $this->node = new \chilimatic\lib\datastructure\graph\Node(null, '.', '');
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 4; $i++) {
             $node2 = new \chilimatic\lib\datastructure\graph\Node($this->node, 'test-'.$i, $i);
-            for ($x = 0; $x < 11; $x++) {
+            for ($x = 0; $x < 4; $x++) {
                 $node3 = new \chilimatic\lib\datastructure\graph\Node($node2, 'test-'.$x, $x+4);
-                for ($y = 0; $y < 5; $y++) {
+                for ($y = 0; $y < 4; $y++) {
                     $node4 = new \chilimatic\lib\datastructure\graph\Node($node3, 'test-'.$y, $y+10);
                     $node3->addChild($node4);
                 }
@@ -76,7 +76,8 @@ class NodeTest extends PHPUnit_Framework_TestCase
     public function getChildValueById() {
         $node = new \chilimatic\lib\datastructure\graph\Node(null, '.', '');
         $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 23));
-        $this->assertEquals(23, $node->getById('.test')->getData());
+        $id = "{$node->keyDelimiter}.{$node->keyDelimiter}test{$node->keyDelimiter}";
+        $this->assertEquals(23, $node->getById($id)->getData());
     }
 
     /**
@@ -84,9 +85,10 @@ class NodeTest extends PHPUnit_Framework_TestCase
      */
     public function getDuplicatedChildValueByKeyBehaviour() {
         $node = new \chilimatic\lib\datastructure\graph\Node(null, '.', '');
-        $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 23));
         $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 24));
-        $this->assertEquals(24, $node->getLastByKey('test')->getData());
+        $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 23));
+        var_dump($node->children);
+        $this->assertEquals(24, $node->getLastByKey('testa')->getData());
     }
 
     /**
@@ -96,7 +98,8 @@ class NodeTest extends PHPUnit_Framework_TestCase
         $node = new \chilimatic\lib\datastructure\graph\Node(null, '.', '');
         $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 23));
         $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test_ing', 24));
-        $this->assertEquals(24, $node->getLastByKey('test')->getData());
+        $this->assertEquals(23, $node->getLastByKey('test')->getData());
+
     }
 
     /**
@@ -106,22 +109,23 @@ class NodeTest extends PHPUnit_Framework_TestCase
         $node = new \chilimatic\lib\datastructure\graph\Node(null, '.', '');
         $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 23));
         $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 24));
-        $this->assertEquals(23, $node->getById('.test')->getData());
+        $id = "{$node->keyDelimiter}.{$node->keyDelimiter}test{$node->keyDelimiter}";
+        $this->assertEquals(23, $node->getById($id)->getData());
     }
 
     /**
      * @test
      */
     public function getDuplicatedChildNodeValueByIdBehaviour() {
-        $node = new \chilimatic\lib\datastructure\graph\Node(null, '.', '');
-        $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 23));
-        $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 24));
-        $this->assertEquals(24, $node->getById('.test-0')->getData());
-    }
+       $node = new \chilimatic\lib\datastructure\graph\Node(null, '.', '');
+       $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 23));
+       $node->addChild(new \chilimatic\lib\datastructure\graph\Node($node, 'test', 24));
+       $this->assertEquals(24, $node->getById('#.#test-0#')->getData());
+   }
 
-    /**
-     * @test
-     */
+   /**
+    * @test
+    */
     public function getMultiResultByKey() {
         $this->initNodes();
         $this->assertInstanceOf('\SplObjectStorage', $this->node->getByKey('test-1'));
@@ -142,7 +146,8 @@ class NodeTest extends PHPUnit_Framework_TestCase
         $result = $resultSet->current();
 
         $this->assertInstanceOf('\SplObjectStorage', $resultSet);
-        $this->assertEquals(".test-9.test-10.test-1", $result->getId());
+
+        $this->assertEquals("#.#test-3#test-3#test-1#", $result->getId());
         $this->assertCount(1, $resultSet);
     }
 

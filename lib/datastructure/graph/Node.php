@@ -96,13 +96,13 @@ class Node implements INode
         // optional comment
         $this->comment = $comment;
 
+        $this->updateId();
+
         if ($this->parentNode) {
             $this->children = new Collection($parentNode->children->idList);
         } else {
             $this->children = new Collection();
         }
-
-        $this->updateId();
     }
 
     /**
