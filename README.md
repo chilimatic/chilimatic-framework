@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/travis-ci/travis-web.svg?branch=master)](https://travis-ci.org/travis-ci/travis-web)
 # chilimatic-framework
 
 this is for feedback :) fork it, use it if you find something usefull steal it :)
