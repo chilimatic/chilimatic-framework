@@ -19,12 +19,12 @@ the same goes for arrays. before php7 i would not recommend to use this with mor
 
 but as mentioned in https://drive.google.com/file/d/0B3UKOMH_4lgBUTdjUGxIZ3l1Ukk/view you can actually see they changed the architecture of the php array 
 [copied from the pdf]
-● HashTable size reduced from 72 to 56 bytes
-● Bucket size reduced from 72 to 32 bytes
-● Memory for all Buckets is allocated at once
-● Bucket.key now is a pointer to zend_string and it doesn't have to be duplicated (just reference counter should be increased)
-● Values of array elements are embedded into the Buckets
-● Improved data locality => less CPU cache misses
+- HashTable size reduced from 72 to 56 bytes
+- Bucket size reduced from 72 to 32 bytes
+- Memory for all Buckets is allocated at once
+- Bucket.key now is a pointer to zend_string and it doesn't have to be duplicated (just reference counter should be increased)
+- Values of array elements are embedded into the Buckets
+- Improved data locality => less CPU cache misses
 
 which means 
 ```
