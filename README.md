@@ -6,16 +6,19 @@ let me know what you think about it
 
 #Pretext:
 
-In some parts I broke the best practices on purpose based on the design of the PHP Interpreter. Those decisions can be argued about but before the hating starts here is an example why.
+In some parts I broke the best practices on purpose based on the design of the PHP Interpreter. Those decisions,  naturally, can be argued about. Before the hating starts here is an example why.
 
-the node getter and setters. They are still in there but all properties are public this has to do with the behaviour http://jpauli.github.io/2015/01/22/on-php-function-calls.html before phpng. I need to benchmark it with the new engine because they've changed the behaviour of the function calls so it has less overhead and performs https://drive.google.com/file/d/0B3UKOMH_4lgBUTdjUGxIZ3l1Ukk/view so I'm quite positive that I can use them again
-if you use it with hundereds of nodes the structure would be slower with methods calling than with public access so the graph structure should be a private structure but inside everything is public.
+the node getter and setters. They are still in there but all properties are public this has to do with the behaviour http://jpauli.github.io/2015/01/22/on-php-function-calls.html before phpng. I need to benchmark it with the new engine because they've changed the behaviour of the function calls, so it has less overhead and performs.
 
-the same goes for arrays btw ! . Before php7 i would not recommend to use this with more than 1000 nodes 
+https://drive.google.com/file/d/0B3UKOMH_4lgBUTdjUGxIZ3l1Ukk/view 
+
+I'm quite positive that I can use them again. But if you use it with hundereds of nodes the structure would be slower with methods calls than with public access. So the graph structure should be in a private property but inside the graph everything is public.
+
+the same goes for arrays. before php7 i would not recommend to use this with more than 1000 nodes 
 -> see memory allocation of arrays https://nikic.github.io/2011/12/12/How-big-are-PHP-arrays-really-Hint-BIG.html
 
 but as mentioned in https://drive.google.com/file/d/0B3UKOMH_4lgBUTdjUGxIZ3l1Ukk/view you can actually see they changed the architecture of the php array 
-quote: 
+[copied from the pdf]
 ● HashTable size reduced from 72 to 56 bytes
 ● Bucket size reduced from 72 to 32 bytes
 ● Memory for all Buckets is allocated at once
@@ -32,7 +35,7 @@ echo memory_get_usage(true);
 Memory Usage 428 MB [old] 33 MB [new]
 Time 0.49 sec[old] 0.06 sec [new]
 
-which is huge since memory always is an issue esp. because unset() is using the GC and if you compare huge amounts of data you can't use unset because the GC won't collect it instantly but "when he feels that it's needed" so you need to null the values to instantly clean up the memory ..... 
+This is huge since memory always is an issue esp. because unset() is using the Garbage Collector and if you compare huge amounts of data you can't use unset because the GC won't collect it instantly but "when he feels that it's best" ,which means you run out of memory, so you need to null the values to instantly clear some memory ..... 
 
 
 # Config
