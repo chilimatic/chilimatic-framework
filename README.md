@@ -4,6 +4,37 @@
 this is for feedback :) fork it, use it if you find something usefull steal it :)
 let me know what you think about it
 
+#Pretext:
+
+In some parts I broke the best practices on purpose based on the design of the PHP Interpreter. Those decisions can be argued about but before the hating starts here is an example why.
+
+the node getter and setters. They are still in there but all properties are public this has to do with the behaviour http://jpauli.github.io/2015/01/22/on-php-function-calls.html before phpng. I need to benchmark it with the new engine because they've changed the behaviour of the function calls so it has less overhead and performs https://drive.google.com/file/d/0B3UKOMH_4lgBUTdjUGxIZ3l1Ukk/view so I'm quite positive that I can use them again
+
+
+the same goes for arrays btw ! . And if you use it with hundereds of nodes the structure would be slower and btw before php7 i would not recommend to use this with more than 1000 nodes 
+-> see memory allocation of arrays https://nikic.github.io/2011/12/12/How-big-are-PHP-arrays-really-Hint-BIG.html
+
+but as mentioned in https://drive.google.com/file/d/0B3UKOMH_4lgBUTdjUGxIZ3l1Ukk/view you can actually see they changed the architecture of the php array 
+quote: 
+● HashTable size reduced from 72 to 56 bytes
+● Bucket size reduced from 72 to 32 bytes
+● Memory for all Buckets is allocated at once
+● Bucket.key now is a pointer to zend_string and it doesn't have to be duplicated (just reference counter should be increased)
+● Values of array elements are embedded into the Buckets
+● Improved data locality => less CPU cache misses
+
+which means 
+```
+$a = array();
+for ($i = 0; $i < 1000000; $i++) $a[$i] = array("hello");
+echo memory_get_usage(true);
+```
+Memory Usage 428 MB [old] 33 MB [new]
+Time 0.49 sec[old] 0.06 sec [new]
+
+which is huge since memory always is an issue esp. because unset() is using the GC and if you compare huge amounts of data you can't use unset because the GC won't collect it instantly but "when he feels that it's needed" so you need to null the values to instantly clean up the memory ..... 
+
+
 # Config
 it's a domain based system for the configuration
 * *.cfg
@@ -52,6 +83,20 @@ Config::get('cache_settings') // return \stdClass containing the json
 ```
 
 this is a simple example how to use the config object
+
+and for the singelton is an antipattern people ! :) since the singelton in this case is just an container wrapping any config inside of it
+```
+use \chilimatic\lib\config\File as Config;
+$config = new Config([\chilimatic\lib\config\File::CONFIG_PATH_INDEX => <path/to/folder/withconfigfiles>]);
+```
+or the factory ofc
+```
+use \chilimatic\lib\config\ConfigFactory;
+$config = ConfigFactory::make('File',[\chilimatic\lib\config\File::CONFIG_PATH_INDEX => <path/to/folder/withconfigfiles>] );
+```
+the array is an interface question since the ini can accept multiple parameters
+if they would've confirmed this one in php7 https://wiki.php.net/rfc/named_params I would have implemented it just for php7 
+
 
 # DI 
 so let's think about the service collection the default service collection can be found at
@@ -362,7 +407,6 @@ $em->persist($newModel);
 
 
 The whole Framework is mainly academic but if you find a nice app you wanna use it for or you just want see some concepts or give me some usefull feedback. I would be happy
-
 
 
 # Node Filters
