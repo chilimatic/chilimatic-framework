@@ -24,9 +24,9 @@ class ORM_Test extends PHPUnit_Framework_TestCase {
         return $con = new \chilimatic\lib\database\mysql\MysqlConnection(
             [
                 'host' => 'localhost',
-                'username' => 'root',
-                'password' => '$karpunk1',
-                'database' => 'chilimatic',
+                'username' => 'test',
+                'password' => 'test123',
+                'database' => 'testDb',
             ]
         );
     }
@@ -67,9 +67,9 @@ class ORM_Test extends PHPUnit_Framework_TestCase {
          */
         $em = \chilimatic\lib\di\ClosureFactory::getInstance()->get('entity-manager' , [
             'host' => 'localhost',
-            'username' => 'root',
-            'password' => '$karpunk1',
-            'database' => 'chilimatic',
+            'username' => 'test',
+            'password' => 'test123',
+            'database' => 'testDb',
         ]);
 
         $this->assertInstanceOf('\chilimatic\lib\database\ORM\AbstractModel', $em->findOneBy(new \chilimatic\app\model\menu(), []));
@@ -78,9 +78,9 @@ class ORM_Test extends PHPUnit_Framework_TestCase {
     public function testORMMysqlQueryBuilderFindBy() {
         $em = \chilimatic\lib\di\ClosureFactory::getInstance()->get('entity-manager' , [
             'host' => 'localhost',
-            'username' => 'root',
-            'password' => '$karpunk1',
-            'database' => 'chilimatic',
+            'username' => 'test',
+            'password' => 'test123',
+            'database' => 'testDb',
         ]);
 
         $this->assertInstanceOf('\chilimatic\lib\database\ORM\EntityObjectStorage', $em->findBy(new \chilimatic\app\model\menu(), []));
@@ -89,9 +89,9 @@ class ORM_Test extends PHPUnit_Framework_TestCase {
     public function testORMMysqlQueryBuilderGenerateForModel() {
         $em = \chilimatic\lib\di\ClosureFactory::getInstance()->get('entity-manager' , [
             'host' => 'localhost',
-            'username' => 'root',
-            'password' => '$karpunk1',
-            'database' => 'chilimatic',
+            'username' => 'test',
+            'password' => 'test123',
+            'database' => 'testDb',
         ]);
         $expectedResult = "SELECT * FROM `menu`";
         //$this->assertEquals($expectedResult, $em->generateForModel(new \chilimatic\app\model\menu()));
