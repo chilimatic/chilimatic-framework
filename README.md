@@ -9,9 +9,9 @@ let me know what you think about it
 In some parts I broke the best practices on purpose based on the design of the PHP Interpreter. Those decisions can be argued about but before the hating starts here is an example why.
 
 the node getter and setters. They are still in there but all properties are public this has to do with the behaviour http://jpauli.github.io/2015/01/22/on-php-function-calls.html before phpng. I need to benchmark it with the new engine because they've changed the behaviour of the function calls so it has less overhead and performs https://drive.google.com/file/d/0B3UKOMH_4lgBUTdjUGxIZ3l1Ukk/view so I'm quite positive that I can use them again
+if you use it with hundereds of nodes the structure would be slower with methods calling than with public access so the graph structure should be a private structure but inside everything is public.
 
-
-the same goes for arrays btw ! . And if you use it with hundereds of nodes the structure would be slower and btw before php7 i would not recommend to use this with more than 1000 nodes 
+the same goes for arrays btw ! . Before php7 i would not recommend to use this with more than 1000 nodes 
 -> see memory allocation of arrays https://nikic.github.io/2011/12/12/How-big-are-PHP-arrays-really-Hint-BIG.html
 
 but as mentioned in https://drive.google.com/file/d/0B3UKOMH_4lgBUTdjUGxIZ3l1Ukk/view you can actually see they changed the architecture of the php array 
