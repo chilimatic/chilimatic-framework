@@ -10,12 +10,18 @@
 
 class NodeFilterFactoryTest extends PHPUnit_Framework_TestCase
 {
-    public function testNodeFilterInstances()
+    /**
+     * @test
+     */
+    public function nodeFilterInstances()
     {
        $this->assertInstanceOf('\chilimatic\lib\datastructure\graph\filter\Factory', new \chilimatic\lib\datastructure\graph\filter\Factory());
     }
 
-    public function testNodeFilterFactoryStaticMakeWithParserAndTransformer()
+    /**
+     * @test
+     */
+    public function nodeFilterFactoryStaticMakeWithParserAndTransformer()
     {
         \chilimatic\lib\datastructure\graph\filter\FactoryStatic::setValidator(new chilimatic\lib\validator\DynamicCallNamePreTransformed());
         \chilimatic\lib\datastructure\graph\filter\FactoryStatic::setTransformer(new chilimatic\lib\transformer\string\DynamicObjectCallName());
@@ -24,12 +30,18 @@ class NodeFilterFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\chilimatic\lib\datastructure\graph\filter\AbstractFilter', \chilimatic\lib\datastructure\graph\filter\FactoryStatic::make('last-node'));
     }
 
-    public function testNodeFilterFactoryStaticSetTransformer() {
+    /**
+     * @test
+     */
+    public function nodeFilterFactoryStaticSetTransformer() {
         \chilimatic\lib\datastructure\graph\filter\FactoryStatic::setTransformer(new chilimatic\lib\transformer\string\DynamicObjectCallName());
         $this->assertInstanceOf('\chilimatic\lib\transformer\string\DynamicObjectCallName', \chilimatic\lib\datastructure\graph\filter\FactoryStatic::getTransformer());
     }
 
-    public function testNodeFilterFactoryMakeWithParserAndTransformer()
+    /**
+     * @test
+     */
+    public function nodeFilterFactoryMakeWithParserAndTransformer()
     {
         $filterFactory = new \chilimatic\lib\datastructure\graph\filter\Factory();
         $filterFactory->setValidator(new chilimatic\lib\validator\DynamicCallNamePreTransformed());
@@ -39,14 +51,20 @@ class NodeFilterFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\chilimatic\lib\datastructure\graph\filter\AbstractFilter', $filterFactory->make('last-node'));
     }
 
-    public function testNodeFilterFactoryMake()
+    /**
+     * @test
+     */
+    public function nodeFilterFactoryMake()
     {
         $filterFactory = new \chilimatic\lib\datastructure\graph\filter\Factory();
         $this->assertEquals(null, $filterFactory->make('last-node'));
         $this->assertInstanceOf('\chilimatic\lib\datastructure\graph\filter\AbstractFilter', $filterFactory->make('lastNode'));
     }
 
-    public function testNodeFilterFactoryStaticMake()
+    /**
+     * @test
+     */
+    public function nodeFilterFactoryStaticMake()
     {
         \chilimatic\lib\datastructure\graph\filter\FactoryStatic::setValidator(null);
         \chilimatic\lib\datastructure\graph\filter\FactoryStatic::setTransformer(null);

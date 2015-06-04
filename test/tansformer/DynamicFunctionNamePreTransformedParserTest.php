@@ -16,7 +16,7 @@ class DynamicCallNamePreTransformedValidatorTest extends PHPUnit_Framework_TestC
     /**
      * @test
      */
-    public function testInterface() {
+    public function interfaceTest() {
         $this->assertInstanceOf('\chilimatic\lib\interfaces\IFlyWeightValidator', new DynamicCallNamePreTransformed());
     }
 

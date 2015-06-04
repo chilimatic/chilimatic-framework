@@ -72,6 +72,11 @@ class File extends AbstractConfig
      * gets the current host id for the machine
      */
     private function _initHostId() {
+
+        if ($this->get('host_id')) {
+            return;
+        }
+
         // if an apache is running use the http host of it
         if ( !empty( $_SERVER ['HTTP_HOST'] ) )
         {
@@ -83,7 +88,7 @@ class File extends AbstractConfig
             // split them via spaces
             foreach ( $GLOBALS ['argv'] as $param )
             {
-                if (strpos($param, IConfig::CLI_COMMAND_DELIMITER) === false) continue;
+                if (strpos($param, IConfig::CLI_COMMAND_DELIMITER ) === false) continue;
                 // split the input into a key value pair
                 $inp = (array) explode( IConfig::CLI_COMMAND_DELIMITER , $param );
                 if ( strtolower(trim($inp[0])) == IConfig::CLI_HOST_VARIABLE )
