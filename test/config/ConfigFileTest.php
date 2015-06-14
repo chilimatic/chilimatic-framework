@@ -10,8 +10,16 @@
 
 class ConfigFile_Test extends PHPUnit_Framework_TestCase {
 
+    /**
+     * path to the test data
+     *
+     * @var string
+     */
     const TEST_DATA_DIR = __DIR__ . '/../testdata/';
 
+    /**
+     * @var chilimatic\lib\config\AbstractConfig
+     */
     public $config;
 
     /**
@@ -52,6 +60,15 @@ class ConfigFile_Test extends PHPUnit_Framework_TestCase {
      */
     public function getHirachicalValue1AsString() {
         $this->assertEquals('test2', $this->config->get('value1'));
+    }
+
+    /**
+     * @test
+     */
+    public function addConfigSet() {
+        var_dump($this->config->get('value1'));
+        $this->config->set('value1', 12);
+        $this->assertEquals(12, $this->config->get('value1'));
     }
 
 }
