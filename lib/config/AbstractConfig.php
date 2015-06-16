@@ -142,6 +142,7 @@ abstract class AbstractConfig implements IConfig {
         if ( empty( $key ) ) return $this;
 
         if (!($node = $this->mainNode->getLastByKey($key))) {
+            var_dump($node);
             $newNode = new Node($this->mainNode, $key, $val);
             $this->mainNode->addChild($newNode);
         } else {

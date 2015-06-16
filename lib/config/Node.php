@@ -39,8 +39,8 @@ class Node extends \chilimatic\lib\datastructure\graph\Node
         // set the current key identifier
         $this->key = $key;
         // set the current value of the node
-        if ($data) {
-            $this->initType($data);
+        if ($data && !$this->initType($data)) {
+            $this->data = $data;
         }
 
         if (!$this->parentNode || !$this->parentNode->key) {
@@ -66,7 +66,8 @@ class Node extends \chilimatic\lib\datastructure\graph\Node
      */
     private function initType($data)
     {
-        if ( !is_string($data) ) return true;
+        if ( !is_string($data) ) return false;
+
         $data = trim($data);
         switch (true) {
             case (in_array($data, ['true', 'false'])):

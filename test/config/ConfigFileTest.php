@@ -66,7 +66,6 @@ class ConfigFile_Test extends PHPUnit_Framework_TestCase {
      * @test
      */
     public function addConfigSet() {
-        var_dump($this->config->get('value1'));
         $this->config->set('value1', 12);
         $this->assertEquals(12, $this->config->get('value1'));
     }
