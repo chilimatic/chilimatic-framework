@@ -285,4 +285,3 @@ class Memcached extends \Memcached implements CacheInterface
         // optional
     }
 }
-?>

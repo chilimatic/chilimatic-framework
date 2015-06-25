@@ -26,4 +26,3 @@ Class Text extends File
         return true;
     } 
 }
-?>

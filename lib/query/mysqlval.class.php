@@ -198,5 +198,3 @@ class Query_MysqlVal extends Query_FieldVal
 
     }
 }
-
-?>

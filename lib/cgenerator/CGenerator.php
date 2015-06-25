@@ -199,10 +199,10 @@ abstract class CGenerator
      * @param $db object           
      * @param $table_name string           
      */
-    public function __construct( $db , $table_name = '' )
+    public function __construct($db , $table_name = '')
     {
-		$this->db = $db;
-		$this->table_name = $table_name;
+        $this->db = $db;
+        $this->table_name = $table_name;
     }
 
 
@@ -216,54 +216,48 @@ abstract class CGenerator
     public function generate_class()
     {
 
-
         /**
          * generates the spaces 
          * 
          * @param int $amount
          * @return string
          */
-        function gen_spaces( $amount )
+        function gen_spaces($amount)
         {
-
             $spaces = '';
-            for ( $i = 0 ; $i < $amount ; $i++ )
-            {
+            for ($i = 0; $i < $amount ; $i++) {
                 $spaces .= ' ';
             }
             return $spaces;
         }
         
-        if ( empty($this->table_model) )
-        {
+        if (empty($this->table_model)) {
             return false;
         }
+
         // general initiation of the object properties based on the
-        // $this->table_model
         $this->init();
 
         $this->generate_class_definition();
-        if ( strpos($this->class_name, '_') !== false )
-        {
+        if (strpos($this->class_name, '_') !== false) {
             $tmp = explode('_', $this->class_name);
-            foreach ( $tmp as $key => $part )
-            {
+            foreach ($tmp as $key => $part) {
                 $tmp[$key] = ucfirst(strtolower($part));
             }
             $this->class_name = implode('_', $tmp);
         }
+
         $this->tpl_replacements['class_name'] = $this->class_name;
         $file = new File();
         $file->open($this->tpl_path);     
 
         $this->generated_code =  $file->read();
         
-        foreach ($this->tpl_replacements as $pattern => $value )
-        {
-        	if (!is_string($value)) continue;
-        	
-        	$pattern = '#' . strtoupper($pattern) . '#'; 
-        	$this->generated_code = str_replace($pattern, $value, $this->generated_code);
+        foreach ($this->tpl_replacements as $pattern => $value) {
+            if (!is_string($value)) continue;
+
+            $pattern = '#' . strtoupper($pattern) . '#';
+            $this->generated_code = str_replace($pattern, $value, $this->generated_code);
         }
 
         $this->generated_code = str_replace("\t", gen_spaces(self::SPACE_AMOUNT), $this->generated_code);
@@ -282,13 +276,11 @@ abstract class CGenerator
     {
         $this->tpl_replacements['class_definition'] = '';
         $this->tpl_replacements['class_definition_list'] = '';
-        if ($this->is_final == true)
-        {
+        if ($this->is_final == true) {
             $this->tpl_replacements['class_definition'] .= 'final ';
         }
 
-        if ($this->is_abstract == true)
-        {
+        if ($this->is_abstract == true) {
             $this->tpl_replacements['class_definition'] .= 'abstract ';
         }
 
@@ -297,14 +289,12 @@ abstract class CGenerator
 
         if (empty($this->extend_class) && empty($this->implement_interface)) return true;
 
-        if (!empty($this->extend_class))
-        {
+        if (!empty($this->extend_class)) {
             $this->tpl_replacements['class_definition'] .= ' extends ' . ucfirst(strtolower($this->extend_class));
             $this->tpl_replacements['class_definition_list'] .= ' extends ' . ucfirst(strtolower($this->extend_class)) . 'List';
         }
 
-        if (!empty($this->implement_interface))
-        {
+        if (!empty($this->implement_interface)) {
             $this->tpl_replacements['class_definition'] .= ' implements ' . implode(',', $this->implement_interface);
             $this->tpl_replacements['class_definition_list'] .= ' implements ' . implode('List,', $this->implement_interface) . 'List';
         }
@@ -324,32 +314,24 @@ abstract class CGenerator
     public function get_table_short_tag()
     {
 
-        if ( empty($this->table_name) ) return false;
+        if (empty($this->table_name)) return false;
         
         $tmp = null;
         
-        if ( strpos($this->table_name, '_') !== false )
-        {
+        if (strpos($this->table_name, '_') !== false) {
             $tmp = explode('_', $this->table_name);
         }
         
-        if ( !empty($tmp) )
-        {
-            foreach ( $tmp as $val )
-            {
+        if (!empty($tmp)) {
+            foreach ($tmp as $val) {
                 $this->table_short_tag .= strtolower(substr($val, 0, 1));
             }
-        }
-        else
-        {
+        } else {
             $this->table_short_tag .= strtolower(substr($this->table_name, 0, 1));
         }
         
-        $this->tpl_replacements['table_short_tag'] =  $this->table_short_tag;
+        $this->tpl_replacements['table_short_tag'] = $this->table_short_tag;
         return true;
     }
 
-
-    
 }
-?>

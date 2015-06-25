@@ -43,7 +43,8 @@ class ModelCache
      *
      * @return AbstractModel|null
      */
-    public function get(AbstractModel $model, $param = null) {
+    public function get(AbstractModel $model, $param = null)
+    {
         $this->modelStorage->rewind();
 
         foreach ($this->modelStorage as $storedModel) {
@@ -51,7 +52,6 @@ class ModelCache
                 return $model;
             }
         }
-
         return null;
     }
 

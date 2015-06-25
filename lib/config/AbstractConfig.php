@@ -13,12 +13,12 @@
 
 namespace chilimatic\lib\config;
 
-
 /**
  * Class Config_Generic
  * @package chilimatic\lib\config
  */
-abstract class AbstractConfig implements IConfig {
+abstract class AbstractConfig implements IConfig
+{
 
     /**
      * comment within the nodes that it's a given parameter
@@ -72,9 +72,11 @@ abstract class AbstractConfig implements IConfig {
      * @param string $key
      * @return mixed
      */
-    public function delete($key = ''){
+    public function delete($key = '')
+    {
         $node = $this->mainNode->getLastByKey($key);
         if (empty($node)) return $this->mainNode;
+
         $this->mainNode->children->removeNode($node);
         unset($node);
         return $this->mainNode;
@@ -104,7 +106,8 @@ abstract class AbstractConfig implements IConfig {
      * @internal param $var
      * @return mixed
      */
-    public function getById($id) {
+    public function getById($id)
+    {
         $node = $this->mainNode->getById($id);
         if (empty($node)) return NULL;
         return $node->getData();
@@ -118,7 +121,8 @@ abstract class AbstractConfig implements IConfig {
      *
      * @return mixed
      */
-    public function setById($id, $val){
+    public function setById($id, $val)
+    {
         // set the variable
         if (empty($id)) return $this;
 
@@ -137,12 +141,12 @@ abstract class AbstractConfig implements IConfig {
      * @param $val
      * @return mixed
      */
-    public function set($key, $val){
+    public function set($key, $val)
+    {
         // set the variable
         if ( empty( $key ) ) return $this;
 
         if (!($node = $this->mainNode->getLastByKey($key))) {
-            var_dump($node);
             $newNode = new Node($this->mainNode, $key, $val);
             $this->mainNode->addChild($newNode);
         } else {

@@ -70,4 +70,3 @@ abstract class AbstractView implements IView
         return;
     }
 }
-?>

@@ -191,4 +191,3 @@ class DatabaseException extends \ErrorException
         return mail( $this->fatal_recipient, $this->fatal_subject, $error_msg, $this->fatal_from );
     }
 }
-?>

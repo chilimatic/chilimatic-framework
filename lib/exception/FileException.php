@@ -16,4 +16,3 @@ class FileException extends \ErrorException
     );
     
 }
-?>

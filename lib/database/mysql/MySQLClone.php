@@ -178,5 +178,3 @@ class MySQLClone extends Mysql
         return $this->query($create_sql);
     }
 }
-
-?>
