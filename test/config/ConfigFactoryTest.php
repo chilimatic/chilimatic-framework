@@ -1,30 +1,33 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: j
  * Date: 31.05.15
  * Time: 15:43
  */
-
-class ConfigFactory_Test extends PHPUnit_Framework_TestCase {
+class ConfigFactory_Test extends PHPUnit_Framework_TestCase
+{
 
 
     /**
      * @before
      */
-    public function createEmptyConfigFiles() {
-        touch(__DIR__ .'/*.cfg');
-        touch(__DIR__ .'/*.test.cfg');
+    public function createEmptyConfigFiles()
+    {
+        touch(__DIR__ . '/*.cfg');
+        touch(__DIR__ . '/*.test.cfg');
         touch(__DIR__ . '/test.ini');
     }
 
     /**
      * @after
      */
-    public function removeEmptyConfigFiles() {
-        unlink(__DIR__ .'/*.cfg');
-        unlink(__DIR__ .'/*.test.cfg');
-        unlink(__DIR__ .'/test.ini');
+    public function removeEmptyConfigFiles()
+    {
+        unlink(__DIR__ . '/*.cfg');
+        unlink(__DIR__ . '/*.test.cfg');
+        unlink(__DIR__ . '/test.ini');
     }
 
     /**
@@ -63,7 +66,8 @@ class ConfigFactory_Test extends PHPUnit_Framework_TestCase {
      * @expectedException \LogicException
      * @expectedExceptionMessage The Config Type has to be specified ... $type is empty
      */
-    public function catchLogicExceptionNoType() {
+    public function catchLogicExceptionNoType()
+    {
         \chilimatic\lib\config\ConfigFactory::make(
             null,
             [
@@ -78,7 +82,8 @@ class ConfigFactory_Test extends PHPUnit_Framework_TestCase {
      * @expectedException \LogicException
      * @expectedExceptionMessage The Config class has to be implemented and accessible ... chilimatic\lib\config\Asfdasfd is not found
      */
-    public function catchLogicExceptionClassDoesNotExist() {
+    public function catchLogicExceptionClassDoesNotExist()
+    {
         \chilimatic\lib\config\ConfigFactory::make(
             'asfdasfd',
             [

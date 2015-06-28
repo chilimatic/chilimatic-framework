@@ -9,6 +9,7 @@
  * Class HTTP_MultiParam
  *
  * constructs a string like
+ *
  * @example Accept: text/plain; q=0.5; level=0; ....
  *
  */
@@ -20,7 +21,8 @@ namespace chilimatic\lib\http;
  *
  * @package chilimatic\http
  */
-Class MultiParam {
+Class MultiParam
+{
 
     /**
      * sets the default delimiter based on the specs
@@ -58,24 +60,28 @@ Class MultiParam {
      *
      * @return \chilimatic\http\MultiParam
      */
-    public function __construct($field, $param, $delimiter = null) {
+    public function __construct($field, $param, $delimiter = null)
+    {
         // if there is no name abort!
         if (empty($field) || empty($param)) return;
 
-        $this->delimiter = (empty($delimiter) ? self::DEFAULT_DELIMITER : $delimiter );
+        $this->delimiter = (empty($delimiter) ? self::DEFAULT_DELIMITER : $delimiter);
 
         $this->field = $field;
-        $this->list = $param;
+        $this->list  = $param;
     }
 
     /**
      * gets a specific parameter array
      *
      * @param $key
+     *
      * @return array|bool
      */
-    public function getParam($key){
+    public function getParam($key)
+    {
         if (isset($this->list[$key])) return $this->list[$key];
+
         return false;
     }
 
@@ -84,7 +90,8 @@ Class MultiParam {
      *
      * @return array
      */
-    public function getAllParam() {
+    public function getAllParam()
+    {
         return $this->list;
     }
 
@@ -92,11 +99,14 @@ Class MultiParam {
      * removeParameter
      *
      * @param $key
+     *
      * @return bool
      */
-    public function removeParam($key) {
-        if(!isset($this->list[$key])) return false;
+    public function removeParam($key)
+    {
+        if (!isset($this->list[$key])) return false;
         unset($this->list[$key]);
+
         return true;
     }
 
@@ -108,9 +118,11 @@ Class MultiParam {
      *
      * @return bool
      */
-    public function addParameter($key, $settings = null) {
+    public function addParameter($key, $settings = null)
+    {
         if (empty($key)) return false;
         $this->list[$key] = (is_array($settings)) ? $settings : null;
+
         return true;
     }
 
@@ -119,7 +131,8 @@ Class MultiParam {
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
         // if there is no fieldname don't add the values
         if (empty($this->field) || !count($this->list)) return '';
 
@@ -133,13 +146,13 @@ Class MultiParam {
                 continue;
             }
             // walk through subparameters
-            foreach($value as $key2 => $value2){
+            foreach ($value as $key2 => $value2) {
                 $string .= ";$key2=$value2 ";
             }
             $string .= ', ';
         }
         // remove the last comma and add the linebreak
-        $string = substr($string, 0,-2) . "\r\n";
+        $string = substr($string, 0, -2) . "\r\n";
 
         return $string;
     }

@@ -13,7 +13,8 @@ namespace chilimatic\lib\http;
  *
  * @package chilimatic\http
  */
-Class RequestLine  {
+Class RequestLine
+{
 
     /**
      * default protocol
@@ -52,7 +53,8 @@ Class RequestLine  {
      *
      * @return \chilimatic\http\RequestLine
      */
-    public function __construct($address, $method = Protocol::GET, $url_param = [] , $protocol = self::DEFAULT_PROTOCOL) {
+    public function __construct($address, $method = Protocol::GET, $url_param = [], $protocol = self::DEFAULT_PROTOCOL)
+    {
         if (empty($address)) return;
 
         $this->address = $address;
@@ -68,10 +70,13 @@ Class RequestLine  {
      * sets the address
      *
      * @param $address
+     *
      * @return bool
      */
-    public function setAddress($address) {
+    public function setAddress($address)
+    {
         $this->address = $address;
+
         return true;
     }
 
@@ -79,9 +84,11 @@ Class RequestLine  {
      * sets the method
      *
      * @param $method
+     *
      * @return bool
      */
-    public function setMethod($method) {
+    public function setMethod($method)
+    {
         if (empty($method)) return false;
         $this->method = $method;
 
@@ -92,10 +99,12 @@ Class RequestLine  {
      * sets the protocol
      *
      * @param $protocol
+     *
      * @return bool
      */
-    public function setProtocol($protocol) {
-        if(empty($protocol)) return false;
+    public function setProtocol($protocol)
+    {
+        if (empty($protocol)) return false;
         $this->protocol = $protocol;
 
         return true;
@@ -105,15 +114,18 @@ Class RequestLine  {
      * sets the urlparameters
      *
      * @param $param
+     *
      * @return bool
      */
-    public function setParam($param) {
+    public function setParam($param)
+    {
         if (is_string($param)) {
             if ($param[0] == '') $this->url_param = '';
             else $this->url_param = (strpos($param, '?') !== false) ? $param : '?' . $param;
         } elseif (is_array($param) && count($param)) {
             $this->url_param = '?' . implode('&', $param);
         }
+
         return true;
     }
 
@@ -122,7 +134,8 @@ Class RequestLine  {
      *
      * @return string
      */
-    public function getParam(){
+    public function getParam()
+    {
         return $this->url_param;
     }
 
@@ -131,7 +144,8 @@ Class RequestLine  {
      *
      * @return string
      */
-    public function getMethod(){
+    public function getMethod()
+    {
         return $this->method;
     }
 
@@ -140,7 +154,8 @@ Class RequestLine  {
      *
      * @return string
      */
-    public function getProtocol(){
+    public function getProtocol()
+    {
         return $this->protocol;
     }
 
@@ -149,7 +164,8 @@ Class RequestLine  {
      *
      * @return string
      */
-    public function __toString(){
+    public function __toString()
+    {
         return "$this->method $this->address$this->url_param $this->protocol\r\n";
     }
 }

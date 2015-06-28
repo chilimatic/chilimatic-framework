@@ -11,6 +11,7 @@ namespace chilimatic\lib\datastructure\graph;
 
 /**
  * Class Node
+ *
  * @package chilimatic\collections
  */
 class Node implements INode
@@ -91,7 +92,7 @@ class Node implements INode
         // set the parent node
         $this->parentNode = $parentNode;
         // set the current key identifier
-        $this->key = $key;
+        $this->key  = $key;
         $this->data = $data;
         // optional comment
         $this->comment = $comment;
@@ -103,7 +104,8 @@ class Node implements INode
     /**
      * DRY :) so it initializes the children the same way
      */
-    public function initChildren(){
+    public function initChildren()
+    {
         if ($this->parentNode) {
             $this->children = new Collection(
                 $this->parentNode->children->idList, // idlist as reference
@@ -120,7 +122,7 @@ class Node implements INode
      */
     public function updateId()
     {
-        if ( empty($this->parentNode->key)) {
+        if (empty($this->parentNode->key)) {
             $this->id = "{$this->keyDelimiter}$this->key{$this->keyDelimiter}";
         } else {
             $this->id = "{$this->parentNode->id}$this->keyDelimiter{$this->key}$this->keyDelimiter";
@@ -129,11 +131,11 @@ class Node implements INode
     }
 
 
-
     /**
      * @return string
      */
-    public function __toString(){
+    public function __toString()
+    {
         return json_encode($this->getData());
     }
 
@@ -156,8 +158,10 @@ class Node implements INode
      *
      * @return Node|null
      */
-    public function getLastByKey($key) {
-        if ($this->key == $key ) return $this;
+    public function getLastByKey($key)
+    {
+        if ($this->key == $key) return $this;
+
         return $this->children->getLastByKey($key);
     }
 
@@ -167,11 +171,13 @@ class Node implements INode
      * out of the depths in the chain
      *
      * @param $id
+     *
      * @return mixed|null
      */
     public function getById($id)
     {
-        if ($this->id == $id ) return $this;
+        if ($this->id == $id) return $this;
+
         return $this->children->getById($id);
     }
 
@@ -190,11 +196,13 @@ class Node implements INode
      * set the current data
      *
      * @param $data
+     *
      * @return $this
      */
     public function setData($data)
     {
         $this->data = $data;
+
         return $this;
     }
 
@@ -202,11 +210,13 @@ class Node implements INode
      * set the parent id
      *
      * @param Node $node
+     *
      * @return $this
      */
     public function setParent(Node $node = null)
     {
         $this->parentNode = $node;
+
         return $this;
     }
 
@@ -234,6 +244,7 @@ class Node implements INode
      * set the id
      *
      * @param $id
+     *
      * @return $this
      */
     public function setId($id)
@@ -257,6 +268,7 @@ class Node implements INode
      * set the id
      *
      * @param $key
+     *
      * @return $this
      */
     public function setKey($key)
@@ -285,6 +297,7 @@ class Node implements INode
      * adds/replace a node to node children list
      *
      * @param Node $node
+     *
      * @return bool|null
      */
     public function removeChild(Node $node)
@@ -310,6 +323,7 @@ class Node implements INode
     public function deleteChildren()
     {
         $this->children->removeAll();
+
         return $this;
     }
 
@@ -321,6 +335,7 @@ class Node implements INode
     public function delete()
     {
         $this->parentNode->children->removeNode($this);
+
         return $this;
     }
 }

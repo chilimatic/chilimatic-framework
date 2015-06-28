@@ -9,41 +9,41 @@ use chilimatic\lib\route\parser\UrlParser;
 use chilimatic\lib\route\routesystem\RouteSystemFactory;
 
 /**
- * main routing system that loads & maps and saves 
+ * main routing system that loads & maps and saves
  * contains a list of possible routes that can be called edited
- * 
- * 
- * possible are 
+ *
+ *
+ * possible are
  * -> stdclass
  * -> array numeric
  * -> array assoc
  * -> lambda function
  * -> function call
  * -> static content
- * 
+ *
  * chilimatic framework routing
- * 
+ *
  * examples
  * \chilimatic\route\Route::register('/test/(:num)', array('job', 'load'), '/');
  * \chilimatic\route\Route::register('/user/add/(:num)', array('object' => 'user', 'method' => 'add', 'namespace' => '\\user\\', 'param' => array(true, false)));
  * \chilimatic\route\Route::register('/test/(:char)', array('object' => 'user', 'method' => 'add', 'namespace' => '\\user\\', 'param' => array(true, false)));
  * \chilimatic\route\Route::register('/mytest/(:array)[|]',  function($num) { foreach($num as $val) {  echo $val . ': this is a test'; }});
- * 
- * 
+ *
+ *
  * @author j
  */
 class Router implements IRouter
 {
     /**
      * Caching Object
-     * 
+     *
      * @var object
      */
     private $_cache = null;
 
     /**
      * url parts
-     * 
+     *
      * @var array
      */
     protected $urlPart = array();
@@ -65,8 +65,9 @@ class Router implements IRouter
      * @throws RouteException
      * @throws \Exception
      */
-    public function __construct($type) {
-        $this->urlParser = new UrlParser();
+    public function __construct($type)
+    {
+        $this->urlParser   = new UrlParser();
         $this->routeSystem = RouteSystemFactory::make($type, $this->__getPath());
     }
 
@@ -78,7 +79,7 @@ class Router implements IRouter
     private function __getPath()
     {
 
-        if ( !empty($this->path) ) return $this->path;
+        if (!empty($this->path)) return $this->path;
 
         /**
          * check if the path is empty otherwise
@@ -86,7 +87,7 @@ class Router implements IRouter
          */
         $path = !empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null;
 
-        if ( empty($path) || $path == '/' ) $path = Map::DEFAULT_URL_DELIMITER;
+        if (empty($path) || $path == '/') $path = Map::DEFAULT_URL_DELIMITER;
         // get the clean path
         $this->urlPart = $this->urlParser->parse($path);
 
@@ -104,14 +105,14 @@ class Router implements IRouter
      *
      * @throws RouteException
      */
-    public function getRoute( $path = null )
+    public function getRoute($path = null)
     {
 
-        if ( empty($path)) {
+        if (empty($path)) {
             $path = $this->__getPath();;
         }
 
-       return $this->routeSystem->getRoute($path);
+        return $this->routeSystem->getRoute($path);
     }
 
 
@@ -142,7 +143,6 @@ class Router implements IRouter
 
         return $this;
     }
-
 
 
 }

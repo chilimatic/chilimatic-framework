@@ -12,7 +12,8 @@ namespace chilimatic\lib\session\handler;
 
 use chilimatic\lib\exception\Exception_InvalidArgument;
 
-class Session {
+class Session
+{
 
     /**
      * @var \chilimatic\lib\session\engine\GenericEngine|null
@@ -37,7 +38,8 @@ class Session {
     /**
      * @param \chilimatic\lib\session\engine\GenericEngine|null $engine
      */
-    public function __construct(\chilimatic\lib\session\engine\GenericEngine $engine = null) {
+    public function __construct(\chilimatic\lib\session\engine\GenericEngine $engine = null)
+    {
         $this->engine = $engine;
         $this->registerObserver();
 
@@ -78,7 +80,8 @@ class Session {
      * -> this just sets the data -> the engine will decide when and where it will be saved (latest on the destructor call!)
      * i tried instant saving but I would have to hack the normal session behaviour so the second empty rewrite does not happen !
      */
-    public function save() {
+    public function save()
+    {
         $this->engine->setSessionData(array_merge($this->sessionData, $this->sessionNameSpaceData));
     }
 
@@ -120,8 +123,10 @@ class Session {
      *
      * @return $this
      */
-    public function delete($key) {
+    public function delete($key)
+    {
         unset($this->sessionData[$key]);
+
         return $this;
     }
 

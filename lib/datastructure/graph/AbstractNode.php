@@ -10,9 +10,11 @@ namespace chilimatic\lib\datastructure\graph;
 
 /**
  * Class Config
+ *
  * @package chilimatic\collection
  */
-abstract class AbstractNode {
+abstract class AbstractNode
+{
 
     /**
      * main config node
@@ -45,6 +47,7 @@ abstract class AbstractNode {
      * deletes a config
      *
      * @param string $key
+     *
      * @return mixed
      */
     public function delete($key = '')
@@ -53,6 +56,7 @@ abstract class AbstractNode {
         if (empty($node)) return $this->mainNode;
         $this->mainNode->children->removeNode($node);
         unset($node);
+
         return $this->mainNode;
     }
 
@@ -60,12 +64,14 @@ abstract class AbstractNode {
      * gets a specific parameter
      *
      * @param $var
+     *
      * @return mixed
      */
     public function get($var)
     {
         $node = $this->mainNode->getByKey($var);
-        if (empty($node)) return NULL;
+        if (empty($node)) return null;
+
         return $node->getData();
     }
 
@@ -73,12 +79,14 @@ abstract class AbstractNode {
      * gets a specific parameter
      *
      * @param $id
+     *
      * @return mixed
      */
     public function getById($id)
     {
         $node = $this->mainNode->getById($id);
-        if (empty($node)) return NULL;
+        if (empty($node)) return null;
+
         return $node->getData();
     }
 
@@ -93,7 +101,7 @@ abstract class AbstractNode {
     public function setById($id, $val)
     {
         // set the variable
-        if ( empty( $id ) ) return $this;
+        if (empty($id)) return $this;
 
         $node = new Node($this->mainNode, $id, $val);
 
@@ -107,12 +115,13 @@ abstract class AbstractNode {
      *
      * @param $key
      * @param $val
+     *
      * @return mixed
      */
     public function set($key, $val)
     {
         // set the variable
-        if ( empty($key) ) return $this;
+        if (empty($key)) return $this;
 
         $node = new Node($this->mainNode, $key, $val);
         $this->mainNode->addChild($node);

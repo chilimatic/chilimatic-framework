@@ -30,7 +30,8 @@ class SessionNamespaceData
     /**
      * @param string $namespace
      */
-    public function __construct($namespace) {
+    public function __construct($namespace)
+    {
         $this->namespace = $namespace;
     }
 
@@ -80,12 +81,14 @@ class SessionNamespaceData
      *
      * @return $this
      */
-    public function set($key, $value) {
+    public function set($key, $value)
+    {
         if (!$key) {
             return $this;
         }
 
         $this->sessionData[$key] = $value;
+
         return $this;
     }
 
@@ -94,7 +97,8 @@ class SessionNamespaceData
      *
      * @return null
      */
-    public function get($key) {
+    public function get($key)
+    {
         if ($key === null || $key === '') {
             return null;
         }

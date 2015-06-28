@@ -11,9 +11,11 @@ namespace chilimatic\lib\request;
 
 /**
  * Class Get
+ *
  * @package chilimatic\lib\request
  */
-class Get extends Generic implements RequestInterface{
+class Get extends Generic implements RequestInterface
+{
 
     /**
      * singelton constructor
@@ -24,8 +26,7 @@ class Get extends Generic implements RequestInterface{
      */
     public static function getInstance(array $array = array())
     {
-        if (!(self::$instance instanceof Get))
-        {
+        if (!(self::$instance instanceof Get)) {
             // construct the object
             self::$instance = new Get($array);
         }

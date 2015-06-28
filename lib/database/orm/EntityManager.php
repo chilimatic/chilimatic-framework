@@ -77,9 +77,9 @@ class EntityManager
      */
     public function __construct(AbstractDatabase $db, AbstractQueryBuilder $queryBuilder = null)
     {
-        $this->db = $db;
+        $this->db           = $db;
         $this->queryBuilder = $queryBuilder;
-        $this->modelCache = new ModelCache();
+        $this->modelCache   = new ModelCache();
 
         if ($this->queryBuilder) {
             $this->queryBuilder->setDb($db);
@@ -101,7 +101,7 @@ class EntityManager
 
         foreach ($param as $set) {
             $value = &$set[1];
-            $key = $set[0];
+            $key   = $set[0];
             $stmt->bindParam($key, $value);
         }
 
@@ -114,12 +114,13 @@ class EntityManager
      *
      * @return AbstractModel|EntityObjectStorage
      */
-    public function executeQuery($model,\PDOStatement $stmt)
+    public function executeQuery($model, \PDOStatement $stmt)
     {
         if ($stmt->execute()) {
-            if ( $stmt->rowCount() > 1) {
+            if ($stmt->rowCount() > 1) {
                 return $this->getList($model, $stmt);
             }
+
             return $this->hydrate($model, $stmt->fetchObject());
         } else {
             $this->log(ILog::T_ERROR, implode(',', $stmt->errorInfo()));
@@ -141,7 +142,7 @@ class EntityManager
         /**
          * @var $stmt \PDOStatement
          */
-        while($row = $stmt->fetchObject()) {
+        while ($row = $stmt->fetchObject()) {
             $container->attach($this->hydrate(clone $model, $row));
         }
 
@@ -156,8 +157,9 @@ class EntityManager
      *
      * @return array
      */
-    public function prepareParam(array $param = null) {
-        if (!$param){
+    public function prepareParam(array $param = null)
+    {
+        if (!$param) {
             return [];
         }
         $ret = [];
@@ -177,13 +179,12 @@ class EntityManager
     public function findBy(AbstractModel $model, $param = [])
     {
         if ($this->useCache && $this->modelCache) {
-            if ($ret = $this->modelCache->get($model, $param))
-            {
+            if ($ret = $this->modelCache->get($model, $param)) {
                 return $ret;
             }
         }
 
-        $query = $this->queryBuilder->generateSelectForModel($model, $param);
+        $query  = $this->queryBuilder->generateSelectForModel($model, $param);
         $result = $this->executeQuery(
             $model,
             $this->prepare(
@@ -207,7 +208,7 @@ class EntityManager
      */
     public function findOneBy(AbstractModel $model, $param = [])
     {
-        $query = $this->queryBuilder->generateSelectForModel($model, $param);
+        $query  = $this->queryBuilder->generateSelectForModel($model, $param);
         $result = $this->executeQuery(
             $model,
             $this->prepare(
@@ -221,6 +222,7 @@ class EntityManager
         }
 
         $result->rewind();
+
         return $result->current();
     }
 
@@ -236,11 +238,11 @@ class EntityManager
             return $model;
         }
 
-        $p = (array) get_object_vars($row);
+        $p = (array)get_object_vars($row);
 
         foreach ($p as $property => $value) {
             $property = str_replace('_', '', $property);
-            $m = self::setterPrefix. ucfirst($property);
+            $m        = self::setterPrefix . ucfirst($property);
             if (method_exists($model, $m)) {
                 $model->$m($value);
             }
@@ -265,7 +267,7 @@ class EntityManager
         foreach ($this->queryBuilder->fetchCacheData($model)['relationList'] as $relation) {
             $injectionModel = new $relation[1]();
             if (strpos($relation[1], '\\') !== false) {
-                $tmp = explode('\\', $relation[1]);
+                $tmp      = explode('\\', $relation[1]);
                 $property = array_pop($tmp);
             } else {
                 $property = $relation[1];
@@ -298,6 +300,7 @@ class EntityManager
         $this->modelCache->set($model);
 
         $stmt = $this->prepare($data[0], $data[1]);
+
         return $stmt->execute();
     }
 
@@ -309,6 +312,7 @@ class EntityManager
     public function setQueryBuilder(AbstractQueryBuilder $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
+
         return $this;
     }
 
@@ -327,7 +331,8 @@ class EntityManager
      */
     public function setLazyLoading($lazyLoading)
     {
-        $this->lazyLoading = (bool) $lazyLoading;
+        $this->lazyLoading = (bool)$lazyLoading;
+
         return $this;
     }
 
@@ -347,6 +352,7 @@ class EntityManager
     public function setDb($db)
     {
         $this->db = $db;
+
         return $this;
     }
 
@@ -373,7 +379,7 @@ class EntityManager
      */
     public function setUseCache($useCache)
     {
-        $this->useCache = (bool) $useCache;
+        $this->useCache = (bool)$useCache;
 
         return $this;
     }

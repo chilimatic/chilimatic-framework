@@ -8,7 +8,8 @@
 
 namespace chilimatic\lib\log\client;
 
-class PrintOut extends AbstractClient {
+class PrintOut extends AbstractClient
+{
 
     public function send()
     {

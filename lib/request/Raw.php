@@ -14,7 +14,8 @@ namespace chilimatic\lib\request;
  *
  * @package chilimatic\lib\request
  */
-class Raw extends Generic implements RequestInterface {
+class Raw extends Generic implements RequestInterface
+{
 
 
     /**
@@ -26,8 +27,7 @@ class Raw extends Generic implements RequestInterface {
      */
     public static function getInstance(array $array = array())
     {
-        if (!(self::$instance instanceof Raw))
-        {
+        if (!(self::$instance instanceof Raw)) {
             // construct the object
             self::$instance = new Raw($array);
         }

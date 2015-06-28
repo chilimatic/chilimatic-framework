@@ -2,17 +2,18 @@
 /**
  *
  * @author j
- * 
- * 
+ *
+ *
  */
 
 namespace chilimatic\lib\generator;
+
 use chilimatic\lib\file\File;
 
 
 /**
  * Class generator
- * 
+ *
  * @author j
  */
 abstract class CGenerator
@@ -37,11 +38,11 @@ abstract class CGenerator
 
     /**
      * path to the template file
-     * 
+     *
      * @var string
      */
     public $tpl_path = '';
-    
+
     /**
      * mysql numeric object list
      *
@@ -154,19 +155,19 @@ abstract class CGenerator
      * @var string
      */
     public $extend_class = 'Base';
-    
-    
+
+
     /**
      * is_final [final class]
-     * 
+     *
      * @var bool
      */
     public $is_final = false;
-    
-    
+
+
     /**
      * list of parameter for the constructor
-     * 
+     *
      * @var string
      */
     public $constructor_param_list = '';
@@ -177,34 +178,34 @@ abstract class CGenerator
      * @var bool
      */
     public $is_abstract = false;
-    
+
     /**
      * interface names which are implemented
      *
      * @var string
      */
     public $implement_interface = '';
-    
+
     /**
      * array with replacement values
      * #KEY# will be replaced with $value
+     *
      * @var array
      */
-	public $tpl_replacements = array();
-    
-    
+    public $tpl_replacements = array();
+
+
     /**
      * constructor
      *
-     * @param $db object           
-     * @param $table_name string           
+     * @param $db         object
+     * @param $table_name string
      */
-    public function __construct($db , $table_name = '')
+    public function __construct($db, $table_name = '')
     {
-        $this->db = $db;
+        $this->db         = $db;
         $this->table_name = $table_name;
     }
-
 
 
     /**
@@ -217,20 +218,22 @@ abstract class CGenerator
     {
 
         /**
-         * generates the spaces 
-         * 
+         * generates the spaces
+         *
          * @param int $amount
+         *
          * @return string
          */
         function gen_spaces($amount)
         {
             $spaces = '';
-            for ($i = 0; $i < $amount ; $i++) {
+            for ($i = 0; $i < $amount; $i++) {
                 $spaces .= ' ';
             }
+
             return $spaces;
         }
-        
+
         if (empty($this->table_model)) {
             return false;
         }
@@ -248,33 +251,34 @@ abstract class CGenerator
         }
 
         $this->tpl_replacements['class_name'] = $this->class_name;
-        $file = new File();
-        $file->open($this->tpl_path);     
+        $file                                 = new File();
+        $file->open($this->tpl_path);
 
-        $this->generated_code =  $file->read();
-        
+        $this->generated_code = $file->read();
+
         foreach ($this->tpl_replacements as $pattern => $value) {
             if (!is_string($value)) continue;
 
-            $pattern = '#' . strtoupper($pattern) . '#';
+            $pattern              = '#' . strtoupper($pattern) . '#';
             $this->generated_code = str_replace($pattern, $value, $this->generated_code);
         }
 
         $this->generated_code = str_replace("\t", gen_spaces(self::SPACE_AMOUNT), $this->generated_code);
+
         return true;
     }
-    
+
     abstract public function init();
 
 
     /**
      * generates the class definiton
-     * 
+     *
      * @return boolean
      */
     public function generate_class_definition()
     {
-        $this->tpl_replacements['class_definition'] = '';
+        $this->tpl_replacements['class_definition']      = '';
         $this->tpl_replacements['class_definition_list'] = '';
         if ($this->is_final == true) {
             $this->tpl_replacements['class_definition'] .= 'final ';
@@ -315,13 +319,13 @@ abstract class CGenerator
     {
 
         if (empty($this->table_name)) return false;
-        
+
         $tmp = null;
-        
+
         if (strpos($this->table_name, '_') !== false) {
             $tmp = explode('_', $this->table_name);
         }
-        
+
         if (!empty($tmp)) {
             foreach ($tmp as $val) {
                 $this->table_short_tag .= strtolower(substr($val, 0, 1));
@@ -329,8 +333,9 @@ abstract class CGenerator
         } else {
             $this->table_short_tag .= strtolower(substr($this->table_name, 0, 1));
         }
-        
+
         $this->tpl_replacements['table_short_tag'] = $this->table_short_tag;
+
         return true;
     }
 

@@ -3,10 +3,10 @@
  * Mysql database abstraction class
  * please feel free to add or modify this class as you like
  * as long you don't spoil the old functionality
- * 
- * @author j
+ *
+ * @author  j
  * @version $id$
- * 
+ *
  */
 
 namespace chilimatic\lib\database\mysql;
@@ -80,15 +80,16 @@ class Mysql extends AbstractDatabase
      */
     CONST NO_RESSOURCE = 4;
 
-   /**
-    * to be pdo compatible -> i just copied the pdo variables
-    *
-    * Specifies that the fetch method shall return each row as an object with
-    * variable names that correspond to the column names returned in the result
-    * set. <b>PDO::FETCH_LAZY</b> creates the object variable names as they are accessed.
-    * Not valid inside <b>PDOStatement::fetchAll</b>.
-    * @link http://php.net/manual/en/pdo.constants.php
-    */
+    /**
+     * to be pdo compatible -> i just copied the pdo variables
+     *
+     * Specifies that the fetch method shall return each row as an object with
+     * variable names that correspond to the column names returned in the result
+     * set. <b>PDO::FETCH_LAZY</b> creates the object variable names as they are accessed.
+     * Not valid inside <b>PDOStatement::fetchAll</b>.
+     *
+     * @link http://php.net/manual/en/pdo.constants.php
+     */
     const FETCH_LAZY = 1;
 
     /**
@@ -97,6 +98,7 @@ class Mysql extends AbstractDatabase
      * set contains multiple columns with the same name,
      * <b>PDO::FETCH_ASSOC</b> returns
      * only a single value per column name.
+     *
      * @link http://php.net/manual/en/pdo.constants.php
      */
     const FETCH_ASSOC = 2;
@@ -105,6 +107,7 @@ class Mysql extends AbstractDatabase
      * Specifies that the fetch method shall return each row as an array indexed
      * by column number as returned in the corresponding result set, starting at
      * column 0.
+     *
      * @link http://php.net/manual/en/pdo.constants.php
      */
     const FETCH_NUM = 3;
@@ -113,6 +116,7 @@ class Mysql extends AbstractDatabase
      * Specifies that the fetch method shall return each row as an array indexed
      * by both column name and number as returned in the corresponding result set,
      * starting at column 0.
+     *
      * @link http://php.net/manual/en/pdo.constants.php
      */
     const FETCH_BOTH = 4;
@@ -121,6 +125,7 @@ class Mysql extends AbstractDatabase
      * Specifies that the fetch method shall return each row as an object with
      * property names that correspond to the column names returned in the result
      * set.
+     *
      * @link http://php.net/manual/en/pdo.constants.php
      */
     const FETCH_OBJ = 5;
@@ -130,6 +135,7 @@ class Mysql extends AbstractDatabase
      * the columns in the result set to the PHP variables to which they were
      * bound with the <b>PDOStatement::bindParam</b> or
      * <b>PDOStatement::bindColumn</b> methods.
+     *
      * @link http://php.net/manual/en/pdo.constants.php
      */
     const FETCH_BOUND = 6;
@@ -137,6 +143,7 @@ class Mysql extends AbstractDatabase
     /**
      * Specifies that the fetch method shall return only a single requested
      * column from the next row in the result set.
+     *
      * @link http://php.net/manual/en/pdo.constants.php
      */
     const FETCH_COLUMN = 7;
@@ -147,6 +154,7 @@ class Mysql extends AbstractDatabase
      * The magic
      * <b>__set</b>
      * method is called if the property doesn't exist in the requested class
+     *
      * @link http://php.net/manual/en/pdo.constants.php
      */
     const FETCH_CLASS = 8;
@@ -154,6 +162,7 @@ class Mysql extends AbstractDatabase
     /**
      * Specifies that the fetch method shall update an existing instance of the
      * requested class, mapping the columns to named properties in the class.
+     *
      * @link http://php.net/manual/en/pdo.constants.php
      */
     const FETCH_INTO = 9;
@@ -161,6 +170,7 @@ class Mysql extends AbstractDatabase
     /**
      * Allows completely customize the way data is treated on the fly (only
      * valid inside <b>PDOStatement::fetchAll</b>).
+     *
      * @link http://php.net/manual/en/pdo.constants.php
      */
     const FETCH_FUNC = 10;
@@ -169,12 +179,14 @@ class Mysql extends AbstractDatabase
      * Group return by values. Usually combined with
      * <b>PDO::FETCH_COLUMN</b> or
      * <b>PDO::FETCH_KEY_PAIR</b>.
+     *
      * @link http://php.net/manual/en/pdo.constants.php
      */
     const FETCH_GROUP = 65536;
 
     /**
      * Fetch only the unique values.
+     *
      * @link http://php.net/manual/en/pdo.constants.php
      */
     const FETCH_UNIQUE = 196608;
@@ -182,12 +194,14 @@ class Mysql extends AbstractDatabase
     /**
      * Fetch a two-column result into an array where the first column is a key and the second column
      * is the value. Available since PHP 5.2.3.
+     *
      * @link http://php.net/manual/en/pdo.constants.php
      */
     const FETCH_KEY_PAIR = 12;
 
     /**
      * Determine the class name from the value of first column.
+     *
      * @link http://php.net/manual/en/pdo.constants.php
      */
     const FETCH_CLASSTYPE = 262144;
@@ -195,12 +209,14 @@ class Mysql extends AbstractDatabase
     /**
      * As <b>PDO::FETCH_INTO</b> but object is provided as a serialized string.
      * Available since PHP 5.1.0.
+     *
      * @link http://php.net/manual/en/pdo.constants.php
      */
     const FETCH_SERIALIZE = 524288;
 
     /**
      * Available since PHP 5.2.0
+     *
      * @link http://php.net/manual/en/pdo.constants.php
      */
     const FETCH_PROPS_LATE = 1048576;
@@ -211,6 +227,7 @@ class Mysql extends AbstractDatabase
      * set contains multiple columns with the same name,
      * <b>PDO::FETCH_NAMED</b> returns
      * an array of values per column name.
+     *
      * @link http://php.net/manual/en/pdo.constants.php
      */
     const FETCH_NAMED = 11;
@@ -302,9 +319,9 @@ class Mysql extends AbstractDatabase
      * @throws DatabaseException
      * @throws \Exception
      */
-    public function __construct( AbstractConnection $masterConnection, AbstractConnection $slaveConnection = null)
+    public function __construct(AbstractConnection $masterConnection, AbstractConnection $slaveConnection = null)
     {
-        if ( !$masterConnection->isValid() ) return;
+        if (!$masterConnection->isValid()) return;
 
         $this->masterConnection = $masterConnection;
         $this->connect($this->masterConnection);
@@ -321,10 +338,10 @@ class Mysql extends AbstractDatabase
      */
     final public function __clone()
     {
-        if ( empty($this->_master_host) ) return;
+        if (empty($this->_master_host)) return;
         $this->connect($this->masterConnection);
-        
-        if ( empty($this->_slave_host) ) return;
+
+        if (empty($this->_slave_host)) return;
         $this->connect($this->slaveConnection);
     }
 
@@ -334,10 +351,10 @@ class Mysql extends AbstractDatabase
      */
     final public function __wakeup()
     {
-        if ( $this->masterConnection ) return;
+        if ($this->masterConnection) return;
         $this->connect($this->masterConnection);
-        
-        if ( $this->slaveConnection ) return;
+
+        if ($this->slaveConnection) return;
         $this->connect($this->slaveConnection);
     }
 
@@ -347,7 +364,8 @@ class Mysql extends AbstractDatabase
      *
      * @return bool
      */
-    public function commit(){
+    public function commit()
+    {
         return $this->query('commit');
     }
 
@@ -362,9 +380,8 @@ class Mysql extends AbstractDatabase
      */
     public function connect(MysqlConnection $connection)
     {
-        try
-        {
-            if ( !$connection->isValid() ) {
+        try {
+            if (!$connection->isValid()) {
                 throw new DatabaseException(__METHOD__ . _(sprintf(" One or More missing Parameters \nhost:%s\nusername:\n%s\npassword:%s"), $connection->getHost(), $connection->getUsername(), $connection->getPassword()), self::ERR_NO_CREDENTIALS, self::SEVERITY_LOG, __FILE__, __LINE__);
             }
             // because mariadb has a completely new header setting
@@ -374,7 +391,7 @@ class Mysql extends AbstractDatabase
 
             // checks if it's connected or not
             $connection->setConnected($db ? true : false);
-            
+
             // if no connection to master and slave is possible
             if (!$connection->isConnected()) {
                 throw new DatabaseException(__METHOD__ . "\nConnection failure no ressource given", self::NO_RESSOURCE, self::SEVERITY_LOG, __FILE__, __LINE__);
@@ -384,10 +401,10 @@ class Mysql extends AbstractDatabase
             if ($this->_get_detail === true) {
                 $this->db_detail = $this->getDatabaseDetail($this);
             }
-            
+
             // sets the charset based on the client_encoding
-            $this->setCharset((!empty($this->db_detail) ? $this->db_detail->character_set_database : MysqlConnection::STANDARD_CHARSET) , $connection->getDb());
-        } catch ( DatabaseException $ed ) {
+            $this->setCharset((!empty($this->db_detail) ? $this->db_detail->character_set_database : MysqlConnection::STANDARD_CHARSET), $connection->getDb());
+        } catch (DatabaseException $ed) {
             throw $ed;
         }
 
@@ -400,7 +417,8 @@ class Mysql extends AbstractDatabase
     }
 
 
-    public function fetch($res, $mode = '') {
+    public function fetch($res, $mode = '')
+    {
 
     }
 
@@ -426,17 +444,17 @@ class Mysql extends AbstractDatabase
 
         $result = array();
         try {
-            if ( !$res ) {
+            if (!$res) {
                 throw new DatabaseException(__METHOD__ . " No ressource has been given", self::NO_RESSOURCE, self::SEVERITY_LOG, __FILE__, __LINE__);
             }
-            
+
             while ($row = $res->fetch(\PDO::FETCH_ASSOC)) {
                 $result[] = $row[$col];
             }
-        } catch ( DatabaseException $e ) {
+        } catch (DatabaseException $e) {
             throw $e;
         }
-        
+
         return $result;
     }
 
@@ -449,7 +467,7 @@ class Mysql extends AbstractDatabase
      * @throws DatabaseException|\Exception
      * @return bool array
      */
-    public function fetchAssoc(\PDOStatement $res )
+    public function fetchAssoc(\PDOStatement $res)
     {
         return $res->fetchAll(\PDO::FETCH_ASSOC);
     }
@@ -466,37 +484,36 @@ class Mysql extends AbstractDatabase
      *
      * @return array bool
      */
-    public function fetchAssocList(\PDOStatement $res , $assign_by = null )
+    public function fetchAssocList(\PDOStatement $res, $assign_by = null)
     {
         $result = array();
-        try
-        {
-            while ( $row = $res->fetch(\PDO::FETCH_ASSOC) ) {
-                if ( !empty($assign_by) && !is_array($assign_by) ) {
-                    $result[$row[$assign_by]] = (array) $row;
-                } elseif ( !empty($assign_by) && is_array($assign_by) ) {
+        try {
+            while ($row = $res->fetch(\PDO::FETCH_ASSOC)) {
+                if (!empty($assign_by) && !is_array($assign_by)) {
+                    $result[$row[$assign_by]] = (array)$row;
+                } elseif (!empty($assign_by) && is_array($assign_by)) {
                     $key = array();
-                    foreach ( $assign_by as $key_w ) {
-                        if ( isset($row[$key_w]) ){
+                    foreach ($assign_by as $key_w) {
+                        if (isset($row[$key_w])) {
                             $key[] = $row[$key_w];
                         }
                     }
-                    
-                    if ( empty($key) ) {
-                        $result[] = (object) $row;
+
+                    if (empty($key)) {
+                        $result[] = (object)$row;
                     } else {
                         // removes the first '- '
-                        $key = implode('-', $key);
-                        $result[$key] = (object) $row;
+                        $key          = implode('-', $key);
+                        $result[$key] = (object)$row;
                     }
                 } else {
-                    $result[] = (array) $row;
+                    $result[] = (array)$row;
                 }
             }
-        } catch ( DatabaseException $e ) {
+        } catch (DatabaseException $e) {
             throw $e;
         }
-        
+
         return $result;
     }
 
@@ -511,14 +528,14 @@ class Mysql extends AbstractDatabase
      *
      * @return \SplFixedArray
      */
-    public function fetchNumericList(\PDOStatement $res )
+    public function fetchNumericList(\PDOStatement $res)
     {
         $result = new \SplFixedArray($res->rowCount());
         try {
-            while ( $row = $res->fetch(\PDO::FETCH_NUM)) {
-                $result[] = (array) $row;
+            while ($row = $res->fetch(\PDO::FETCH_NUM)) {
+                $result[] = (array)$row;
             }
-        } catch ( DatabaseException $e ) {
+        } catch (DatabaseException $e) {
             throw $e;
         }
 
@@ -551,41 +568,39 @@ class Mysql extends AbstractDatabase
      * @throws DatabaseException|\Exception
      * @return array bool
      */
-    public function fetchObjectList(\PDOStatement $res , $assign_by = null )
+    public function fetchObjectList(\PDOStatement $res, $assign_by = null)
     {
-        try
-        {
+        try {
             $result = [];
-            
-            while ( $row = $res->fetch(\PDO::FETCH_OBJ) ) {
-                if ( !empty($assign_by) && !is_array($assign_by) ) {
-                    $result[$row->$assign_by] = (object) $row;
+
+            while ($row = $res->fetch(\PDO::FETCH_OBJ)) {
+                if (!empty($assign_by) && !is_array($assign_by)) {
+                    $result[$row->$assign_by] = (object)$row;
                 } elseif (!empty($assign_by) && is_array($assign_by)) {
                     $key = array();
-                    foreach ( $assign_by as $key_w ){
+                    foreach ($assign_by as $key_w) {
                         if (property_exists($row, $key_w)) {
                             $key[] = $row->$key_w;
                         }
                     }
-                    
-                    if ( empty($key) ) {
-                        $result[] = (object) $row;
+
+                    if (empty($key)) {
+                        $result[] = (object)$row;
                     } else {
                         // removes the first '- '
-                        $key = implode('-', $key);
-                        $result[$key] = (object) $row;
+                        $key          = implode('-', $key);
+                        $result[$key] = (object)$row;
                     }
                 } else {
-                    $result[] = (object) $row;
+                    $result[] = (object)$row;
                 }
             }
-        } catch ( DatabaseException $e ) {
+        } catch (DatabaseException $e) {
             throw $e;
         }
-        
+
         return $result;
     }
-
 
 
     /**
@@ -597,7 +612,7 @@ class Mysql extends AbstractDatabase
      */
     public function fetchString(\PDOStatement $res)
     {
-        return (string) $res->fetch(\PDO::FETCH_NUM)[0];
+        return (string)$res->fetch(\PDO::FETCH_NUM)[0];
     }
 
 
@@ -609,26 +624,30 @@ class Mysql extends AbstractDatabase
      * @throws \chilimatic\lib\exception\DatabaseException|\Exception
      * @return bool
      */
-    public function free( $res )
+    public function free($res)
     {
         $res->free();
+
         return true;
     }
 
     /**
      *
      * @param string $query
+     *
      * @return \PDOStatement
      * @throws \chilimatic\lib\exception\DatabaseException
      * @throws \Exception
      */
-    public function prepare($query = ''){
+    public function prepare($query = '')
+    {
         try {
             if (empty($query)) return false;
 
             if (empty($this->db)) {
                 throw new DatabaseException(__METHOD__ . " No Database Connection opened", self::NO_RESSOURCE, self::SEVERITY_DEBUG, __FILE__, __LINE__);
             }
+
             return $this->db->getDb()->prepare($query);
         } catch (DatabaseException $e) {
             throw $e;
@@ -640,17 +659,17 @@ class Mysql extends AbstractDatabase
      * wrapper for the db_detail object the parameter should be a valid db
      * object
      *
-     * @param \chilimatic\lib\database\mysql\mysql|object$db
+     * @param \chilimatic\lib\database\mysql\mysql|object $db
      *
      * @return MysqlDetail
      */
-    public function getDatabaseDetail(Mysql $db = null )
+    public function getDatabaseDetail(Mysql $db = null)
     {
 
-        if ( empty($db) || empty($db->db) ) {
+        if (empty($db) || empty($db->db)) {
             $db = $this;
         }
-        
+
         return new MysqlDetail($db);
     }
 
@@ -659,28 +678,32 @@ class Mysql extends AbstractDatabase
      *
      * @return bool
      */
-    public function execute($query) {
-        return (bool) $this->getDb()->getDb()->exec($query);
+    public function execute($query)
+    {
+        return (bool)$this->getDb()->getDb()->exec($query);
     }
 
     /**
      * @return string
      */
-    public function lastQuery(){
-        return (string) $this->lastSql;
+    public function lastQuery()
+    {
+        return (string)$this->lastSql;
     }
 
     /**
      * @return bool
      */
-    public function isConnected() {
+    public function isConnected()
+    {
         return $this->db->isConnected();
     }
 
     /**
      * @return AbstractConnection|MysqlConnection
      */
-    public function getDb() {
+    public function getDb()
+    {
         return $this->db->getDb();
     }
 
@@ -690,55 +713,50 @@ class Mysql extends AbstractDatabase
      *
      * @throws DatabaseException
      *
-     * @param $query string            
+     * @param $query string
      *
      * @return resource
      */
-    public function query( $query )
+    public function query($query)
     {
         $db = $this->getDb();
-        if ( empty($query) || !$db ) return false;
+        if (empty($query) || !$db) return false;
 
 
         // if the resource type is not a mysql link it should try to reconnect
-        if ( !$db->isConnected() ) $db->ping();
-        
+        if (!$db->isConnected()) $db->ping();
+
         // the last sql query
-        $this->lastSql = (string) $query;
-        
+        $this->lastSql = (string)$query;
+
 
         // if the master is down a select may query the slave but it should not
         // insert anything
-        if ( $this->slaveConnection === $this->getDb() && stripos(trim($query), 'SELECT') !== 0 )
-        {
+        if ($this->slaveConnection === $this->getDb() && stripos(trim($query), 'SELECT') !== 0) {
             throw new DatabaseException(__METHOD__ . ' no Select on slave, abort !!', self::ERR_CONN, self::SEVERITY_LOG, __FILE__, __LINE__);
         }
-        
+
         // tries execute the query and fetches the result
-        $res = $db->getDb()->query($query);
+        $res             = $db->getDb()->query($query);
         $this->insert_id = $db->getDb()->insert_id;
 
-        try
-        {
+        try {
             // in cases of errors
-            if ( !$res )
-            {
-                $this->error = $db->getDb()->errorCode();
+            if (!$res) {
+                $this->error   = $db->getDb()->errorCode();
                 $this->errorno = $db->getDb()->errorCode();
                 throw new DatabaseException(__METHOD__ . "\nsql: $this->lastSql\nsql_error:$this->error\nsql_errorno:$this->errorno", self::ERR_EXEC, self::SEVERITY_LOG, __FILE__, __LINE__);
             }
-        }
-        catch ( DatabaseException $e )
-        {
-            if ( Config::get('use_exception') !== true ) return false;
+        } catch (DatabaseException $e) {
+            if (Config::get('use_exception') !== true) return false;
             throw $e;
         }
-        
+
         // reset old errors
-        $this->error = '';
-        $this->errorno = 0;
+        $this->error         = '';
+        $this->errorno       = 0;
         $this->affected_rows = $db->getDb()->affected_rows;
-        
+
         return $res;
     }
 
@@ -748,7 +766,8 @@ class Mysql extends AbstractDatabase
      *
      * @return bool
      */
-    public function rollback(){
+    public function rollback()
+    {
         return $this->query('rollback;');
     }
 
@@ -763,16 +782,16 @@ class Mysql extends AbstractDatabase
      *
      * @return bool
      */
-    public function selectDb( $dbname , \PDO $db)
+    public function selectDb($dbname, \PDO $db)
     {
-        if ( empty($db) || empty($dbname) ) return false;
+        if (empty($db) || empty($dbname)) return false;
         try {
-            if ( !$db->query("USE `$dbname`") ) {
-                $this->error = (string) $db->errorInfo();
-                $this->errorno = (int) $db->errorCode();
+            if (!$db->query("USE `$dbname`")) {
+                $this->error   = (string)$db->errorInfo();
+                $this->errorno = (int)$db->errorCode();
                 throw new DatabaseException(__METHOD__ . "\nsql_error: $this->error\nsql_errorno:$this->errorno", self::ERR_EXEC, self::SEVERITY_LOG, __FILE__, __LINE__);
             }
-        } catch ( DatabaseException $e ) {
+        } catch (DatabaseException $e) {
             throw $e;
         }
 
@@ -789,24 +808,24 @@ class Mysql extends AbstractDatabase
      * @throws DatabaseException|\Exception
      * @return bool
      */
-    public function setCharset( $charset = 'UTF8', \PDO $db)
+    public function setCharset($charset = 'UTF8', \PDO $db)
     {
-        try
-        {
-            if ( empty($charset) || !$db ) {
+        try {
+            if (empty($charset) || !$db) {
                 throw new DatabaseException(__METHOD__ . "\ncharset:$charset\nressource:" . print_r($this->db, true), self::ERR_EXEC, self::SEVERITY_LOG, __FILE__, __LINE__);
             }
-            
-            $this->mysqli_client_encoding = (string) $charset;
-            
-            if ( $this->db_detail ) {
-                $this->db_detail->character_set_client = (string) $charset;
+
+            $this->mysqli_client_encoding = (string)$charset;
+
+            if ($this->db_detail) {
+                $this->db_detail->character_set_client = (string)$charset;
             }
-        } catch ( DatabaseException $e ) {
+        } catch (DatabaseException $e) {
             throw $e;
         }
 
         $db->exec("set names $charset");
+
         return true;
     }
 
@@ -819,6 +838,7 @@ class Mysql extends AbstractDatabase
     public function beginTransaction()
     {
         $this->getDb()->beginTransaction();
+
         return true;
     }
 
@@ -830,6 +850,7 @@ class Mysql extends AbstractDatabase
     public function endTransaction()
     {
         $this->getDb()->commit();
+
         return true;
     }
 
@@ -840,7 +861,7 @@ class Mysql extends AbstractDatabase
      */
     public function __destruct()
     {
-        if ( is_resource($this->masterConnection) ) mysqli_close($this->masterConnection->getDb());
-        if ( is_resource($this->slaveConnection) ) mysqli_close($this->slaveConnection->getDb());
+        if (is_resource($this->masterConnection)) mysqli_close($this->masterConnection->getDb());
+        if (is_resource($this->slaveConnection)) mysqli_close($this->slaveConnection->getDb());
     }
 }

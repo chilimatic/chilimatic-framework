@@ -10,8 +10,10 @@ namespace chilimatic\lib\exception;
 
 /**
  * Class Dependency
+ *
  * @package chilimatic\lib\exception
  */
-class DependencyException extends \LogicException {
+class DependencyException extends \LogicException
+{
 
 }

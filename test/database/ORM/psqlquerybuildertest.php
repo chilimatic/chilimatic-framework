@@ -14,14 +14,17 @@ require_once '../../../app/general/init.php';
 );
 
 
-class PSQL_Query_Builder_Test extends PHPUnit_Framework_TestCase{
+class PSQL_Query_Builder_Test extends PHPUnit_Framework_TestCase
+{
 
-    public function testAbstraction() {
+    public function testAbstraction()
+    {
         $queryBuilder = new \chilimatic\lib\database\orm\PgsqlQueryBuilder();
         $this->assertInstanceOf('\chilimatic\lib\database\orm\AbstractQueryBuilder', $queryBuilder);
     }
 
-    public function testConnection() {
+    public function testConnection()
+    {
 
     }
 }

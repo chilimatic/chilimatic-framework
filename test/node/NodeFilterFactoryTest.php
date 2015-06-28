@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @author j
@@ -7,7 +8,6 @@
  *
  * File: NodeFilterFactoryTest.php
  */
-
 class NodeFilterFactoryTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -15,7 +15,7 @@ class NodeFilterFactoryTest extends PHPUnit_Framework_TestCase
      */
     public function nodeFilterInstances()
     {
-       $this->assertInstanceOf('\chilimatic\lib\datastructure\graph\filter\Factory', new \chilimatic\lib\datastructure\graph\filter\Factory());
+        $this->assertInstanceOf('\chilimatic\lib\datastructure\graph\filter\Factory', new \chilimatic\lib\datastructure\graph\filter\Factory());
     }
 
     /**
@@ -33,7 +33,8 @@ class NodeFilterFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function nodeFilterFactoryStaticSetTransformer() {
+    public function nodeFilterFactoryStaticSetTransformer()
+    {
         \chilimatic\lib\datastructure\graph\filter\FactoryStatic::setTransformer(new chilimatic\lib\transformer\string\DynamicObjectCallName());
         $this->assertInstanceOf('\chilimatic\lib\transformer\string\DynamicObjectCallName', \chilimatic\lib\datastructure\graph\filter\FactoryStatic::getTransformer());
     }

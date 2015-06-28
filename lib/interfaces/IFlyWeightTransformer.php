@@ -13,7 +13,8 @@ namespace chilimatic\lib\interfaces;
 /**
  * Interface IFlyWeightTransformer
  */
-interface IFlyWeightTransformer {
+interface IFlyWeightTransformer
+{
 
     /**
      * @param $content

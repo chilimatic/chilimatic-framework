@@ -52,6 +52,7 @@ class ModelCache
                 return $model;
             }
         }
+
         return null;
     }
 

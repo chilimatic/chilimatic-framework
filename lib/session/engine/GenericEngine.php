@@ -54,11 +54,12 @@ abstract class GenericEngine implements SessionEngineInterface, \SplSubject
      *
      * @param [] $config
      */
-    public function __construct($config = []) {
+    public function __construct($config = [])
+    {
 
         // init script
         $this->initTrait();
-        if ( !$this->init($config) ) return;
+        if (!$this->init($config)) return;
 
 
         // Read the maxlifetime setting from PHP
@@ -86,7 +87,7 @@ abstract class GenericEngine implements SessionEngineInterface, \SplSubject
 
         // override config [optional]
         $this->sessionLifeTime = isset($config['session_lifetime']) ? $config['session_lifetime'] : $this->sessionLifeTime;
-        $this->sessionKey =  isset($config['session_key']) ? $config['session_key'] : $this->sessionKey;
+        $this->sessionKey      = isset($config['session_key']) ? $config['session_key'] : $this->sessionKey;
         // start the session
         session_start();
     }
@@ -95,6 +96,7 @@ abstract class GenericEngine implements SessionEngineInterface, \SplSubject
      * init method to add tables or other needed behaviour
      *
      * @param array $config
+     *
      * @return mixed
      */
     abstract public function init($config = []);
@@ -103,27 +105,31 @@ abstract class GenericEngine implements SessionEngineInterface, \SplSubject
      * reads a specific session
      *
      * @param string $sessionId
+     *
      * @return mixed
      */
-    abstract public function session_read( $sessionId );
+    abstract public function session_read($sessionId);
 
     /**
      * writes a specific session
      *
      * @param string $sessionId
      * @param mixed $sessionData
+     *
      * @return mixed
      */
-    abstract public function session_write( $sessionId , $sessionData );
+    abstract public function session_write($sessionId, $sessionData);
 
     /**
      * opens a specific session
      *
      * @param string $savePath
      * @param string $sessionName
+     *
      * @return mixed
      */
-    public function session_open( $savePath , $sessionName ) {
+    public function session_open($savePath, $sessionName)
+    {
         // Don't need to do anything. Just return TRUE.
         return true;
     }
@@ -133,7 +139,8 @@ abstract class GenericEngine implements SessionEngineInterface, \SplSubject
      *
      * @return mixed
      */
-    public function session_gc() {
+    public function session_gc()
+    {
         return true;
     }
 
@@ -141,16 +148,18 @@ abstract class GenericEngine implements SessionEngineInterface, \SplSubject
      * destroys the session
      *
      * @param $sessionId
+     *
      * @return mixed
      */
-    abstract function session_destroy( $sessionId );
+    abstract function session_destroy($sessionId);
 
     /**
      * close the session
      *
      * @return mixed
      */
-    public function session_close() {
+    public function session_close()
+    {
         // return true atm there is nothing specific needed
         return true;
     }
@@ -158,7 +167,8 @@ abstract class GenericEngine implements SessionEngineInterface, \SplSubject
     /**
      * call for the garbage collector
      */
-    public function __destruct() {
+    public function __destruct()
+    {
         // notify the observer so it can write the session data
         // before it's destroyed
         $this->notify();
@@ -180,7 +190,8 @@ abstract class GenericEngine implements SessionEngineInterface, \SplSubject
     public function setSessionData(array $sessionData)
     {
         $this->sessionData = $sessionData;
-        $_SESSION = $this->sessionData;
+        $_SESSION          = $this->sessionData;
+
         return $this;
     }
 }

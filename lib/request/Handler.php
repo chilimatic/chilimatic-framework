@@ -17,9 +17,11 @@ namespace chilimatic\lib\request;
 
 /**
  * Class Handler
+ *
  * @package chilimatic\lib\request
  */
-class Handler extends \stdClass implements RequestInterface {
+class Handler extends \stdClass implements RequestInterface
+{
 
     /**
      * Post object
@@ -89,7 +91,8 @@ class Handler extends \stdClass implements RequestInterface {
      *
      * @return mixed
      */
-    private function parseRawData($data) {
+    private function parseRawData($data)
+    {
         switch (true) {
             case strpos($data, '{') === 0:
                 return json_decode($data, true);
@@ -101,7 +104,8 @@ class Handler extends \stdClass implements RequestInterface {
     }
 
 
-    private function __clone() {
+    private function __clone()
+    {
 
     }
 
@@ -114,8 +118,7 @@ class Handler extends \stdClass implements RequestInterface {
      */
     public static function getInstance(array $param = array())
     {
-        if (!(self::$instance instanceof \chilimatic\lib\request\Handler))
-        {
+        if (!(self::$instance instanceof \chilimatic\lib\request\Handler)) {
             // construct the object
             self::$instance = new self();
         }
@@ -149,6 +152,7 @@ class Handler extends \stdClass implements RequestInterface {
     public function setCli(\chilimatic\lib\request\Cli $cli)
     {
         $this->cli = $cli;
+
         return $this;
     }
 
@@ -158,7 +162,7 @@ class Handler extends \stdClass implements RequestInterface {
     public function getFile()
     {
         if ($this->file === null) {
-            $this->file = File::getInstance((array) $_FILES);
+            $this->file = File::getInstance((array)$_FILES);
             // remove the $_FILES so no one is tempted
             unset ($_FILES);
         }
@@ -174,6 +178,7 @@ class Handler extends \stdClass implements RequestInterface {
     public function setFile(\chilimatic\lib\request\File $file)
     {
         $this->file = $file;
+
         return $this;
     }
 
@@ -183,7 +188,7 @@ class Handler extends \stdClass implements RequestInterface {
     public function getGet()
     {
         if ($this->get === null) {
-            $this->get = Get::getInstance((array) $_GET);
+            $this->get = Get::getInstance((array)$_GET);
             // remove the $_GET so no one is tempted!
             unset ($_GET);
         }
@@ -199,6 +204,7 @@ class Handler extends \stdClass implements RequestInterface {
     public function setGet(\chilimatic\lib\request\Get $get)
     {
         $this->get = $get;
+
         return $this;
     }
 
@@ -208,7 +214,7 @@ class Handler extends \stdClass implements RequestInterface {
     public function getPost()
     {
         if ($this->post === null) {
-            $this->post = Post::getInstance((array) $_POST);
+            $this->post = Post::getInstance((array)$_POST);
             // remove the $_POST so no one is tempted
             unset ($_POST);
         }
@@ -224,6 +230,7 @@ class Handler extends \stdClass implements RequestInterface {
     public function setPost(\chilimatic\lib\request\Post $post)
     {
         $this->post = $post;
+
         return $this;
     }
 
@@ -232,9 +239,8 @@ class Handler extends \stdClass implements RequestInterface {
      */
     public function getRequest()
     {
-        if ($this->request === null)
-        {
-            $this->request = Request::getInstance((array) $_REQUEST);
+        if ($this->request === null) {
+            $this->request = Request::getInstance((array)$_REQUEST);
             unset($_REQUEST);
         }
 
@@ -249,6 +255,7 @@ class Handler extends \stdClass implements RequestInterface {
     public function setRequest(\chilimatic\lib\request\Request $request)
     {
         $this->request = $request;
+
         return $this;
     }
 
@@ -256,14 +263,16 @@ class Handler extends \stdClass implements RequestInterface {
     /**
      * @return string
      */
-    public function parsePath() {
+    public function parsePath()
+    {
         $this->path = !empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';;
     }
 
     /**
      * @return string|null
      */
-    public function getPath() {
+    public function getPath()
+    {
         if ($this->path != '') {
             return $this->path;
         }
@@ -278,7 +287,7 @@ class Handler extends \stdClass implements RequestInterface {
     public function getRaw()
     {
         if ($this->raw === null && ($data = file_get_contents('php://input'))) {
-            $this->raw = Raw::getInstance((array) $this->parseRawData($data));
+            $this->raw = Raw::getInstance((array)$this->parseRawData($data));
         } else {
             $this->raw = Raw::getInstance();
         }

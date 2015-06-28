@@ -33,7 +33,7 @@ Interface ILog
 
     /**
      * default log date filename
-     * 
+     *
      * @var string
      */
     CONST LOG_DATE_FILE = 'Y-m-d';
@@ -42,10 +42,10 @@ Interface ILog
     /**
      * constructor
      *
-     * @param $log_path string           
-     * @param $file_name string           
+     * @param $log_path  string
+     * @param $file_name string
      */
-    public function __construct( $file_name = '' , $log_path = '' );
+    public function __construct($file_name = '', $log_path = '');
 
 
     /**
@@ -56,7 +56,7 @@ Interface ILog
      *
      * @return
      */
-    public function write_log( $msg = '' , $log_level = 0 );
+    public function write_log($msg = '', $log_level = 0);
 
 
     /**

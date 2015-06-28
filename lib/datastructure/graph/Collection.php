@@ -11,18 +11,21 @@ namespace chilimatic\lib\datastructure\graph;
 
 /**
  * Class NodeList
+ *
  * @package chilimatic\Collection
  */
 class Collection
 {
     /**
      * list of all nodes
+     *
      * @var array|null
      */
     public $list = null;
 
     /**
      * list of all ids WITHIN ALL CHILD AN PARENT NODES !!!! this is a reference ! :)
+     *
      * @var array|null
      */
     public $idList = null;
@@ -40,7 +43,8 @@ class Collection
      * @param null|array $idList
      * @param null|array $keyList
      */
-    public function __construct(&$idList = null, &$keyList = null) {
+    public function __construct(&$idList = null, &$keyList = null)
+    {
 
         if ($idList !== null) {
             $this->idList = &$idList;
@@ -60,7 +64,8 @@ class Collection
      *
      * @return int
      */
-    public function count() {
+    public function count()
+    {
         return count($this->list);
     }
 
@@ -86,7 +91,7 @@ class Collection
             $this->keyList[$node->key]->push($node);
         }
 
-        $this->list[$node->key] = $node;
+        $this->list[$node->key]  = $node;
         $this->idList[$node->id] = $node;
 
         return $this;
@@ -107,7 +112,7 @@ class Collection
         }
 
         $newId = false;
-        $id = $node->id;
+        $id    = $node->id;
         for ($i = 0; $newId == false; $i++) {
             $newId = rtrim($id, $node->keyDelimiter) . Node::MULTIPLE_ID_ENTRY_DELIMITER . "$i{$node->keyDelimiter}";
 
@@ -125,6 +130,7 @@ class Collection
      *
      * @param Node $node
      * @param Node $parent
+     *
      * @return $this
      */
     public function moveNode(Node $node, Node $parent)
@@ -139,6 +145,7 @@ class Collection
      * gets a node by its unique id
      *
      * @param $id
+     *
      * @return mixed|null
      */
     public function getById($id)
@@ -146,6 +153,7 @@ class Collection
         if (isset($this->idList[$id])) {
             return $this->idList[$id];
         }
+
         return null;
     }
 
@@ -154,6 +162,7 @@ class Collection
      * -> it's a strpos comparison so every hit is returned
      *
      * @param $key
+     *
      * @return \SplDoublyLinkedList()|null
      */
     public function getByIdFuzzy($key)
@@ -168,6 +177,7 @@ class Collection
                 $resultSet->push($node);
             }
         }
+
         return $resultSet;
     }
 
@@ -183,6 +193,7 @@ class Collection
         if (!isset($this->keyList[$key])) {
             return null;
         }
+
         // returns the last entry
         return $this->keyList[$key]->top();
     }
@@ -262,7 +273,8 @@ class Collection
     /**
      * @return array|null
      */
-    public function getList() {
+    public function getList()
+    {
         return $this->list;
     }
 
@@ -271,8 +283,10 @@ class Collection
      *
      * @return $this
      */
-    public function removeAll(){
+    public function removeAll()
+    {
         $this->list = array();
+
         return $this;
     }
 
@@ -280,6 +294,7 @@ class Collection
      * removes a specific node
      *
      * @param Node $node
+     *
      * @return $this
      */
     public function removeNode(Node $node = null)

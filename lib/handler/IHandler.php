@@ -9,9 +9,11 @@ namespace chilimatic\lib\handler;
 
 /**
  * Interface HandlerInterface
+ *
  * @package chilimatic\lib\handler
  */
-interface IHandler {
+interface IHandler
+{
 
     /**
      * @param null $param
@@ -26,6 +28,7 @@ interface IHandler {
 
     /**
      * @param $request
+     *
      * @return mixed
      */
     public function setRequest($request);

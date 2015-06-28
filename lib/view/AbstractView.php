@@ -3,6 +3,7 @@ namespace chilimatic\lib\view;
 
 /**
  * Class Generic
+ *
  * @package chilimatic\lib\view
  */
 abstract class AbstractView implements IView
@@ -29,15 +30,14 @@ abstract class AbstractView implements IView
     public function initEngine()
     {
 
-        if ( empty($this->setting) ) return false;
-        
-        foreach ( $this->setting as $key => $value )
-        {
-            if ( empty($key) || !property_exists($this->_engine, $key) ) continue;
-            
+        if (empty($this->setting)) return false;
+
+        foreach ($this->setting as $key => $value) {
+            if (empty($key) || !property_exists($this->_engine, $key)) continue;
+
             $this->_engine->$key = $this->setting->$key;
         }
-        
+
         return true;
     }
 
@@ -54,6 +54,7 @@ abstract class AbstractView implements IView
      *
      *
      * @see View_Generic_Interface::render()
+     *
      * @param string $templateFile
      */
     abstract public function render($templateFile = '');

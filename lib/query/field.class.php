@@ -22,22 +22,22 @@ class Query_Field
 
     /**
      * condition is optional default will be and
-     * 
+     *
      * @var string
      */
     private $condition = 'AND';
 
-	/**
-	 * list of functions within mysql as a field position
-	 * 
-	 * @var array
-	 */
+    /**
+     * list of functions within mysql as a field position
+     *
+     * @var array
+     */
     private $function_list = array('count', 'max');
-    
-    
+
+
     private $function = '';
-    
-    
+
+
     /**
      * constructor
      */
@@ -55,12 +55,12 @@ class Query_Field
      *
      * @return boolean
      */
-    public function __set( $property , $value )
+    public function __set($property, $value)
     {
 
-        if ( !property_exists(get_called_class(), $property) ) return false;
+        if (!property_exists(get_called_class(), $property)) return false;
         $this->$property = $value;
-        
+
         return true;
     }
 
@@ -72,40 +72,38 @@ class Query_Field
      *
      * @return mixed
      */
-    public function __get( $property )
+    public function __get($property)
     {
 
-        if ( !property_exists(get_called_class(), $property) ) return false;
-        
+        if (!property_exists(get_called_class(), $property)) return false;
+
         return $this->$property;
     }
 
 
     /**
      * returns a string of the field
-     * 
+     *
      * if the value has been set it's a where field so it returns the condition
-     * 
+     *
      * @return string
      */
     public function tostring()
     {
 
-        if ( empty($this->value) ) {
-           
-           return (empty($this->function)) ? "$this->function(`$this->name`)" : " `$this->name`";
+        if (empty($this->value)) {
+
+            return (empty($this->function)) ? "$this->function(`$this->name`)" : " `$this->name`";
         }
-        
+
         $str = strtoupper($this->condition) . " `$this->name`";
-        
-        if ( is_array($this->value) )
-        {
+
+        if (is_array($this->value)) {
             $str .= " IN (" . implode("','", $this->value) . "')";
-        }
-        else
-        {
+        } else {
             $str .= " = '$this->value'";
         }
+
         return $str;
     }
 }

@@ -16,7 +16,8 @@ namespace chilimatic\lib\http;
  *
  * @package chilimatic\http
  */
-class ParamList {
+class ParamList
+{
 
     /**
      * Accept param
@@ -24,6 +25,7 @@ class ParamList {
      * @source http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
      *
      * filled with default value it accepts everything that's text
+     *
      * @example Accept: text/*, text/html, text/html;level=1
      *
      * @var array
@@ -59,7 +61,7 @@ class ParamList {
      * @var array
      */
     public $accept_encoding = array(
-        'gzip' => 0,
+        'gzip'     => 0,
         'compress' => 0
     );
 
@@ -185,7 +187,6 @@ class ParamList {
      * @var int
      */
     public $content_length = '';
-
 
 
     /**
@@ -425,7 +426,7 @@ class ParamList {
      *
      * @var string
      */
-    public $range = array ();
+    public $range = array();
 
     /**
      * @var int
@@ -477,7 +478,6 @@ class ParamList {
      * @var string
      */
     public $te = array();
-
 
 
     /**

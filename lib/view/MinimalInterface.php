@@ -9,6 +9,7 @@ namespace chilimatic\lib\view;
 
 /**
  * Interface minimalInterface
+ *
  * @package chilimatic\lib\view
  */
 interface MinimalInterface
@@ -16,6 +17,7 @@ interface MinimalInterface
 
     /**
      * initializes the specific render presets
+     *
      * @return mixed
      */
     public function initRender();

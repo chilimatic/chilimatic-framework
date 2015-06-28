@@ -16,14 +16,16 @@ class DynamicCallNamePreTransformedValidatorTest extends PHPUnit_Framework_TestC
     /**
      * @test
      */
-    public function interfaceTest() {
+    public function interfaceTest()
+    {
         $this->assertInstanceOf('\chilimatic\lib\interfaces\IFlyWeightValidator', new DynamicCallNamePreTransformed());
     }
 
     /**
      * @test
      */
-    public function wrongCharacterAtBeginningSyntax() {
+    public function wrongCharacterAtBeginningSyntax()
+    {
         $tranformer = new DynamicCallNamePreTransformed();
         $this->assertEquals(false, $tranformer->validate('-methodname'));
     }
@@ -31,7 +33,8 @@ class DynamicCallNamePreTransformedValidatorTest extends PHPUnit_Framework_TestC
     /**
      * @test
      */
-    public function wrongCharacterAtEndSyntax() {
+    public function wrongCharacterAtEndSyntax()
+    {
         $tranformer = new DynamicCallNamePreTransformed();
         $this->assertEquals(false, $tranformer->validate('methodname-'));
     }
@@ -39,7 +42,8 @@ class DynamicCallNamePreTransformedValidatorTest extends PHPUnit_Framework_TestC
     /**
      * @test
      */
-    public function wrongCaseCharacterInCallNameSyntax() {
+    public function wrongCaseCharacterInCallNameSyntax()
+    {
         $tranformer = new DynamicCallNamePreTransformed();
         $this->assertEquals(false, $tranformer->validate('Methodname'));
     }
@@ -47,7 +51,8 @@ class DynamicCallNamePreTransformedValidatorTest extends PHPUnit_Framework_TestC
     /**
      * @test
      */
-    public function wrongCharactInCallNameSyntax() {
+    public function wrongCharactInCallNameSyntax()
+    {
         $tranformer = new DynamicCallNamePreTransformed();
         $this->assertEquals(false, $tranformer->validate('$method'));
     }
@@ -55,7 +60,8 @@ class DynamicCallNamePreTransformedValidatorTest extends PHPUnit_Framework_TestC
     /**
      * @test
      */
-    public function getErrorMessage() {
+    public function getErrorMessage()
+    {
         $tranformer = new DynamicCallNamePreTransformed();
         $this->assertEquals(false, $tranformer->validate('$method'));
         $this->assertEquals($tranformer->getInvalidCharacters() . ' are not allowed to be in the callname', $tranformer->getErrorMsg());
@@ -64,7 +70,8 @@ class DynamicCallNamePreTransformedValidatorTest extends PHPUnit_Framework_TestC
     /**
      * @test
      */
-    public function correctComplexCallSyntax() {
+    public function correctComplexCallSyntax()
+    {
         $tranformer = new DynamicCallNamePreTransformed();
         $this->assertEquals(true, $tranformer->validate('my-method-name'));
     }
@@ -72,7 +79,8 @@ class DynamicCallNamePreTransformedValidatorTest extends PHPUnit_Framework_TestC
     /**
      * @test
      */
-    public function correctSimpleCallSyntax() {
+    public function correctSimpleCallSyntax()
+    {
         $tranformer = new DynamicCallNamePreTransformed();
         $this->assertEquals(true, $tranformer->validate('method'));
     }

@@ -11,7 +11,8 @@ namespace chilimatic\lib\http\response;
  * File: Content.php
  */
 
-class Content {
+class Content
+{
     /**
      * complete response Data
      *

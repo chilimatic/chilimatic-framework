@@ -10,7 +10,8 @@
 
 namespace chilimatic\lib\session\observer;
 
-class Session implements \SplObserver {
+class Session implements \SplObserver
+{
 
     /**
      * @var \chilimatic\lib\session\handler\Session $sessionHandler
@@ -20,7 +21,8 @@ class Session implements \SplObserver {
     /**
      * @param \chilimatic\lib\session\handler\Session $sessionHandler
      */
-    public function __construct(\chilimatic\lib\session\handler\Session $sessionHandler){
+    public function __construct(\chilimatic\lib\session\handler\Session $sessionHandler)
+    {
         $this->sessionHandler = $sessionHandler;
     }
 
@@ -31,10 +33,10 @@ class Session implements \SplObserver {
      *
      * @param \SplSubject $splSubject
      */
-    public function update(\SplSubject $splSubject){
+    public function update(\SplSubject $splSubject)
+    {
         $this->sessionHandler->save();
     }
-
 
 
 }

@@ -8,6 +8,7 @@
  * File: FirstNode.php
  */
 namespace chilimatic\lib\datastructure\graph\filter;
+
 use chilimatic\lib\traits\comperator\StringValueBiggerThan;
 
 /**
@@ -31,20 +32,21 @@ class FirstNode extends AbstractFilter
             return null;
         }
 
-        if ($param->count() === 1){
+        if ($param->count() === 1) {
             return $param;
         }
 
-        $idValue = $returnNode = null;
+        $idValue          = $returnNode = null;
         $returnCollection = new \SplObjectStorage();
-        foreach($param as $node) {
+        foreach ($param as $node) {
             if (!$idValue || $this->compare($idValue, $node->getId())) {
-                $idValue = $node->getId();
+                $idValue    = $node->getId();
                 $returnNode = $node;
             }
         }
 
         $returnCollection->attach($returnNode);
+
         return $returnCollection;
     }
 }

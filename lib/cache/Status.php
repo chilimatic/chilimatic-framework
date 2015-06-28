@@ -9,7 +9,8 @@
 
 namespace chilimatic\lib\cache;
 
-class Status {
+class Status
+{
 
     public $info = array();
 

@@ -8,6 +8,7 @@
  * File: StringValueBiggerThan.php
  */
 namespace chilimatic\lib\traits\comperator;
+
 use chilimatic\lib\traits\string\AsciiTrait;
 
 /**

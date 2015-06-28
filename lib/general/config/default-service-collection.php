@@ -1,33 +1,33 @@
 <?php
-    return
+return
     [
-        'view' => function($setting = []) {
+        'view'                => function ($setting = []) {
             return new \chilimatic\lib\view\PHtml();
         },
-        'db' => function($setting = []) {
+        'db'                  => function ($setting = []) {
             return new PDO($setting['dns']);
         },
-        'request-handler' => function($setting = []) {
+        'request-handler'     => function ($setting = []) {
             return \chilimatic\lib\request\Handler::getInstance($setting);
         },
-        'application-handler' => function($setting = []) {
+        'application-handler' => function ($setting = []) {
             return new chilimatic\lib\handler\HTTPHandler($setting);
         },
-        'routing' => function($setting = []) {
+        'routing'             => function ($setting = []) {
             return new \chilimatic\lib\route\Router($setting['type']);
         },
-        'session' => function($setting = []){
+        'session'             => function ($setting = []) {
             return new chilimatic\lib\session\handler\Session(
                 chilimatic\lib\session\engine\Factory::make(@$setting['type'], @$setting['param'])
             );
         },
-        'template-resolver' => function ($setting = []) {
+        'template-resolver'   => function ($setting = []) {
             return new chilimatic\lib\view\resolver\templatePathStack($setting);
         },
-        'cache' => function($setting = []) {
+        'cache'               => function ($setting = []) {
             return chilimatic\lib\cache\engine\CacheFactory::make($setting['type'], isset($setting['setting']) ? $setting['setting'] : null);
         },
-        'entity-manager' => function($setting = []) {
+        'entity-manager'      => function ($setting = []) {
             $mysqlStorage = new \chilimatic\lib\database\mysql\MysqlConnectionStorage();
             $mysqlStorage->addConnection(
                 $setting['host'],
@@ -38,14 +38,16 @@
                 isset($setting['charset']) ? $setting['charset'] : null
             );
             $master = $mysqlStorage->getConnection(0);
-            $em = new \chilimatic\lib\database\orm\EntityManager(new \chilimatic\lib\database\mysql\Mysql($master));
+            $em     = new \chilimatic\lib\database\orm\EntityManager(new \chilimatic\lib\database\mysql\Mysql($master));
+
             return $em->setQueryBuilder(\chilimatic\lib\di\ClosureFactory::getInstance()->get('query-builder'));
         },
-        'query-builder' => function($setting = []) {
+        'query-builder'       => function ($setting = []) {
             $queryBuilder = new \chilimatic\lib\database\orm\querybuilder\MysqlQueryBuilder();
+
             return $queryBuilder->setCache(\chilimatic\lib\di\ClosureFactory::getInstance()->get('cache', ['type' => 'shmop']));
         },
-        'error-handler' => function($setting = []) {
+        'error-handler'       => function ($setting = []) {
             return new \chilimatic\lib\error\Handler(new \chilimatic\lib\log\client\printOut());
         },
     ];

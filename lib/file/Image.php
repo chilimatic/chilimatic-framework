@@ -27,13 +27,13 @@ class Image extends File
      *
      * @return bool
      */
-    public function __contruct( $file_name = '' )
+    public function __contruct($file_name = '')
     {
 
-        if ( empty($file_name) ) return;
-        
+        if (empty($file_name)) return;
+
         $this->open($file_name);
-        
+
         $this->imagemagik = new \Imagick($file_name);
     }
 
@@ -47,11 +47,12 @@ class Image extends File
      *
      * @return boolean
      */
-    public function open( $file_name = '' )
+    public function open($file_name = '')
     {
 
-        if ( !parent::open($file_name) ) return false;
+        if (!parent::open($file_name)) return false;
         $this->imagemagik = new \Imagick($file_name);
+
         return true;
     }
 
@@ -68,19 +69,16 @@ class Image extends File
      * @throws \ImagickException
      * @return boolean
      */
-    public function create_thumbnail( $width = 200 , $height = 200 , $bestfit = false , $fill = false )
+    public function create_thumbnail($width = 200, $height = 200, $bestfit = false, $fill = false)
     {
 
-        if ( empty($this->imagemagik) || empty($this->filename) ) return false;
-        try
-        {
+        if (empty($this->imagemagik) || empty($this->filename)) return false;
+        try {
             $this->imagemagik->thumbnailimage($width, $height, $bestfit, $fill);
-        }
-        catch ( \ImagickException $e )
-        {
+        } catch (\ImagickException $e) {
             throw $e;
         }
-        
+
         return true;
     }
 
@@ -95,21 +93,18 @@ class Image extends File
      * @throws \ImagickException
      * @return boolean
      */
-    public function saveThumb( $path = '' , $filename = '' )
+    public function saveThumb($path = '', $filename = '')
     {
 
-        if ( empty($this->filename) ) return false;
-        try
-        {
+        if (empty($this->filename)) return false;
+        try {
             $save_name = (empty($path) ? $this->path : $path);
             $save_name = "$save_name/" . (empty($filename) ? 'th_' . $this->filename : $filename);
             $this->imagemagik->writeImage($save_name);
-        }
-        catch ( \ImagickException $e )
-        {
+        } catch (\ImagickException $e) {
             throw $e;
         }
-        
+
         return $this->open($save_name);
     }
 }

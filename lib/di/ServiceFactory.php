@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @author j
@@ -7,7 +8,6 @@
  *
  * File: ServiceFactory.php
  */
-
 class ServiceFactory
 {
     /**
@@ -24,13 +24,14 @@ class ServiceFactory
      * @var \chilimatic\lib\interfaces\IFlyWeightTransformer
      */
     private $transformer;
+
     /**
      * @param $parser
      * @param $transformer
      */
     public function __construct(\chilimatic\lib\interfaces\IFlyWeightParser $parser = null, \chilimatic\lib\interfaces\IFlyWeightTransformer $transformer = null)
     {
-        $this->parser = $parser;
+        $this->parser      = $parser;
         $this->transformer = $transformer;
     }
 
@@ -38,7 +39,8 @@ class ServiceFactory
     /**
      * @return void
      */
-    public function __clone() {
+    public function __clone()
+    {
         $this->pseudoSingeltonList = [];
     }
 
@@ -51,6 +53,7 @@ class ServiceFactory
     public function set($key, IService $service)
     {
         $this->serviceCollection[$key] = $service;
+
         return $this;
     }
 
@@ -76,7 +79,7 @@ class ServiceFactory
         }
 
 
-        return ;
+        return;
     }
 
 

@@ -25,12 +25,14 @@ class Response implements IResponse, \JsonSerializable
     protected $content;
 
 
-    public function __construct() {
-        $this->status = new Status();
+    public function __construct()
+    {
+        $this->status  = new Status();
         $this->content = new Content();
     }
 
-    public function addHeader($header){
+    public function addHeader($header)
+    {
         $this->header[] = $header;
     }
 
@@ -58,7 +60,8 @@ class Response implements IResponse, \JsonSerializable
      * @param int $code
      * @param string $message
      */
-    public function setStatusCode($code, $message){
+    public function setStatusCode($code, $message)
+    {
         $this->status->setCode($code, $message);
     }
 

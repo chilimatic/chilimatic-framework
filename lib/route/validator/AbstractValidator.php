@@ -1,5 +1,6 @@
 <?php
 namespace chilimatic\lib\route\validator;
+
 use chilimatic\lib\interfaces\IFlyWeightValidator;
 
 /**
@@ -22,7 +23,7 @@ abstract class AbstractValidator implements IFlyWeightValidator
     /**
      * for more complex calles / lamdafunctions with array parameters through
      * the url a delimiter is needed
-     * 
+     *
      * @var string
      */
     public $delimiter = null;
@@ -33,7 +34,7 @@ abstract class AbstractValidator implements IFlyWeightValidator
      *
      * @return mixed
      */
-    abstract function validate( $value );
+    abstract function validate($value);
 
 
     /**
@@ -41,5 +42,5 @@ abstract class AbstractValidator implements IFlyWeightValidator
      *
      * @return mixed
      */
-    abstract function __invoke( $value );
+    abstract function __invoke($value);
 }

@@ -44,11 +44,11 @@ class RouteMethodAnnotaionParser implements IFlyWeightParser
 
         if (preg_match_all($this->pattern, $content, $matches)) {
 
-            for ($i =0, $c = count($matches[0]); $i < $c; $i++) {
+            for ($i = 0, $c = count($matches[0]); $i < $c; $i++) {
                 $result[] = [
                     'property' => $matches[1][$i],
-                    'value' => $matches[2][$i],
-                    'type' => $this->getType($matches[2][$i])
+                    'value'    => $matches[2][$i],
+                    'type'     => $this->getType($matches[2][$i])
                 ];
             }
 
@@ -67,7 +67,8 @@ class RouteMethodAnnotaionParser implements IFlyWeightParser
      *
      * @return string
      */
-    public function getType($value) {
+    public function getType($value)
+    {
         if (strpos($value, '\\') !== false && class_exists($value)) {
             return self::TYPE_CLASS;
         } else {

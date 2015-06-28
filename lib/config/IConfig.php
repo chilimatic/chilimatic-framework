@@ -14,9 +14,11 @@ namespace chilimatic\lib\config;
 
 /**
  * Interface Config_Interface
+ *
  * @package chilimatic\lib\config
  */
-Interface IConfig {
+Interface IConfig
+{
 
     /**
      * root node key
@@ -89,6 +91,7 @@ Interface IConfig {
      * gets a specific parameter
      *
      * @param $key
+     *
      * @return mixed
      */
     public function get($key);
@@ -98,6 +101,7 @@ Interface IConfig {
      * gets a specific parameter
      *
      * @param $id
+     *
      * @return mixed
      */
     public function getbyId($id);
@@ -117,6 +121,7 @@ Interface IConfig {
      *
      * @param $key
      * @param $val
+     *
      * @return mixed
      */
     public function set($key, $val);
@@ -125,6 +130,7 @@ Interface IConfig {
      * saves the specified config
      *
      * @param Node $node
+     *
      * @return mixed
      */
     public function saveConfig(Node $node = null);

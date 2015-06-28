@@ -9,6 +9,7 @@
  */
 
 namespace chilimatic\lib\cache\handler\storage;
+
 use chilimatic\lib\database\orm\AbstractModel;
 
 /**
@@ -39,15 +40,17 @@ class ModelStorageDecorator
      * @param AbstractModel $model
      * @param $data
      */
-    public function __construct(AbstractModel $model, $data) {
+    public function __construct(AbstractModel $model, $data)
+    {
         $this->model = $model;
-        $this->data = $data;
+        $this->data  = $data;
     }
 
     /**
      * @param $data
      */
-    public function addData($data) {
+    public function addData($data)
+    {
         $this->data = array_merge($this->data, $data);
     }
 

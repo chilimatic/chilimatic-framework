@@ -9,7 +9,8 @@
 
 namespace chilimatic\lib\datastructure\graph;
 
-class TreeNode extends Node {
+class TreeNode extends Node
+{
 
     /**
      * @var
@@ -28,13 +29,13 @@ class TreeNode extends Node {
 
     /**
      * @param int $depth
+     *
      * @return null
      */
     private function searchTree($depth = 0)
     {
         $this->depth = $depth;
-        foreach ($this->children->getList() as $node)
-        {
+        foreach ($this->children->getList() as $node) {
             if ($depth > count($this->treePath)) {
                 break;
             }
@@ -48,6 +49,7 @@ class TreeNode extends Node {
              */
             if (count($this->treePath) > $depth && $this->allowedToDiveDeeper($depth)) {
                 $node->setTreepath($this->treePath);
+
                 return $node->searchTree(++$depth);
             }
         }
@@ -57,9 +59,11 @@ class TreeNode extends Node {
 
     /**
      * @param $depth
+     *
      * @return bool
      */
-    protected function allowedToDiveDeeper($depth) {
+    protected function allowedToDiveDeeper($depth)
+    {
         if ($this->maxDepth == 0) {
             return true;
         }
@@ -74,7 +78,8 @@ class TreeNode extends Node {
      *
      * @return TreeNode|null
      */
-    public function appendToBranch($key, $data, $delimiter = self::DEFAULT_KEY_DELIMITER) {
+    public function appendToBranch($key, $data, $delimiter = self::DEFAULT_KEY_DELIMITER)
+    {
         $node = $this->findTreeBranch($key, $delimiter);
 
         /**
@@ -88,8 +93,8 @@ class TreeNode extends Node {
         /**
          * create just one missing node to a fully established tree with branches
          */
-        $key = array_pop(explode((string) $delimiter, trim((string) $key, (string) $delimiter)));
-        $newNode = new self($node, $key , $data, $delimiter);
+        $key     = array_pop(explode((string)$delimiter, trim((string)$key, (string)$delimiter)));
+        $newNode = new self($node, $key, $data, $delimiter);
         $node->addChild($newNode);
 
         return null;
@@ -100,7 +105,8 @@ class TreeNode extends Node {
      *
      * @return array
      */
-    public function getMissingKeysByDepth() {
+    public function getMissingKeysByDepth()
+    {
         return array_slice(
             $this->getTreePath(),
             $this->getAmountMissingTreeNodes() * -1,
@@ -113,13 +119,15 @@ class TreeNode extends Node {
      *
      * @param array $keyParts
      * @param TreeNode $rootNode
+     *
      * @return TreeNode
      */
-    protected function createTree(&$keyParts, TreeNode $rootNode) {
+    protected function createTree(&$keyParts, TreeNode $rootNode)
+    {
         if (!count($keyParts)) return $rootNode;
 
-        $newKey = array_shift($keyParts);
-        $newNode = new self($rootNode, $newKey , null, $rootNode->getKeyDelimiter());
+        $newKey  = array_shift($keyParts);
+        $newNode = new self($rootNode, $newKey, null, $rootNode->getKeyDelimiter());
         $rootNode->addChild($newNode);
 
         return $this->createTree($keyParts, $newNode);
@@ -132,7 +140,8 @@ class TreeNode extends Node {
      *
      * @return $this|null
      */
-    public function findTreeBranch($key, $delimiter = self::DEFAULT_KEY_DELIMITER) {
+    public function findTreeBranch($key, $delimiter = self::DEFAULT_KEY_DELIMITER)
+    {
         $this->resetTreeSearch();
         $this->treePath = explode($delimiter, trim($key, $delimiter));
         if (($node = $this->searchTree()) != null) {
@@ -145,14 +154,16 @@ class TreeNode extends Node {
     /**
      * @return int
      */
-    public function getAmountMissingTreeNodes() {
-        return count($this->treePath) - ($this->depth+1);
+    public function getAmountMissingTreeNodes()
+    {
+        return count($this->treePath) - ($this->depth + 1);
     }
 
     /**
      * resets the treePath
      */
-    protected function resetTreeSearch(){
+    protected function resetTreeSearch()
+    {
         $this->setTreePath([]);
     }
 
@@ -173,6 +184,7 @@ class TreeNode extends Node {
     public function setTreePath($treePath)
     {
         $this->treePath = $treePath;
+
         return $this;
     }
 
@@ -192,6 +204,7 @@ class TreeNode extends Node {
     public function setMaxDepth($maxDepth)
     {
         $this->maxDepth = $maxDepth;
+
         return $this;
     }
 
@@ -211,6 +224,7 @@ class TreeNode extends Node {
     public function setKeyDelimiter($keyDelimiter)
     {
         $this->keyDelimiter = $keyDelimiter;
+
         return $this;
     }
 }

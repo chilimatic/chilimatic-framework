@@ -10,15 +10,19 @@ namespace chilimatic\lib\route\routesystem;
 
 /**
  * Class RouteSystemFactory
+ *
  * @package chilimatic\lib\route\routesystem
  */
-class RouteSystemFactory {
+class RouteSystemFactory
+{
 
     /**
      * @param string $type
+     *
      * @return AbstractRoute
      */
-    public static function make($type = 'Default', $param) {
+    public static function make($type = 'Default', $param)
+    {
         $className = __NAMESPACE__ . "\\{$type}Route";
 
         if (!class_exists($className)) return null;

@@ -11,9 +11,11 @@ namespace chilimatic\lib\request;
 
 /**
  * Class File
+ *
  * @package chilimatic\lib\request
  */
-class File extends Generic implements RequestInterface {
+class File extends Generic implements RequestInterface
+{
 
 
     /**
@@ -25,8 +27,7 @@ class File extends Generic implements RequestInterface {
      */
     public static function getInstance(array $array = array())
     {
-        if (!(self::$instance instanceof File))
-        {
+        if (!(self::$instance instanceof File)) {
             // construct the object
             self::$instance = new File($array);
         }

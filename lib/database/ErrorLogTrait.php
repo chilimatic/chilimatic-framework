@@ -13,7 +13,8 @@ namespace chilimatic\lib\database;
 use chilimatic\lib\log\client\ToFile;
 use chilimatic\lib\log\ILog;
 
-trait ErrorLogTrait {
+trait ErrorLogTrait
+{
 
 
     /**
@@ -27,7 +28,8 @@ trait ErrorLogTrait {
      * @param $message
      * @param null $data
      */
-    public function log($type, $message, $data = null) {
+    public function log($type, $message, $data = null)
+    {
         if (!$this->log) {
             $this->initLog();
         }
@@ -48,7 +50,8 @@ trait ErrorLogTrait {
     /**
      *
      */
-    public function initLog() {
+    public function initLog()
+    {
         $this->log = new ToFile();
     }
 }

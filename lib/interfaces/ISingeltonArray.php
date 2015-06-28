@@ -16,7 +16,8 @@ namespace chilimatic\lib\interfaces;
  *
  * @package chilimatic\lib\interfaces
  */
-interface ISingeltonArray {
+interface ISingeltonArray
+{
 
     /**
      * standard singelton method returns

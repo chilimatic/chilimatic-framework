@@ -69,18 +69,21 @@ class ClosureFactory
     /**
      * @return void
      */
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
     /**
      * @param string $path
      */
-    public function loadServiceFromFile($path) {
+    public function loadServiceFromFile($path)
+    {
         if (!$path) {
             return;
         }
 
-        $serviceList = @require (string) $path;
-        $this->serviceCollection = array_merge((array) $this->serviceCollection, (array) $serviceList);
+        $serviceList             = @require (string)$path;
+        $this->serviceCollection = array_merge((array)$this->serviceCollection, (array)$serviceList);
     }
 
     /**
@@ -89,7 +92,8 @@ class ClosureFactory
      *
      * @return self::$instance
      */
-    public static function getInstance($path = null, $serviceList = null) {
+    public static function getInstance($path = null, $serviceList = null)
+    {
         if (!self::$instance instanceof self) {
             self::$instance = new self($path, $serviceList);
         }
@@ -112,10 +116,10 @@ class ClosureFactory
      *
      * @return void
      */
-    public static function destroyInstance() {
+    public static function destroyInstance()
+    {
         self::$instance = null;
     }
-
 
 
     /**
@@ -124,8 +128,10 @@ class ClosureFactory
      *
      * @return $this
      */
-    public function set($key, $service) {
+    public function set($key, $service)
+    {
         $this->serviceCollection[$key] = $service;
+
         return $this;
     }
 
@@ -134,7 +140,8 @@ class ClosureFactory
      *
      * @return $this
      */
-    public function remove($key) {
+    public function remove($key)
+    {
         unset($this->serviceCollection[$key]);
         unset($this->pseudoSingeltonList[$key]);
 
@@ -146,12 +153,13 @@ class ClosureFactory
      *
      * @return bool
      */
-    public function exists($key) {
+    public function exists($key)
+    {
         return isset($this->serviceCollection[$key]);
     }
 
     /**
-     * @param  string  $key
+     * @param  string $key
      * @param array $setting
      * @param bool $singelton
      *
@@ -189,6 +197,7 @@ class ClosureFactory
 
     /**
      * @param string $key
+     *
      * @return mixed|null
      */
     public function getClosure($key)

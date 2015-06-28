@@ -70,7 +70,7 @@ class DummyModel extends AbstractModel
     public function jsonSerialize()
     {
         return [
-            'id' => $this->id,
+            'id'   => $this->id,
             'name' => $this->name
         ];
     }

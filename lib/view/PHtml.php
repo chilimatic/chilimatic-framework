@@ -9,6 +9,7 @@ namespace chilimatic\lib\view;
 
 /**
  * Class PHtml
+ *
  * @package chilimatic\lib\view
  */
 class PHtml extends AbstractView
@@ -36,7 +37,7 @@ class PHtml extends AbstractView
      */
     public function initRender()
     {
-        if (!file_exists((string) $this->getTemplateFile())) {
+        if (!file_exists((string)$this->getTemplateFile())) {
             $this->setTemplateFile($this->getConfigVariable('templatePath') . self::FILE_EXTENSION);
         }
     }
@@ -54,7 +55,7 @@ class PHtml extends AbstractView
 
         $this->initRender();
 
-        if (!$this->getTemplateFile()){
+        if (!$this->getTemplateFile()) {
             throw new \LogicException('no template given');
         }
 
@@ -86,7 +87,8 @@ class PHtml extends AbstractView
     public function setTemplateFile($templateFile)
     {
         if (!$templateFile) return $this;
-        $this->templateFile = (string) $templateFile;
+        $this->templateFile = (string)$templateFile;
+
         return $this;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @author j
@@ -14,14 +15,16 @@ class DynamicFunctionNamePreTransformerTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function doesTheClassUseTheCorrectInterface() {
+    public function doesTheClassUseTheCorrectInterface()
+    {
         $this->assertInstanceOf('\chilimatic\lib\interfaces\IFlyWeightTransformer', new \chilimatic\lib\transformer\string\DynamicFunctionCallName());
     }
 
     /**
      * @test
      */
-    public function simpleMethodCallString() {
+    public function simpleMethodCallString()
+    {
         $transformer = new \chilimatic\lib\transformer\string\DynamicFunctionCallName();
         $this->assertEquals('myMethod', $transformer->transform('MyMethod'));
     }
@@ -29,7 +32,8 @@ class DynamicFunctionNamePreTransformerTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function complexMethodCallString() {
+    public function complexMethodCallString()
+    {
         $transformer = new \chilimatic\lib\transformer\string\DynamicFunctionCallName();
         $this->assertEquals('myMethodCallName', $transformer->transform('my-method-call-name'));
     }
@@ -37,7 +41,8 @@ class DynamicFunctionNamePreTransformerTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function complexEmptyCallString() {
+    public function complexEmptyCallString()
+    {
         $transformer = new \chilimatic\lib\transformer\string\DynamicFunctionCallName();
         $this->assertEquals('', $transformer->transform(''));
     }

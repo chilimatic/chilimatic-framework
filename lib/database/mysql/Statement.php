@@ -20,7 +20,8 @@ use chilimatic\lib\exception\DatabaseException;
  *
  * @package chilimatic\lib\database
  */
-class Statement {
+class Statement
+{
 
     /**
      * boolean parameter
@@ -123,9 +124,10 @@ class Statement {
      * @param $sql
      * @param $db
      */
-    public function __construct($sql, $db) {
+    public function __construct($sql, $db)
+    {
         $this->prepared_sql = $sql;
-        $this->_db = $db;
+        $this->_db          = $db;
     }
 
     /**
@@ -137,7 +139,8 @@ class Statement {
      *
      * @return bool
      */
-    public function bindParam($placeholder, &$var, $type = null) {
+    public function bindParam($placeholder, &$var, $type = null)
+    {
 
         $this->param_list[$placeholder] = &$var;
         if (!empty($type) && in_array($type, $this->_type_list)) {
@@ -155,12 +158,12 @@ class Statement {
      * @throws \chilimatic\lib\exception\DatabaseException
      * @throws \Exception
      */
-    public function execute() {
+    public function execute()
+    {
         try {
             $sql = $this->prepared_sql;
 
-            foreach($this->param_list as $placeholder => $param)
-            {
+            foreach ($this->param_list as $placeholder => $param) {
                 if (strpos($this->prepared_sql, $placeholder) === false) {
                     throw new DatabaseException(__METHOD__ . " missing bound placeholder: $placeholder in sql $this->prepared_sql", Mysql::ERR_CONN, Mysql::SEVERITY_LOG, __FILE__, __LINE__);
                 }
@@ -175,10 +178,10 @@ class Statement {
                         break;
                     case self::TYPE_INT:
                     case self::TYPE_BOOL:
-                        $val = (int) $param;
+                        $val = (int)$param;
                         break;
                     case self::TYPE_FLOAT:
-                        $val = (float) $param;
+                        $val = (float)$param;
                         break;
                     case self::TYPE_NULL:
                         $val = 'NULL';
@@ -219,13 +222,14 @@ class Statement {
      * @throws DatabaseException
      * @throws \Exception
      */
-    public function fetchAll($type = null){
+    public function fetchAll($type = null)
+    {
         try {
             if ($this->res === false) {
                 throw new DatabaseException(__METHOD__ . " No ressource has been given", Mysql::NO_RESSOURCE, Mysql::SEVERITY_DEBUG, __FILE__, __LINE__);
             }
 
-            switch($type) {
+            switch ($type) {
                 case Mysql::FETCH_ASSOC:
                     return $this->_db->fetch_assoc_list($this->res);
                     break;

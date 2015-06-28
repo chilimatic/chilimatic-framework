@@ -13,6 +13,7 @@ use chilimatic\lib\interfaces\ISingelton;
 
 /**
  * Class Config
+ *
  * @package chilimatic\lib\config
  */
 class Config implements ISingelton
@@ -51,7 +52,7 @@ class Config implements ISingelton
      */
     public static function getInstance($param = null)
     {
-        if ( self::$instance === null) {
+        if (self::$instance === null) {
             if (isset($param['type'])) {
                 $type = $param['type'];
                 unset($param['type']);
@@ -70,9 +71,10 @@ class Config implements ISingelton
      * get wrapper
      *
      * @param string $var
+     *
      * @return mixed
      */
-    public static function get ($var)
+    public static function get($var)
     {
         return self::$instance->get($var);
     }
@@ -81,6 +83,7 @@ class Config implements ISingelton
      * gets a specific param based on the id
      *
      * @param string $id
+     *
      * @return mixed
      */
     public static function getById($id)
@@ -96,7 +99,7 @@ class Config implements ISingelton
      *
      * @return mixed
      */
-    public static function set ($key, $value)
+    public static function set($key, $value)
     {
         return self::$instance->set($key, $value);
     }
@@ -106,7 +109,8 @@ class Config implements ISingelton
      *
      * @return mixed
      */
-    public static function delete($key) {
+    public static function delete($key)
+    {
         return self::$instance->delete($key);
     }
 
@@ -114,9 +118,11 @@ class Config implements ISingelton
      * load module wrapper
      *
      * @param string $module_name
+     *
      * @return mixed
      */
-    public static function loadModule( $module_name = ''){
+    public static function loadModule($module_name = '')
+    {
         return self::$instance->loadModule($module_name);
     }
 

@@ -17,7 +17,8 @@ use chilimatic\lib\interfaces\IFlyWeightValidator;
  *
  * @package chilimatic\lib\parser
  */
-class DynamicCallNamePreTransformed implements IFlyWeightValidator{
+class DynamicCallNamePreTransformed implements IFlyWeightValidator
+{
     /**
      * the local Parser
      *
@@ -61,12 +62,15 @@ class DynamicCallNamePreTransformed implements IFlyWeightValidator{
             return false;
         } elseif (mb_strpos($content, self::PARSE_DELIMITER) === 0) {
             $this->errorMsg = self::PARSE_DELIMITER . ' is not allowed to be at the beginning of the callname';
+
             return false;
-        } elseif (mb_strpos($content, self::PARSE_DELIMITER) == (strlen($content) -1)) {
-            $this->errorMsg  = self::PARSE_DELIMITER . ' is not allowed to be at the end of the callname';
+        } elseif (mb_strpos($content, self::PARSE_DELIMITER) == (strlen($content) - 1)) {
+            $this->errorMsg = self::PARSE_DELIMITER . ' is not allowed to be at the end of the callname';
+
             return false;
         } elseif (preg_match($this->invalidCharacters, $content)) {
             $this->errorMsg = $this->invalidCharacters . ' are not allowed to be in the callname';
+
             return false;
         }
 

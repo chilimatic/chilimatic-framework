@@ -129,7 +129,8 @@ class GenericMySQL
      *
      * @return $this
      */
-    public function insertQueue($insert_array) {
+    public function insertQueue($insert_array)
+    {
         if (empty($insert_array)) return $this;
         $this->insert_list[] = $insert_array;
 
@@ -189,7 +190,7 @@ class GenericMySQL
     public function setFieldList($field_list = array())
     {
         if (empty($field_list)) $this->_field_list = array('*');
-        $this->_field_list = (array) $field_list;
+        $this->_field_list = (array)$field_list;
 
         return $this;
     }

@@ -23,8 +23,9 @@ abstract class AbstractClient implements ClientInterface
     /**
      * @param \chilimatic\lib\formater\Log $format
      */
-    public function __construct(\chilimatic\lib\formater\Log $format = null) {
-        $this->format = $format;
+    public function __construct(\chilimatic\lib\formater\Log $format = null)
+    {
+        $this->format      = $format;
         $this->logMessages = new \SPLFixedArray();
     }
 
@@ -36,6 +37,7 @@ abstract class AbstractClient implements ClientInterface
     /**
      * @param string $message
      * @param mixed $data
+     *
      * @return $this
      */
     public function log($message, $data)
@@ -44,16 +46,18 @@ abstract class AbstractClient implements ClientInterface
 
         // TODO: Implement log() method.
         $this->logMessages[] = [
-            'date' => date('Y-m-d H:i:s'),
+            'date'    => date('Y-m-d H:i:s'),
             'message' => $message,
-            'data' => $data
+            'data'    => $data
         ];
+
         return $this;
     }
 
     /**
      * @param string $message
      * @param mixed $data
+     *
      * @return $this
      */
     public function info($message, $data)
@@ -61,17 +65,19 @@ abstract class AbstractClient implements ClientInterface
         $this->logMessages->setSize($this->logMessages->getSize() + 1);
         // TODO: Implement info() method.
         $this->logMessages[] = [
-            'prefix' => 'info',
-            'date' => date('Y-m-d H:i:s'),
+            'prefix'  => 'info',
+            'date'    => date('Y-m-d H:i:s'),
             'message' => $message,
-            'data' => $data
+            'data'    => $data
         ];
+
         return $this;
     }
 
     /**
      * @param string $message
      * @param $mixed $data
+     *
      * @return self
      */
     public function warn($message, $data)
@@ -79,44 +85,49 @@ abstract class AbstractClient implements ClientInterface
         $this->logMessages->setSize($this->logMessages->getSize() + 1);
         // TODO: Implement warn() method.
         $this->logMessages[] = [
-            'prefix' => 'warn',
-            'date' => date('Y-m-d H:i:s'),
+            'prefix'  => 'warn',
+            'date'    => date('Y-m-d H:i:s'),
             'message' => $message,
-            'data' => $data
+            'data'    => $data
         ];
+
         return $this;
     }
 
     /**
      * @param string $message
      * @param mixed $data
+     *
      * @return self
      */
     public function error($message, $data)
     {
         // TODO: Implement error() method.
         $this->logMessages[] = [
-            'prefix' => 'error',
-            'date' => date('Y-m-d H:i:s'),
+            'prefix'  => 'error',
+            'date'    => date('Y-m-d H:i:s'),
             'message' => $message,
-            'data' => $data
+            'data'    => $data
         ];
+
         return $this;
     }
 
     /**
      * @param string $message
      * @param mixed $data
+     *
      * @return self
      */
     public function trace($message, $data)
     {
         // TODO: Implement trace() method.
         $this->logMessages[] = [
-            'date' => date('Y-m-d H:i:s'),
+            'date'    => date('Y-m-d H:i:s'),
             'message' => $message,
-            'data' => $data
+            'data'    => $data
         ];
+
         return $this;
     }
 
@@ -130,6 +141,7 @@ abstract class AbstractClient implements ClientInterface
 
     /**
      * @param \chilimatic\lib\formater\Log $format
+     *
      * @return mixed
      */
     public function setFormat(\chilimatic\lib\formater\Log $format)

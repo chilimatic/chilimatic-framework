@@ -10,6 +10,7 @@ namespace chilimatic\lib\handler;
 
 /**
  * Class GenericHandler
+ *
  * @package chilimatic\lib\handler
  */
 abstract class AbstractHandler implements IHandler
@@ -33,7 +34,8 @@ abstract class AbstractHandler implements IHandler
     /**
      * @param null $param
      */
-    public function __construct($param = null) {
+    public function __construct($param = null)
+    {
         // do something
     }
 
@@ -52,11 +54,13 @@ abstract class AbstractHandler implements IHandler
 
     /**
      * @param mixed $route
+     *
      * @return $this|mixed
      */
     public function setRoute($route)
     {
         $this->route = $route;
+
         return $this;
     }
 
@@ -71,11 +75,13 @@ abstract class AbstractHandler implements IHandler
 
     /**
      * @param mixed $request
+     *
      * @return $this|mixed
      */
     public function setRequest($request)
     {
         $this->request = $request;
+
         return $this;
     }
 
@@ -95,6 +101,7 @@ abstract class AbstractHandler implements IHandler
     public function setView($view)
     {
         $this->view = $view;
+
         return $this;
     }
 

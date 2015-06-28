@@ -8,6 +8,7 @@
  * File: lastNode.php
  */
 namespace chilimatic\lib\datastructure\graph\filter;
+
 use chilimatic\lib\traits\comperator\StringValueBiggerThan;
 
 /**
@@ -32,20 +33,21 @@ class LastNode extends AbstractFilter
             return new \SplObjectStorage();
         }
 
-        if ($param->count() === 1){
+        if ($param->count() === 1) {
             return $param;
         }
 
-        $idValue = $returnNode = null;
+        $idValue          = $returnNode = null;
         $returnCollection = new \SplObjectStorage();
-        foreach($param as $node) {
+        foreach ($param as $node) {
             if (!$idValue || $this->compare($node->getId(), $idValue)) {
-                $idValue = $node->getId();
+                $idValue    = $node->getId();
                 $returnNode = $node;
             }
         }
 
         $returnCollection->attach($returnNode);
+
         return $returnCollection;
     }
 

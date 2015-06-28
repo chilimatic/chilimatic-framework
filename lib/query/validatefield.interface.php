@@ -17,9 +17,9 @@ Interface Query_ValidateField
 
 
     /**
-     * validates the content of a field 
+     * validates the content of a field
      * based on the field type and value
-     * 
+     *
      * @return bool
      */
     public function validate();

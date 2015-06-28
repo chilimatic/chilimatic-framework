@@ -10,7 +10,7 @@ namespace chilimatic\lib\route\validator;
  * class is based on the pattern (:num) which will be resolved to this classname
  * therefore new classes can be added and new types of validations defined with such short snipplets
  *
- * @author j
+ * @author  j
  *
  * @package chilimatic\lib\route\validator
  */
@@ -21,9 +21,10 @@ class ValidatorNum extends AbstractValidator
      *
      * @return bool
      */
-    public function validate($value) {
+    public function validate($value)
+    {
         // generic pattern match if it's numeric [float/int/double]
-        if ( !preg_match( '/^\d{0,}[.,]?\d*$/', (string) $value ) ) return false;
+        if (!preg_match('/^\d{0,}[.,]?\d*$/', (string)$value)) return false;
 
         $this->value = $value;
 
@@ -36,7 +37,7 @@ class ValidatorNum extends AbstractValidator
      *
      * @see \Route\Route_AbstractValidator::validate()
      */
-    public function __invoke( $value )
+    public function __invoke($value)
     {
         return $this->validate($value);
     }

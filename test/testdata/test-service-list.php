@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'my-test' => function($param = null){
+    'my-test' => function ($param = null) {
         return $param;
     }
 ];

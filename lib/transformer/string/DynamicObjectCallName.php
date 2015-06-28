@@ -9,6 +9,7 @@
  */
 
 namespace chilimatic\lib\transformer\string;
+
 use chilimatic\lib\interfaces\IFlyWeightTransformer;
 
 /**
@@ -43,11 +44,11 @@ class DynamicObjectCallName implements IFlyWeightTransformer
         }
 
         $tmp = explode('-', $content);
-        array_walk($tmp, function(&$a) {
+        array_walk($tmp, function (&$a) {
             $a = ucfirst($a);
         });
 
-        return (string) implode('', $tmp);
+        return (string)implode('', $tmp);
     }
 
 }

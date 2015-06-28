@@ -11,6 +11,7 @@ namespace chilimatic\lib\request;
 
 /**
  * Class CLI
+ *
  * @package chilimatic\lib\request
  */
 class CLI extends Generic implements RequestInterface
@@ -51,8 +52,7 @@ class CLI extends Generic implements RequestInterface
      */
     public static function getInstance(array $array = array())
     {
-        if (!(self::$instance instanceof Request))
-        {
+        if (!(self::$instance instanceof Request)) {
             // construct the object
             self::$instance = new self($array);
         }
@@ -74,11 +74,9 @@ class CLI extends Generic implements RequestInterface
         if (empty($array)) return;
 
 
-        foreach ($array as $param)
-        {
-            if (strpos($param, '=') > 0)
-            {
-                $tmp = explode(Generic::ASSIGNMENT_OPERATOR, $param);
+        foreach ($array as $param) {
+            if (strpos($param, '=') > 0) {
+                $tmp           = explode(Generic::ASSIGNMENT_OPERATOR, $param);
                 $this->$tmp[0] = $tmp[1];
             }
         }

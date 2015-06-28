@@ -46,75 +46,67 @@ class MysqlStatistic extends Mysql
 
     /**
      * constructor
-     * 
+     *
      * @param mysql $db
      */
-    public function __construct( Mysql $db = null )
+    public function __construct(Mysql $db = null)
     {
 
-        if ( empty($db) ) return;
-        
+        if (empty($db)) return;
+
         // assign database object
         $this->db = $db;
-    
+
     }
 
     /**
      * get processlist
-     * 
+     *
      * @throws DatabaseException
      * @return mixed:
      */
     public function get_processlist()
     {
 
-        try
-        {
-            if ( empty($this->db) )
-            {
+        try {
+            if (empty($this->db)) {
                 throw new DatabaseException(__METHOD__ . 'No Database Object has been given', Mysql::ERR_NO_CREDENTIALS, Mysql::SEVERITY_LOG, __FILE__, __LINE__);
             }
-            
-            $sql = (string) "SHOW FULL PROCESSLIST";
+
+            $sql = (string)"SHOW FULL PROCESSLIST";
             $res = $this->db->query($sql);
-            
-            if ( empty($res) ) return array();
-            
+
+            if (empty($res)) return array();
+
             return $this->db->fetch_object_list($res);
-        }
-        catch ( DatabaseException $e )
-        {
+        } catch (DatabaseException $e) {
             throw $e;
         }
     }
 
     /**
      * show table listing
-     * 
+     *
      * @throws DatabaseException
-     * 
+     *
      * @return array:
      */
     public function show_table_listing()
     {
 
-        try
-        {
-            if ( empty($this->db) )
-            {
+        try {
+            if (empty($this->db)) {
                 throw new DatabaseException(__METHOD__ . 'No Database Object has been given', Mysql::ERR_NO_CREDENTIALS, Mysql::SEVERITY_LOG, __FILE__, __LINE__);
             }
-            
-            $sql = (string) "SELECT * FROM `information_schema`.`tables`";
+
+            $sql = (string)"SELECT * FROM `information_schema`.`tables`";
             $res = $this->db->query($sql);
-            
-            if ( empty($res) ) return array();
-            
+
+            if (empty($res)) return array();
+
             return $this->db->fetch_object_list($res);
-        
-        }
-        catch ( DatabaseException $e )
-        {
+
+        } catch (DatabaseException $e) {
             throw $e;
         }
     }

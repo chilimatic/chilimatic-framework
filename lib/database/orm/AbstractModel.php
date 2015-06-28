@@ -14,7 +14,8 @@ namespace chilimatic\lib\database\orm;
  *
  * @package chilimatic\lib\database\orm
  */
-abstract class AbstractModel implements \JsonSerializable{
+abstract class AbstractModel implements \JsonSerializable
+{
 
     /**
      * @return mixed

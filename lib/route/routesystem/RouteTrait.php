@@ -76,15 +76,16 @@ Trait RouteTrait
      *
      * @returns \chilimatic\lib\route\Map
      */
-    public function getDefaultRoute() {
+    public function getDefaultRoute()
+    {
         try {
             return $this->buildRouteMap(
                 $this->defaultUrlDelimiter,
                 [
-                    'object' => implode ('\\',  $this->generateClassName(
+                    'object' => implode('\\', $this->generateClassName(
                         $this->defaultNameSpace,
                         $this->defaultModule,
-                        $this->defaultControllerPath ,
+                        $this->defaultControllerPath,
                         $this->defaultClass)
                     ),
                     'method' => $this->defaultMethod . $this->actionSuffix
@@ -102,6 +103,7 @@ Trait RouteTrait
      * @param string $path
      * @param array $config
      * @param string $delimiter
+     *
      * @throws \chilimatic\lib\exception\RouteException
      *
      * @return \chilimatic\lib\route\Map
@@ -112,8 +114,9 @@ Trait RouteTrait
             if (!$this->getMapFactory()) {
                 $this->setMapFactory(new MapFactory());
             }
+
             return $this->mapFactory->make($path, $config, $delimiter);
-        } catch ( \chilimatic\lib\exception\RouteException $e ) {
+        } catch (\chilimatic\lib\exception\RouteException $e) {
             throw $e;
         }
 
@@ -126,10 +129,12 @@ Trait RouteTrait
      * @param string $module
      * @param string $class
      * @param string $controllerPath
+     *
      * @return string
      */
-    private function generateClassName($namespace, $module, $controllerPath, $class) {
-        return [$namespace , $module, $controllerPath ,ucfirst($this->transformer->transform($class))];
+    private function generateClassName($namespace, $module, $controllerPath, $class)
+    {
+        return [$namespace, $module, $controllerPath, ucfirst($this->transformer->transform($class))];
     }
 
 
@@ -141,15 +146,15 @@ Trait RouteTrait
     public function getStandardRouting($path)
     {
         // remove starting and ending slash
-        $path = trim($path, $this->defaultUrlDelimiter);
+        $path     = trim($path, $this->defaultUrlDelimiter);
         $pathPart = explode($this->defaultUrlDelimiter, $path);
 
         // more than 1 part means class/method/[value or param{/value}]
         if (count($pathPart) >= 1) {
-            $module = empty($pathPart[0]) ? $this->defaultModule : $pathPart[0];
+            $module    = empty($pathPart[0]) ? $this->defaultModule : $pathPart[0];
             $className = empty($pathPart[1]) ? $this->defaultClass : $pathPart[1];
 
-            $class = implode ('\\',
+            $class     = implode('\\',
                 $this->generateClassName(
                     $this->defaultNameSpace,
                     $module,
@@ -157,24 +162,24 @@ Trait RouteTrait
                     $className
                 )
             );
-            $urlMethod = (string) empty($pathPart[2]) ? $this->defaultMethod : $pathPart[2];
-            $method = $this->transformer->transform($urlMethod . $this->actionSuffix);
+            $urlMethod = (string)empty($pathPart[2]) ? $this->defaultMethod : $pathPart[2];
+            $method    = $this->transformer->transform($urlMethod . $this->actionSuffix);
 
         } else {
             $className = $this->defaultClass;
-            $class = implode ('\\',  $this->generateClassName(
+            $class     = implode('\\', $this->generateClassName(
                 $this->defaultNameSpace,
                 $this->defaultModule,
                 $this->defaultControllerPath,
                 $this->defaultClass)
             );
 
-            $urlMethod = (string) $this->defaultMethod;
-            $method = $this->transformer->transform($urlMethod . $this->actionSuffix);
+            $urlMethod = (string)$this->defaultMethod;
+            $method    = $this->transformer->transform($urlMethod . $this->actionSuffix);
         }
 
         if (class_exists($class, true)) {
-            foreach ((array) get_class_methods($class) as $cmethod) {
+            foreach ((array)get_class_methods($class) as $cmethod) {
                 if (strtolower($cmethod) != strtolower($method)) {
                     continue;
                 }
@@ -182,8 +187,8 @@ Trait RouteTrait
                 return $this->mapFactory->make(
                     strtolower("/{$module}/{$className}/{$urlMethod}"),
                     [
-                        'object' => $class,
-                        'method' => $this->transformer->transform($method),
+                        'object'    => $class,
+                        'method'    => $this->transformer->transform($method),
                         'namespace' => null
                     ],
                     $this->defaultUrlDelimiter
