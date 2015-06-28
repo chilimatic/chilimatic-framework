@@ -172,7 +172,7 @@ class Node implements INode
      *
      * @param $id
      *
-     * @return mixed|null
+     * @return Node|null
      */
     public function getById($id)
     {

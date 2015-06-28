@@ -299,10 +299,12 @@ class Collection
      */
     public function removeNode(Node $node = null)
     {
-        if (empty($node)) return $this;
+        if (empty($node)) {
+            return true;
+        }
+        // flag for GC
+        unset($this->list[$node->key], $this->keyList[$node->key], $this->idList[$node->id]);
 
-        unset($this->list[$node->getKey()]);
-
-        return $this;
+        return true;
     }
 }

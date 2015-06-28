@@ -49,7 +49,7 @@ class File extends AbstractConfig
         $this->mainNode = new Node(null, self::MAIN_NODE_KEY, null);
 
         // add custom parameters
-        if (is_array($param) && count($param)) {
+        if (is_array($param)) {
             // set the given parameters
             foreach ($param as $key => $value) {
                 $node = new Node($this->mainNode, $key, $value, self::INIT_PARAMETER);
@@ -190,50 +190,53 @@ class File extends AbstractConfig
     /**
      * loads the config settings
      *
-     * @throws ConfigException
+     * @param null $param
      *
      * @return bool
+     * @throws ConfigException
+     * @throws \Exception
      */
     public function load($param = null)
     {
         // if there already has been a config set it means it already
         // has been loaded so why bother retrying ! this is not a dynamic language !
-        $config_set = $this->get('config_set');
-        if (count((array)$config_set) > 0) return true;
+        $configSet = $this->get('config_set');
+        if (count((array) $configSet) > 0) return true;
 
         // if the config set already exists don't parse it
-        if (empty($config_set) && !($config_set = $this->_getConfigSet())) {
+        if (empty($configSet) && !($configSet = $this->_getConfigSet())) {
             // set default config set for the default execution
-            $config_set = [
+            $configSet = [
                 realpath("{$this->config_path}/" . (string)self::HIERACHY_PLACEHOLDER . (string)self::CONFIG_DELIMITER . (string)self::FILE_EXTENSION)
             ];
-            $this->set('config_set', $config_set);
+            $this->set('config_set', $configSet);
         }
 
         /**
          * create the total config parameter array and merge it recursive
          */
         try {
-            if (empty($config_set) || !is_readable($config_set[0])) {
+            if (empty($configSet) || !is_readable($configSet[0])) {
                 throw new ConfigException("No default config file declared {$this->config_path}/" . self::HIERACHY_PLACEHOLDER . (string)self::CONFIG_DELIMITER . (string)self::FILE_EXTENSION);
             }
 
             $configParser = new \chilimatic\lib\config\configfile\Parser();
             // first insert point
-            $Node = null;
-            foreach ($config_set as $config) {
+            $node = null;
+            foreach ($configSet as $config) {
                 /**
                  * get the key for the config node
                  */
                 $key = explode('/', $config);
                 $key = substr(array_pop($key), 0, -4);
 
-                $Node = new Node($this->mainNode, $key, $config, 'self');
+                $node = new Node($this->mainNode, $key, $config, 'self');
+                $this->lastNewNode = $node;
                 // add the config node
-                $this->mainNode->addChild($Node);
+                $this->mainNode->addChild($node);
 
                 unset($key);
-                $configParser->parse($this->getConfigFileContent($config), $Node);
+                $configParser->parse($this->getConfigFileContent($config), $node);
             }
 
         } catch (ConfigException $e) {
@@ -253,7 +256,7 @@ class File extends AbstractConfig
     private function getConfigFileContent($self)
     {
         // if empty just skip it
-        if (!filesize($self)) return array();
+        if (!filesize($self)) return [];
 
         // read the file handler
         $config = (string)file_get_contents($self);
@@ -264,7 +267,7 @@ class File extends AbstractConfig
                 $config
             );
         } else {
-            $config = (array)explode("\n", $config);
+            $config = (array) explode("\n", $config);
         }
 
         return $config;

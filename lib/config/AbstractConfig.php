@@ -34,7 +34,15 @@ abstract class AbstractConfig implements IConfig
      *
      * @var Node
      */
-    public $mainNode = null;
+    public $mainNode;
+
+
+    /**
+     * get the last use node [insert/delete/update .... and so on]
+     *
+     * @var Node|null
+     */
+    public $lastNewNode;
 
     /**
      * constructor
@@ -75,13 +83,34 @@ abstract class AbstractConfig implements IConfig
      */
     public function delete($key = '')
     {
-        $node = $this->mainNode->getLastByKey($key);
-        if (empty($node)) return $this->mainNode;
+        $nodeList = $this->mainNode->getByKey($key);
+        if (empty($nodeList)) {
+            true;
+        }
 
-        $this->mainNode->children->removeNode($node);
+        foreach ($nodeList as $node) {
+            $node->delete();
+        }
+
         unset($node);
 
-        return $this->mainNode;
+        return true;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return bool
+     */
+    public function deleteById($id = '')
+    {
+        $node = $this->mainNode->getById($id);
+
+        if (empty($node)) {
+            true;
+        }
+
+        return $node->delete();
     }
 
     /**
@@ -160,6 +189,8 @@ abstract class AbstractConfig implements IConfig
             $newNode = new Node($node, $key, $val);
             $node->addChild($newNode);
         }
+
+        $this->lastNewNode = $newNode;
 
         return $this;
 
