@@ -12,6 +12,7 @@ use chilimatic\lib\exception\ConfigException;
 
 /**
  * Class Config_Ini
+ *
  * @package chilimatic\lib\config
  */
 class Ini extends AbstractConfig
@@ -46,29 +47,26 @@ class Ini extends AbstractConfig
      *
      * @return void
      */
-    public function load( $param = null )
+    public function load($param = null)
     {
-        try
-        {
-            if ( empty($param['file']) ) {
+        try {
+            if (empty($param['file'])) {
                 throw new ConfigException(_('No config file was give please, the parameter '), 0, 1, __METHOD__, __LINE__);
             }
-            $this->configFile = (string) $param['file'];
+            $this->configFile = (string)$param['file'];
 
-            if ( isset($param['process-sections']) ) {
-                $this->processSections = (bool) $param['process-sections'];
+            if (isset($param['process-sections'])) {
+                $this->processSections = (bool)$param['process-sections'];
             }
-            if ( isset($param['scanner-mode']) ) {
-                $this->scannerMode = (int) $param['scanner-mode'];
+            if (isset($param['scanner-mode'])) {
+                $this->scannerMode = (int)$param['scanner-mode'];
             }
 
             $data = parse_ini_file($this->configFile, $this->processSections, $this->scannerMode);
 
             $this->mainNode = new Node(null, IConfig::MAIN_NODE_KEY, 'main node');
-            foreach ($data as $key => $group)
-            {
-                if( !is_array($group) )
-                {
+            foreach ($data as $key => $group) {
+                if (!is_array($group)) {
                     $newNode = new Node($this->mainNode, $key, $group);
                     $this->mainNode->addChild($newNode);
                     continue;
@@ -76,16 +74,13 @@ class Ini extends AbstractConfig
 
                 $newNode = new Node($this->mainNode, $key, $key);
 
-                foreach ($group as $name => $value)
-                {
+                foreach ($group as $name => $value) {
                     $childNode = new Node($newNode, $name, $value);
                     $newNode->addChild($childNode);
                 }
                 $this->mainNode->addChild($newNode);
             }
-        }
-        catch (ConfigException $e)
-        {
+        } catch (ConfigException $e) {
             throw $e;
         }
     }
@@ -94,9 +89,11 @@ class Ini extends AbstractConfig
      * deletes a config node
      *
      * @param string $id
+     *
      * @return mixed
      */
-    public function delete($id = ""){
+    public function delete($id = "")
+    {
         //@todo think of implementation
     }
 
@@ -104,10 +101,12 @@ class Ini extends AbstractConfig
      * saves the specified config
      *
      * @param Node $node
+     *
      * @internal param $array ;
      *
      * @return mixed
      */
-    function saveConfig(Node $node = null){
+    function saveConfig(Node $node = null)
+    {
     }
 }

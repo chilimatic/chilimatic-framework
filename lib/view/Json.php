@@ -33,13 +33,16 @@ class Json implements MinimalInterface
      * @return mixed|void
      * @internal param bool $fetch
      */
-    public function render() {
+    public function render()
+    {
         $this->initRender();
+
         return json_encode($this->getAll(), JSON_NUMERIC_CHECK);
     }
 
 
-    public function initRender(){
+    public function initRender()
+    {
         header(self::CONTENT_TYPE_JSON);
     }
 
@@ -50,7 +53,8 @@ class Json implements MinimalInterface
      * @param $key
      * @param $val
      */
-    public function __set($key, $val) {
+    public function __set($key, $val)
+    {
         $this->set($key, $val);
     }
 
@@ -59,7 +63,8 @@ class Json implements MinimalInterface
      *
      * @return mixed|null
      */
-    public function __get($key) {
+    public function __get($key)
+    {
         return $this->get($key);
     }
 }

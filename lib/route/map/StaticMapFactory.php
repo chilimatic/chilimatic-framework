@@ -9,13 +9,16 @@ namespace chilimatic\lib\route\map;
 
 /**
  * Interface StaticMapFactory
+ *
  * @package chilimatic\lib\route\map
  */
-Interface StaticMapFactory {
+Interface StaticMapFactory
+{
 
     /**
      * @param $type
      * @param $config
+     *
      * @return mixed
      */
     public static function make($type, $config);

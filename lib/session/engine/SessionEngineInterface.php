@@ -9,7 +9,8 @@
 
 namespace chilimatic\lib\session\engine;
 
-Interface SessionEngineInterface {
+Interface SessionEngineInterface
+{
 
     /**
      * default sesion life time in seconds
@@ -30,6 +31,7 @@ Interface SessionEngineInterface {
      * init method to add tables or other needed behaviour
      *
      * @param array $config
+     *
      * @return mixed
      */
     public function init($config = []);
@@ -38,27 +40,30 @@ Interface SessionEngineInterface {
      * reads a specific session
      *
      * @param $session_id
+     *
      * @return mixed
      */
-    public function session_read( $session_id );
+    public function session_read($session_id);
 
     /**
      * writes a specific session
      *
      * @param $session_id
      * @param $session_data
+     *
      * @return mixed
      */
-    public function session_write( $session_id , $session_data );
+    public function session_write($session_id, $session_data);
 
     /**
      * opens a specific session
      *
      * @param $save_path
      * @param $session_name
+     *
      * @return mixed
      */
-    public function session_open( $save_path , $session_name );
+    public function session_open($save_path, $session_name);
 
     /**
      * session garbage collector
@@ -71,9 +76,10 @@ Interface SessionEngineInterface {
      * destroys the session
      *
      * @param $session_id
+     *
      * @return mixed
      */
-    public function session_destroy( $session_id );
+    public function session_destroy($session_id);
 
     /**
      * close the session

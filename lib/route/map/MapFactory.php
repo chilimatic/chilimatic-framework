@@ -7,10 +7,12 @@
  */
 
 namespace chilimatic\lib\route\map;
+
 use chilimatic\lib\route\Map;
 
 /**
  * Class MapFactory
+ *
  * @package chilimatic\lib\route\map
  */
 class MapFactory
@@ -22,7 +24,8 @@ class MapFactory
      *
      * @return Map
      */
-    public function make($path, $callback, $delimiter) {
+    public function make($path, $callback, $delimiter)
+    {
         return new Map($path, $callback, $delimiter);
     }
 }

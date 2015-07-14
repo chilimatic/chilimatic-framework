@@ -41,7 +41,8 @@ class Parser
     /**
      *
      */
-    public function __construct() {
+    public function __construct()
+    {
         // set the default comment characters
         $this->_comment_character_list = explode(',', self::COMMENT_CHARACTER_LIST);
     }
@@ -51,6 +52,7 @@ class Parser
      * checks if it's a comment in the config
      *
      * @param $line
+     *
      * @return bool
      */
     private function isComment($line)
@@ -60,10 +62,9 @@ class Parser
 
         $is_comment = false;
 
-        foreach ($this->_comment_character_list as $comment_char)
-        {
+        foreach ($this->_comment_character_list as $comment_char) {
             $line = trim($line);
-            if (strpos($line, $comment_char) !== false && strpos($line , $comment_char ) <= 3) {
+            if (strpos($line, $comment_char) !== false && strpos($line, $comment_char) <= 3) {
                 $is_comment = true;
                 break;
             }
@@ -83,7 +84,7 @@ class Parser
         $currentComment = '';
 
         // loop through all lines
-        for ($i = 0, $count = (int) count($currentConfig); $i < $count; $i++) {
+        for ($i = 0, $count = (int)count($currentConfig); $i < $count; $i++) {
             if (!$currentConfig[$i]) {
                 continue;
             } elseif ($this->isComment($currentConfig[$i])) {

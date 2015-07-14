@@ -1,5 +1,6 @@
 <?php
 namespace chilimatic\lib\route;
+
 use chilimatic\lib\exception\RouteException;
 
 /**
@@ -10,8 +11,8 @@ use chilimatic\lib\exception\RouteException;
  *
  * File: IRouter.php
  */
-
-interface IRouter {
+interface IRouter
+{
 
     /**
      * @var string

@@ -15,9 +15,11 @@ use \JsonSerializable;
 
 /**
  * Class Generic
+ *
  * @package chilimatic\lib\request
  */
-abstract class Generic extends \stdClass implements JsonSerializable, ISingeltonArray {
+abstract class Generic extends \stdClass implements JsonSerializable, ISingeltonArray
+{
 
     /**
      * the default delimiter
@@ -60,7 +62,8 @@ abstract class Generic extends \stdClass implements JsonSerializable, ISingelton
      *
      * @return \chilimatic\lib\request\Generic
      */
-    protected function __construct(array $param = null){
+    protected function __construct(array $param = null)
+    {
         $this->param = $param;
     }
 
@@ -68,12 +71,15 @@ abstract class Generic extends \stdClass implements JsonSerializable, ISingelton
     /**
      * @param $key
      * @param $value
+     *
      * @return $this
      */
-    public function add($key, $value) {
+    public function add($key, $value)
+    {
         if (!$key) return $this;
 
         $this->param[$key] = $value;
+
         return $this;
     }
 
@@ -81,32 +87,39 @@ abstract class Generic extends \stdClass implements JsonSerializable, ISingelton
      * adds a array as normal properties
      *
      * @param array $param
+     *
      * @return bool
      */
-    public function addArray(array $param = null) {
+    public function addArray(array $param = null)
+    {
         $this->param = array_merge($this->param, $param);
+
         return $this;
     }
 
     /**
      * @return array
      */
-    public function getAllParam() {
+    public function getAllParam()
+    {
         return $this->param;
     }
 
     /**
      * @param $property
      * @param null $type
+     *
      * @return null
      */
-    public function get($property, $type = null) {
+    public function get($property, $type = null)
+    {
         if (!isset($this->param[$property])) {
             return null;
         }
 
         if (isset($type)) {
             $method = TypeCast::METHODPREFIX . $type;
+
             return TypeCast::$method($property);
         }
 

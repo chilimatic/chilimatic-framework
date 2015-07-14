@@ -37,17 +37,18 @@ class Entry
     /**
      *
      * shmop can't write
+     *
      * @var int
      */
     const ERR_SHMOP_WRITE = 4;
 
     /**
      * human readable name for the cache
-     * 
+     *
      * @var string
      */
     protected $keyName = '';
-    
+
     /**
      * key (random key -> memory)
      *
@@ -132,16 +133,15 @@ class Entry
      */
     public function __construct($id = null, $mode = null, $permission = null, $size = null)
     {
-        try
-        {
+        try {
             if (!function_exists('shmop_open')) {
-                throw new MemoryException(__METHOD__ .' - shmop_open does not exist please install the module or change the caching module', self::ERR_SHMOP_MISSING, 10, __FILE__, __LINE__);
+                throw new MemoryException(__METHOD__ . ' - shmop_open does not exist please install the module or change the caching module', self::ERR_SHMOP_MISSING, 10, __FILE__, __LINE__);
             }
 
-            $this->id = (int) $id;
-            $this->mode = $mode;
+            $this->id         = (int)$id;
+            $this->mode       = $mode;
             $this->permission = $permission;
-            $this->size = $size;
+            $this->size       = $size;
 
             if ($this->id) {
                 $this->load();
@@ -154,7 +154,7 @@ class Entry
 
     /**
      * saves the data of an entry
-     * 
+     *
      * @return boolean
      */
     public function save()
@@ -163,9 +163,9 @@ class Entry
         if ($this->id) {
             $this->id = shmop_open($this->key, $this->mode, $this->permission, $this->size);
         }
-        
+
         @shmop_write($this->id, serialize($this->data), $this->offset);
-        
+
         return true;
     }
 
@@ -178,46 +178,44 @@ class Entry
     {
         try {
             if (empty($this->key)) {
-                throw new MemoryException(__METHOD__ . ' - no key exists', self::ERR_SHMOP_NOT_OPEN, 1, __FILE__, __LINE__ );
+                throw new MemoryException(__METHOD__ . ' - no key exists', self::ERR_SHMOP_NOT_OPEN, 1, __FILE__, __LINE__);
             }
 
             if (empty($this->permission)) {
-                throw new MemoryException( __METHOD__ . ' - no permission set', self::ERR_SHMOP_NOT_OPEN, 1, __FILE__, __LINE__ );
+                throw new MemoryException(__METHOD__ . ' - no permission set', self::ERR_SHMOP_NOT_OPEN, 1, __FILE__, __LINE__);
             }
 
             // switch to read
-            if (! ($this->id = shmop_open( $this->key, Shmop::READ_MOD, $this->permission, $this->size ))) {
-                throw new MemoryException(__METHOD__ . ' - shmop_open not working', self::ERR_SHMOP_NOT_OPEN, 1, __FILE__, __LINE__ );
+            if (!($this->id = shmop_open($this->key, Shmop::READ_MOD, $this->permission, $this->size))) {
+                throw new MemoryException(__METHOD__ . ' - shmop_open not working', self::ERR_SHMOP_NOT_OPEN, 1, __FILE__, __LINE__);
             }
 
-            $data = @shmop_read( $this->id, $this->start, $this->count );
+            $data = @shmop_read($this->id, $this->start, $this->count);
 
             $this->data = $data;
-        }
-        catch(MemoryException $e)
-        {
+        } catch (MemoryException $e) {
             throw $e;
         }
 
-        
+
         return true;
     }
 
     /**
      * deletes the entry
-     * 
+     *
      * @return boolean
      */
     public function delete()
     {
-        if ( empty( $this->id ) ) {
-            $this->id = shmop_open( $this->key, $this->mode, $this->permission, $this->size );
+        if (empty($this->id)) {
+            $this->id = shmop_open($this->key, $this->mode, $this->permission, $this->size);
         }
         @shmop_delete($this->id);
         @shmop_close($this->id);
-        
+
         return true;
-        
+
     }
 
     /**
@@ -255,7 +253,7 @@ class Entry
      */
     public function setKey($key)
     {
-        $this->key = (int) $key;
+        $this->key = (int)$key;
 
         return $this;
     }
@@ -450,7 +448,7 @@ class Entry
      */
     public function __destruct()
     {
-        @shmop_close( $this->id );
+        @shmop_close($this->id);
     }
 
 }

@@ -9,4 +9,6 @@ namespace chilimatic\lib\exception;
  * File: MemoryException.php
  */
 
-class MemoryException extends \RuntimeException {}
+class MemoryException extends \RuntimeException
+{
+}

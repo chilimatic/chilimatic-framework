@@ -28,7 +28,8 @@ class ModelStorage implements \Countable, \Iterator, \Serializable
      *
      * @return string
      */
-    public function generateHash(AbstractModel $model) {
+    public function generateHash(AbstractModel $model)
+    {
         return md5(serialize($model));
     }
 
@@ -37,7 +38,8 @@ class ModelStorage implements \Countable, \Iterator, \Serializable
      *
      * @return bool
      */
-    public function contains(AbstractModel $model) {
+    public function contains(AbstractModel $model)
+    {
         foreach ($this->storage as $key => $storedModel) {
             if ($model === $storedModel->getModel()) {
                 return true;
@@ -51,10 +53,12 @@ class ModelStorage implements \Countable, \Iterator, \Serializable
      * @param AbstractModel $model
      * @param null $param
      */
-    public function addData(AbstractModel $model, $param = null) {
+    public function addData(AbstractModel $model, $param = null)
+    {
         foreach ($this->storage as $key => $storedModel) {
             if ($model === $storedModel->getModel()) {
                 $storedModel->addData($param);
+
                 return;
             }
         }
@@ -64,11 +68,12 @@ class ModelStorage implements \Countable, \Iterator, \Serializable
      * @param AbstractModel $model
      * @param null|mixed $param
      */
-    public function attach(AbstractModel $model, $param = null) {
+    public function attach(AbstractModel $model, $param = null)
+    {
         if ($this->contains($model)) {
             return;
         }
-        $this->currentId = $this->generateHash($model);
+        $this->currentId                 = $this->generateHash($model);
         $this->storage[$this->currentId] = new ModelStorageDecorator($model, $param);
     }
 
@@ -77,7 +82,8 @@ class ModelStorage implements \Countable, \Iterator, \Serializable
      *
      * @return void
      */
-    public function deleteByKey($key) {
+    public function deleteByKey($key)
+    {
         if (isset($this->storage[$key])) {
             unset($this->storage[$key]);
         }
@@ -88,7 +94,8 @@ class ModelStorage implements \Countable, \Iterator, \Serializable
      *
      * @return void
      */
-    public function detach(AbstractModel $model) {
+    public function detach(AbstractModel $model)
+    {
         foreach ($this->storage as $key => $storedModel) {
             if ($model === $storedModel) {
                 unset($this->storage[$key]);
@@ -126,7 +133,8 @@ class ModelStorage implements \Countable, \Iterator, \Serializable
      *
      * @return null|AbstractModel
      */
-    public function containsParam(ModelStorageDecorator $storedModel, $param) {
+    public function containsParam(ModelStorageDecorator $storedModel, $param)
+    {
         if (!$storedModel || !$param) {
             return false;
         }
@@ -160,7 +168,8 @@ class ModelStorage implements \Countable, \Iterator, \Serializable
      *
      * @return null|AbstractModel
      */
-    public function get(AbstractModel $model, $param = null) {
+    public function get(AbstractModel $model, $param = null)
+    {
         if ($this->contains($model)) {
             return $this->storage[$this->generateHash($model, $param)]->getModel();
         }
@@ -175,7 +184,8 @@ class ModelStorage implements \Countable, \Iterator, \Serializable
      * @link http://php.net/manual/en/iterator.current.php
      * @return mixed Can return any type.
      */
-    public function current() {
+    public function current()
+    {
         return $this->storage[$this->currentId];
     }
 
@@ -186,7 +196,8 @@ class ModelStorage implements \Countable, \Iterator, \Serializable
      * @link http://php.net/manual/en/iterator.next.php
      * @return void Any returned value is ignored.
      */
-    public function next() {
+    public function next()
+    {
 
     }
 
@@ -197,7 +208,8 @@ class ModelStorage implements \Countable, \Iterator, \Serializable
      * @link http://php.net/manual/en/iterator.key.php
      * @return mixed scalar on success, or null on failure.
      */
-    public function key() {
+    public function key()
+    {
         return $this->currentId;
     }
 
@@ -209,7 +221,8 @@ class ModelStorage implements \Countable, \Iterator, \Serializable
      * @return boolean The return value will be casted to boolean and then evaluated.
      *       Returns true on success or false on failure.
      */
-    public function valid() {
+    public function valid()
+    {
         return isset($this->storage[$this->currentId]);
     }
 
@@ -220,8 +233,9 @@ class ModelStorage implements \Countable, \Iterator, \Serializable
      * @link http://php.net/manual/en/iterator.rewind.php
      * @return void Any returned value is ignored.
      */
-    public function rewind() {
-        $keyList = array_keys($this->storage);
+    public function rewind()
+    {
+        $keyList         = array_keys($this->storage);
         $this->currentId = array_shift($keyList);
     }
 
@@ -233,7 +247,8 @@ class ModelStorage implements \Countable, \Iterator, \Serializable
      * @link http://php.net/manual/en/serializable.serialize.php
      * @return string the string representation of the object or null
      */
-    public function serialize() {
+    public function serialize()
+    {
         return $this;
     }
 
@@ -249,7 +264,8 @@ class ModelStorage implements \Countable, \Iterator, \Serializable
      *
      * @return void
      */
-    public function unserialize($serialized) {
+    public function unserialize($serialized)
+    {
         // TODO: Implement unserialize() method.
     }
 
@@ -263,7 +279,8 @@ class ModelStorage implements \Countable, \Iterator, \Serializable
      *       <p>
      *       The return value is cast to an integer.
      */
-    public function count() {
+    public function count()
+    {
         return count($this->storage);
     }
 

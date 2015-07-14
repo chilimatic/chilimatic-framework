@@ -17,9 +17,11 @@ use chilimatic\lib\database\AbstractConnection;
  * <p>
  * all connection parameters are injected from the outside. So only the validation is from within
  * </p>
+ *
  * @package chilimatic\lib\database\mysql
  */
-class MysqlConnection extends AbstractConnection {
+class MysqlConnection extends AbstractConnection
+{
 
     /**
      * Mysql standard charset
@@ -118,7 +120,7 @@ class MysqlConnection extends AbstractConnection {
      */
     private function findConnectionType()
     {
-        switch(true) {
+        switch (true) {
             case (strpos($this->getHost(), 'localhost') && $this->getPort() == self::MYSQL_DEFAULT_PORT):
                 $this->setSocket(true);
                 break;
@@ -139,9 +141,11 @@ class MysqlConnection extends AbstractConnection {
      * <p>
      * checks if at least all the needed parameters for a connection are set
      * </p>
+     *
      * @return bool
      */
-    public function isValid() {
+    public function isValid()
+    {
         if ($this->getHost() && $this->getUsername() && $this->getPassword()) {
             return true;
         }
@@ -154,19 +158,22 @@ class MysqlConnection extends AbstractConnection {
      *
      * @return string
      */
-    public function getMysqliConnectionString() {
+    public function getMysqliConnectionString()
+    {
         switch (true) {
             case $this->isPersistent():
                 if ($this->isSocket()) {
-                    return (string) null;
+                    return (string)null;
                 }
-                return (string) 'p:'.$this->getHost();
+
+                return (string)'p:' . $this->getHost();
                 break;
             default:
                 if ($this->isSocket()) {
-                    return (string) null;
+                    return (string)null;
                 }
-                return (string) $this->getHost();
+
+                return (string)$this->getHost();
                 break;
         }
     }
@@ -176,16 +183,17 @@ class MysqlConnection extends AbstractConnection {
      *
      * @return string
      */
-    public function getPDOConnectionString() {
+    public function getPDOConnectionString()
+    {
 
         $dsn = 'mysql:';
 
         if ($this->isSocket()) {
-            $dsn .= (string) 'unix_socket=' . $this->getHost() . ';';
+            $dsn .= (string)'unix_socket=' . $this->getHost() . ';';
         } else {
-            $dsn .= (string) 'host='.$this->getHost() . ';';
+            $dsn .= (string)'host=' . $this->getHost() . ';';
             if ($this->getPort()) {
-                $dsn .= 'port='. $this->getPort(). ';';
+                $dsn .= 'port=' . $this->getPort() . ';';
             }
         }
 
@@ -205,9 +213,11 @@ class MysqlConnection extends AbstractConnection {
      * <p>
      * reconnect to mysql if the connection was lost
      * </p>
+     *
      * @return bool
      */
-    public function ping() {
+    public function ping()
+    {
         if (method_exists($this->getDb(), 'ping')) {
             $this->getDb()->ping();
         } else if ($this->isConnected() && $this->getDb()) { // PDO condition
@@ -217,6 +227,7 @@ class MysqlConnection extends AbstractConnection {
                 $this->getDb()->init();
             }
         }
+
         return true;
     }
 
@@ -368,8 +379,9 @@ class MysqlConnection extends AbstractConnection {
      *
      * @return bool
      */
-    public function tryReconnect() {
-        if ( self::MAX_RECONNECTS < $this->reconnect ) return false;
+    public function tryReconnect()
+    {
+        if (self::MAX_RECONNECTS < $this->reconnect) return false;
         $this->ping();
         $this->reconnect++;
 

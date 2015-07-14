@@ -432,5 +432,4 @@
         
         return (!$count) ? $this->create_list($object_list) : ($count !== false);
     }
-}
-?>
+}s

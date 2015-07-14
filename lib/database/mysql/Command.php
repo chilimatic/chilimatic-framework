@@ -14,21 +14,20 @@ class Command
 
     /**
      * database object
-     * 
+     *
      * @var Mysql
      */
-    public $db = NULL;
+    public $db = null;
 
     /**
      * constructor
-     * 
+     *
      * @param Mysql $db
      */
-    public function __construct( $db = NULL )
+    public function __construct($db = null)
     {
 
-        if ( !empty($db) && is_resource($db) )
-        {
+        if (!empty($db) && is_resource($db)) {
             $this->db = $db;
         } else {
             $this->db = new Mysql(Config::get('mysql_host'), Config::get('mysql_user'), Config::get('mysql_password'), Config::get('mysql_db'));
@@ -37,19 +36,19 @@ class Command
 
     /**
      * kill a specific process
-     * 
+     *
      * @param int $pid
+     *
      * @return boolean
      */
-    public function kill_process( $pid )
+    public function kill_process($pid)
     {
 
-        if ( !is_numeric($pid) ) return FALSE;
-        $pid = (int) $pid;
+        if (!is_numeric($pid)) return false;
+        $pid = (int)$pid;
         $sql = "KILL $pid";
-        
+
         return $this->db->query($sql);
     }
 
 }
-?>

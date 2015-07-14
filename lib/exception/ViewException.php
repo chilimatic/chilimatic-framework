@@ -10,4 +10,6 @@
 namespace chilimatic\lib\exception;
 
 
-class ViewException extends \ErrorException {}
+class ViewException extends \ErrorException
+{
+}

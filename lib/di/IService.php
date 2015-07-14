@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @author j
@@ -7,8 +8,8 @@
  *
  * File: IService.php
  */
-
-Interface IService {
+Interface IService
+{
 
     public function __construct($param = null);
 

@@ -60,11 +60,11 @@ class Upload extends File
      *
      * @throws FileException
      */
-    public function __construct( $file = null )
+    public function __construct($file = null)
     {
 
-        if ( !is_array($file) || empty($file) ) return;
-        
+        if (!is_array($file) || empty($file)) return;
+
         $this->upload($file);
     }
 
@@ -77,27 +77,25 @@ class Upload extends File
      * @return bool
      * @throws FileException
      */
-    public function upload( $file = null )
+    public function upload($file = null)
     {
 
-        if ( empty($file) || !is_array($file) ) return false;
-        
-        $this->u_tmp_name = $file['tmp_name'];
-        $this->u_name = $file['name'];
-        $this->u_size = $file['size'];
+        if (empty($file) || !is_array($file)) return false;
+
+        $this->u_tmp_name  = $file['tmp_name'];
+        $this->u_name      = $file['name'];
+        $this->u_size      = $file['size'];
         $this->u_mime_type = $file['type'];
-        $this->u_error = isset($file['error']) ? $file['error'] : null;
-        
-        if ( $this->u_error )
-        {
+        $this->u_error     = isset($file['error']) ? $file['error'] : null;
+
+        if ($this->u_error) {
             throw new FileException("File couldn't be uploaded reason " . FileException::$upload_errors[$this->u_error], Config::get('file_error'), Config::get('error_lvl_low'), __FILE__, __LINE__);
         }
-        
+
         $this->_get_file_extension();
-        
+
         return true;
     }
-
 
 
     /**
@@ -108,13 +106,13 @@ class Upload extends File
     private function _get_file_extension()
     {
 
-        if ( empty($this->u_mime_type) ) return false;
-        
-        $tmp = explode('/', $this->u_mime_type);
+        if (empty($this->u_mime_type)) return false;
+
+        $tmp                  = explode('/', $this->u_mime_type);
         $this->file_extension = array_pop($tmp);
-        
+
         unset($tmp);
-        
+
         return true;
     }
 
@@ -126,11 +124,12 @@ class Upload extends File
      *
      * @return bool
      */
-    public function change_upload_path( $path )
+    public function change_upload_path($path)
     {
 
-        if ( getenv('upload_tmp_dir') == $path ) return true;
+        if (getenv('upload_tmp_dir') == $path) return true;
         putenv("upload_tmp_dir=$path");
+
         return true;
     }
 
@@ -148,39 +147,31 @@ class Upload extends File
      *
      * @return bool
      */
-    public function save( $path , $file_name = '' , $delete_source = false )
+    public function save($path, $file_name = '', $delete_source = false)
     {
 
-        try
-        {
-            if ( empty($path) )
-            {
+        try {
+            if (empty($path)) {
                 throw new FileException("No path has been given : $path", Config::get('file_error'), Config::get('error_lvl_low'), __FILE__, __LINE__);
             }
-            
+
             $save_name = "$path/" . (empty($file_name) ? $this->u_name : $file_name);
             $save_name = trim($save_name);
             $save_name = (strpos($save_name, '.') === false) ? trim($save_name) . "." . trim($this->file_extension) : trim($save_name);
-            
-            if ( !copy($this->u_tmp_name, $save_name) )
-            {
+
+            if (!copy($this->u_tmp_name, $save_name)) {
                 throw new FileException("Copy operation wasn't possible: $this->u_tmp_name, $save_name", Config::get('file_error'), Config::get('error_lvl_low'), __FILE__, __LINE__);
             }
-            
-            if ( $delete_source === true )
-            {
+
+            if ($delete_source === true) {
                 // delete the temporary file
                 unlink($this->u_tmp_name);
             }
-            
+
             return $this->open($save_name);
-        
-        }
-        catch ( FileException $e )
-        {
+
+        } catch (FileException $e) {
             throw $e;
         }
     }
 }
-
-?>

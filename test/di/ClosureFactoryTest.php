@@ -1,18 +1,18 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: j
  * Date: 25.11.14
  * Time: 22:14
  */
-
-
 class ClosureFactory_Test extends PHPUnit_Framework_TestCase
 {
     /**
      * @before
      */
-    public function destroyDI(){
+    public function destroyDI()
+    {
         \chilimatic\lib\di\ClosureFactory::destroyInstance();
     }
 
@@ -30,7 +30,7 @@ class ClosureFactory_Test extends PHPUnit_Framework_TestCase
     public function setServiceClosure()
     {
         $di = \chilimatic\lib\di\ClosureFactory::getInstance();
-        $di->set('my-test', function() use ($di) {
+        $di->set('my-test', function () use ($di) {
             return 'my-test';
         });
 
@@ -57,7 +57,7 @@ class ClosureFactory_Test extends PHPUnit_Framework_TestCase
     public function loadClosureSetByArrayViaConstructor()
     {
         $di = \chilimatic\lib\di\ClosureFactory::getInstance(null, [
-                'my-test' => function($setting) {
+                'my-test' => function ($setting) {
                     return $setting;
                 }
             ]
@@ -75,7 +75,7 @@ class ClosureFactory_Test extends PHPUnit_Framework_TestCase
     {
         $di = \chilimatic\lib\di\ClosureFactory::getInstance();
         $di->setServiceList([
-            'my-test' => function($setting) {
+            'my-test' => function ($setting) {
                 return $setting;
             }
         ]);
@@ -107,7 +107,7 @@ class ClosureFactory_Test extends PHPUnit_Framework_TestCase
         $di = \chilimatic\lib\di\ClosureFactory::getInstance();
         $di->loadServiceFromFile(__DIR__ . '/../testdata/test-service-list.php');
 
-        $di->set('my-test', function($setting) {
+        $di->set('my-test', function ($setting) {
             return array_pop($setting);
         });
         $testArray = ['test1', 'test2'];
@@ -136,7 +136,8 @@ class ClosureFactory_Test extends PHPUnit_Framework_TestCase
     public function removeClosure()
     {
         $di = \chilimatic\lib\di\ClosureFactory::getInstance();
-        $di->set('my-test', function(){});
+        $di->set('my-test', function () {
+        });
         $di->remove('my-test');
         $di->get('my-test');
     }
@@ -147,7 +148,8 @@ class ClosureFactory_Test extends PHPUnit_Framework_TestCase
     public function getClosure()
     {
         $di = \chilimatic\lib\di\ClosureFactory::getInstance();
-        $di->set('my-test', function(){});
+        $di->set('my-test', function () {
+        });
 
         $this->assertInstanceOf('\Closure', $di->getClosure('my-test'));
     }
@@ -161,12 +163,14 @@ class ClosureFactory_Test extends PHPUnit_Framework_TestCase
     public function destroyInstance()
     {
         $di = \chilimatic\lib\di\ClosureFactory::getInstance();
-        $di->set('my-test', function(){});
+        $di->set('my-test', function () {
+        });
 
         \chilimatic\lib\di\ClosureFactory::destroyInstance();
 
         $di = \chilimatic\lib\di\ClosureFactory::getInstance();
-        $di->set('my-test2', function(){});
+        $di->set('my-test2', function () {
+        });
 
         $di->get('my-test');
     }
@@ -177,7 +181,8 @@ class ClosureFactory_Test extends PHPUnit_Framework_TestCase
     public function checkIfClosureExists()
     {
         $di = \chilimatic\lib\di\ClosureFactory::getInstance();
-        $di->set('my-test', function(){});
+        $di->set('my-test', function () {
+        });
 
         $this->assertEquals(true, $di->exists('my-test'));
     }
@@ -186,11 +191,14 @@ class ClosureFactory_Test extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function checkIfPseudoSingeltonIsWorking() {
+    public function checkIfPseudoSingeltonIsWorking()
+    {
         $di = \chilimatic\lib\di\ClosureFactory::getInstance();
-        $di->set('my-test', function(){ return new \stdClass(); });
+        $di->set('my-test', function () {
+            return new \stdClass();
+        });
 
-        $asSingelton = $di->get('my-test',[], true);
+        $asSingelton  = $di->get('my-test', [], true);
         $asSingelton2 = $di->get('my-test', [], true);
 
         $this->assertEquals(true, $asSingelton === $asSingelton2);

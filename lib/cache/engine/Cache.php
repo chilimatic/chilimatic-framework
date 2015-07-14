@@ -7,6 +7,7 @@ use \chilimatic\lib\interfaces\ISingelton;
 
 /**
  * Class Cache
+ *
  * @package chilimatic\cache
  */
 class Cache implements ISingelton
@@ -18,7 +19,7 @@ class Cache implements ISingelton
      * @var object
      */
     public $cache = null;
-    
+
     /**
      * login credentials if needed
      *
@@ -32,7 +33,7 @@ class Cache implements ISingelton
      * @var bool
      */
     public $connected = false;
-    
+
     /**
      * the name of the cache [memcache/memcached/redis/filebased/apc.....]
      *
@@ -56,14 +57,14 @@ class Cache implements ISingelton
      *
      * @throws CacheException|\Exception
      */
-    private function __construct( $name = null, $credentials = array() )
+    private function __construct($name = null, $credentials = array())
     {
         try {
-            $this->cache = CacheFactory::make($name, $credentials);
-            $this->cacheName = get_class($this->cache);
-            $this->connected = $this->cache->isConnected();
+            $this->cache       = CacheFactory::make($name, $credentials);
+            $this->cacheName   = get_class($this->cache);
+            $this->connected   = $this->cache->isConnected();
             $this->credentials = $credentials;
-        } catch ( CacheException $e ) {
+        } catch (CacheException $e) {
             throw $e;
         }
     }
@@ -72,12 +73,13 @@ class Cache implements ISingelton
      * singelton constructor
      *
      * @param \stdClass $param
+     *
      * @return Cache
      */
-    public static function getInstance( $param = null)
+    public static function getInstance($param = null)
     {
-        if ( !self::$instance instanceof Cache ) {
-            $type = $param->type;
+        if (!self::$instance instanceof Cache) {
+            $type        = $param->type;
             $credentials = (property_exists($param, 'credentials')) ? $param->credentials : null;
 
             self::$instance = new Cache($type, $credentials);
@@ -85,7 +87,6 @@ class Cache implements ISingelton
 
         return self::$instance;
     }
-
 
 
     /**
@@ -97,13 +98,13 @@ class Cache implements ISingelton
      *
      * @return \chilimatic\lib\cache\engine\Cache|null $instance
      */
-    public static function set( $key, $value = null, $expiration = NULL )
+    public static function set($key, $value = null, $expiration = null)
     {
         if (!self::$instance) {
             return null;
         }
 
-        self::$instance->cache->set( $key, $value, $expiration);
+        self::$instance->cache->set($key, $value, $expiration);
 
         return self::$instance;
     }
@@ -116,11 +117,11 @@ class Cache implements ISingelton
      *
      * @return bool
      */
-    public static function get( $key )
+    public static function get($key)
     {
         if (!self::$instance) return null;
 
-        return self::$instance->cache->get( $key );
+        return self::$instance->cache->get($key);
     }
 
 
@@ -132,6 +133,7 @@ class Cache implements ISingelton
     public static function getCache()
     {
         if (!self::$instance) return null;
+
         return self::$instance->cache;
     }
 
@@ -144,6 +146,7 @@ class Cache implements ISingelton
     public static function getStatus()
     {
         if (!self::$instance) return null;
+
         return self::$instance->cache->getStatus();
     }
 

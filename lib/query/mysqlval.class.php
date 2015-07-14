@@ -77,13 +77,13 @@ SET
  */
 
 
-
 class Query_MysqlVal extends Query_FieldVal
 {
 
 
     /**
      * (non-PHPdoc)
+     *
      * @see \query\Query_ValidateField::__construct()
      */
     public function __construct()
@@ -95,9 +95,10 @@ class Query_MysqlVal extends Query_FieldVal
 
     /**
      * (non-PHPdoc)
+     *
      * @see \query\Query_FieldVal::init()
      */
-    public function init( $db_type )
+    public function init($db_type)
     {
         /*
         $this->field_typelist = new \stdClass();
@@ -175,12 +176,13 @@ class Query_MysqlVal extends Query_FieldVal
         $this->field_typelist->date->type = 'date';
         $this->field_typelist->date->pattern = '/^(\d){4}-(\d){2}-(\d){2}$/';
         */
-        
+
     }
 
 
     /**
      * (non-PHPdoc)
+     *
      * @see \query\Query_FieldVal::validate()
      */
     public function validate()
@@ -191,6 +193,7 @@ class Query_MysqlVal extends Query_FieldVal
 
     /**
      * (non-PHPdoc)
+     *
      * @see \query\Query_FieldVal::tostring()
      */
     public function tostring()
@@ -198,5 +201,3 @@ class Query_MysqlVal extends Query_FieldVal
 
     }
 }
-
-?>

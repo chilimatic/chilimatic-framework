@@ -13,16 +13,18 @@
 
 namespace chilimatic\lib\config;
 
-
 /**
  * Class Config_Generic
+ *
  * @package chilimatic\lib\config
  */
-abstract class AbstractConfig implements IConfig {
+abstract class AbstractConfig implements IConfig
+{
 
     /**
      * comment within the nodes that it's a given parameter
      * through the constructor
+     *
      * @var string
      */
     const INIT_PARAMETER = 'init-param';
@@ -32,7 +34,15 @@ abstract class AbstractConfig implements IConfig {
      *
      * @var Node
      */
-    public $mainNode = null;
+    public $mainNode;
+
+
+    /**
+     * get the last use node [insert/delete/update .... and so on]
+     *
+     * @var Node|null
+     */
+    public $lastNewNode;
 
     /**
      * constructor
@@ -45,11 +55,9 @@ abstract class AbstractConfig implements IConfig {
         $this->mainNode = new Node(null, IConfig::MAIN_NODE_KEY, null);
 
         // add custom parameters
-        if (is_array($param) && count($param))
-        {
+        if (is_array($param) && count($param)) {
             // set the given parameters
-            foreach ($param as $key => $value)
-            {
+            foreach ($param as $key => $value) {
                 $node = new Node($this->mainNode, $key, $value, self::INIT_PARAMETER);
                 $this->mainNode->addChild($node);
             }
@@ -70,43 +78,73 @@ abstract class AbstractConfig implements IConfig {
      * deletes a config
      *
      * @param string $key
+     *
      * @return mixed
      */
-    public function delete($key = ''){
-        $node = $this->mainNode->getLastByKey($key);
-        if (empty($node)) return $this->mainNode;
-        $this->mainNode->children->removeNode($node);
+    public function delete($key = '')
+    {
+        $nodeList = $this->mainNode->getByKey($key);
+        if (empty($nodeList)) {
+            true;
+        }
+
+        foreach ($nodeList as $node) {
+            $node->delete();
+        }
+
         unset($node);
-        return $this->mainNode;
+
+        return true;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return bool
+     */
+    public function deleteById($id = '')
+    {
+        $node = $this->mainNode->getById($id);
+
+        if (empty($node)) {
+            true;
+        }
+
+        return $node->delete();
     }
 
     /**
      * gets a specific parameter
      *
      * @param $var
+     *
      * @return mixed
      */
-     public function get($var)
-     {
-         if (!$this->mainNode) {
-             return null;
-         }
+    public function get($var)
+    {
+        if (!$this->mainNode) {
+            return null;
+        }
 
-         $node = $this->mainNode->getLastByKey($var);
-         if (empty($node)) return NULL;
-         return $node->getData();
-     }
+        $node = $this->mainNode->getLastByKey($var);
+        if (empty($node)) return null;
+
+        return $node->getData();
+    }
 
     /**
      * gets a specific parameter
      *
      * @param $id
+     *
      * @internal param $var
      * @return mixed
      */
-    public function getById($id) {
+    public function getById($id)
+    {
         $node = $this->mainNode->getById($id);
-        if (empty($node)) return NULL;
+        if (empty($node)) return null;
+
         return $node->getData();
     }
 
@@ -118,7 +156,8 @@ abstract class AbstractConfig implements IConfig {
      *
      * @return mixed
      */
-    public function setById($id, $val){
+    public function setById($id, $val)
+    {
         // set the variable
         if (empty($id)) return $this;
 
@@ -135,15 +174,23 @@ abstract class AbstractConfig implements IConfig {
      *
      * @param $key
      * @param $val
+     *
      * @return mixed
      */
-    public function set($key, $val){
+    public function set($key, $val)
+    {
         // set the variable
-        if ( empty( $key ) ) return $this;
+        if (empty($key)) return $this;
 
-        $node = new Node($this->mainNode, $key, $val);
+        if (!($node = $this->mainNode->getLastByKey($key))) {
+            $newNode = new Node($this->mainNode, $key, $val);
+            $this->mainNode->addChild($newNode);
+        } else {
+            $newNode = new Node($node, $key, $val);
+            $node->addChild($newNode);
+        }
 
-        $this->mainNode->addChild($node);
+        $this->lastNewNode = $newNode;
 
         return $this;
 
@@ -153,6 +200,7 @@ abstract class AbstractConfig implements IConfig {
      * saves the specified config
      *
      * @param Node $node
+     *
      * @internal param $array ;
      *
      * @return mixed

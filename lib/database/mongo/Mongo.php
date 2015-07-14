@@ -6,8 +6,9 @@ namespace chilimatic\lib\database;
  *
  * @package chilimatic\lib\database
  */
-class MongoConnection {
-	
+class MongoConnection
+{
+
 }
 
 /**
@@ -15,5 +16,6 @@ class MongoConnection {
  *
  * @package chilimatic\lib\database
  */
-class Mongo extends MongoConnection {
+class Mongo extends MongoConnection
+{
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @author j
@@ -7,7 +8,6 @@
  *
  * File: ModelCache.php
  */
-
 class ModelCacheTest extends PHPUnit_Framework_TestCase
 {
 
@@ -16,7 +16,7 @@ class ModelCacheTest extends PHPUnit_Framework_TestCase
      */
     public function storeModelInCache()
     {
-        $model = new \test\testdata\DummyModel();
+        $model      = new \test\testdata\DummyModel();
         $modelCache = new \chilimatic\lib\cache\handler\ModelCache();
         $modelCache->set($model, ['id' => 12]);
         $model = $modelCache->get(new \test\testdata\DummyModel(), ['id' => 12]);

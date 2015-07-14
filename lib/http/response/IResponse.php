@@ -11,7 +11,8 @@ namespace chilimatic\lib\http\response;
  * File: IResponse.phtml
  */
 
-Interface IResponse {
+Interface IResponse
+{
     /**
      * suffix to identify callback functions
      *

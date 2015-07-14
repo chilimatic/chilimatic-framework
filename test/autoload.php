@@ -8,7 +8,7 @@
  * autoloader for the testings since composer fucks up the whole thing
  *
  */
-define('INCLUDE_ROOT', realpath(__DIR__.'/../'));
+define('INCLUDE_ROOT', realpath(__DIR__ . '/../'));
 /**
  * @param $file
  */
@@ -23,15 +23,16 @@ function rq_file($file)
  * Autoloader for Libs view
  *
  * @param string $class_name
+ *
  * @return void
  */
-function main_loader( $class_name )
+function main_loader($class_name)
 {
-    if ( empty($class_name) ) return;
+    if (empty($class_name)) return;
 
     $class_name = str_replace('\\', '/', $class_name);
     $class_name = preg_replace('|chilimatic/|', '/', $class_name);
-    $file_name = $class_name . '.php';
+    $file_name  = $class_name . '.php';
 
     unset($part);
 

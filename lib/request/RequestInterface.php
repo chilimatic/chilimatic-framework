@@ -10,12 +10,15 @@ namespace chilimatic\lib\request;
 
 /**
  * Interface RequestInterface
+ *
  * @package chilimatic\lib\request
  */
-interface RequestInterface {
+interface RequestInterface
+{
 
     /**
      * @param array $param
+     *
      * @return mixed
      */
     public static function getInstance(array $param = array());

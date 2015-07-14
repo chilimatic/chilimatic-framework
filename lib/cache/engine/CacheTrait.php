@@ -10,9 +10,11 @@ namespace chilimatic\lib\cache\engine;
 
 /**
  * Class CacheTrait
+ *
  * @package chilimatic\lib\cache
  */
-trait CacheTrait {
+trait CacheTrait
+{
 
     /**
      * storage for key flushing, if needed
@@ -27,7 +29,7 @@ trait CacheTrait {
      *
      * @var string
      */
-    protected $md5Sum = NULL;
+    protected $md5Sum = null;
 
     /**
      * connected boolean
@@ -41,20 +43,22 @@ trait CacheTrait {
      *
      * @var array
      */
-    protected $list = array ();
+    protected $list = array();
 
     /**
      * @return bool
      */
-    public function isConnected() {
-        return (bool) $this->connected;
+    public function isConnected()
+    {
+        return (bool)$this->connected;
     }
 
     /**
      * @param bool $connected
      */
-    protected function setConnected($connected = true) {
-        $this->connected = (bool) $connected;
+    protected function setConnected($connected = true)
+    {
+        $this->connected = (bool)$connected;
     }
 
 }

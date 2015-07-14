@@ -20,7 +20,8 @@ class MySQLPool
 
     private $position = 0;
 
-    public function __construct($database = null){
+    public function __construct($database = null)
+    {
         if (empty($database)) return;
 
         $this->add($database);
@@ -30,15 +31,16 @@ class MySQLPool
     {
         if (empty($database)) return $this;
 
-        if ( empty($this->pool) ) {
+        if (empty($this->pool)) {
             $this->pool[] = $database;
+
             return $this;
         }
 
-        $new = true;
+        $new   = true;
         $class = get_class($database);
 
-        foreach ($this->pool as $key => $pdb){
+        foreach ($this->pool as $key => $pdb) {
             if (get_class($pdb) !== $class) {
                 break;
             }

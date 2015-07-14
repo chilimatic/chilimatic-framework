@@ -16,9 +16,11 @@ use chilimatic\lib\route\Router;
 
 /**
  * Class HTTPMVC
+ *
  * @package chilimatic\lib\application
  */
-class HTTPMVC {
+class HTTPMVC
+{
 
     /**
      * @var string
@@ -64,10 +66,10 @@ class HTTPMVC {
         if (!$di) return;
 
         $this->config = $config;
-        $this->di = $di;
+        $this->di     = $di;
 
         if ($di->exists(self::FETCH_DEPENDENCIES)) {
-            $this->defaultDependencies = array_merge((array) $this->defaultDependencies, (array) $di->get(self::FETCH_DEPENDENCIES));
+            $this->defaultDependencies = array_merge((array)$this->defaultDependencies, (array)$di->get(self::FETCH_DEPENDENCIES));
         }
 
         foreach ($this->defaultDependencies as $closure) {
@@ -106,6 +108,7 @@ class HTTPMVC {
     public function setRequestHandler($requestHandler)
     {
         $this->requestHandler = $requestHandler;
+
         return $this;
     }
 
@@ -118,7 +121,7 @@ class HTTPMVC {
             $this->httpHandler = $this->di->get(
                 'application-handler',
                 [
-                    'include-root' => $this->config->get('document_root'),
+                    'include-root'          => $this->config->get('document_root'),
                     'application-namespace' => $this->config->get('application-namespace')
                 ]
             );
@@ -135,6 +138,7 @@ class HTTPMVC {
     public function setHandler($httpHandler)
     {
         $this->httpHandler = $httpHandler;
+
         return $this;
     }
 
@@ -146,6 +150,7 @@ class HTTPMVC {
     public function setRouter($router)
     {
         $this->router = $router;
+
         return $this;
     }
 
@@ -158,7 +163,7 @@ class HTTPMVC {
             $this->router = $this->di->get(
                 'routing',
                 [
-                    'type' => $this->config->get('routingType') ?  $this->config->get('routingType') : Router::DEFAULT_ROUTING_TYPE
+                    'type' => $this->config->get('routingType') ? $this->config->get('routingType') : Router::DEFAULT_ROUTING_TYPE
                 ]
             );
         }

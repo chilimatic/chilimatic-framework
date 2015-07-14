@@ -7,9 +7,11 @@ namespace chilimatic\lib\tool;
  *
  * @package chilimatic\lib\tool
  */
-Class Crypt{
+Class Crypt
+{
 
-    public static function encrypt($type, $value) {
+    public static function encrypt($type, $value)
+    {
         return hash($type, $value);
     }
 }

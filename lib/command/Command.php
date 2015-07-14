@@ -84,10 +84,10 @@ class Command
      * @var array
      */
     public $descriptorspec = array(
-                                    self::STDIN => array(self::DESC_PIPE, self::READ),
-                                    self::STDOUT => array(self::DESC_PIPE, self::WRITE),
-                                    self::STDERR => array(self::DESC_PIPE, self::WRITE)
-                                    );
+        self::STDIN  => array(self::DESC_PIPE, self::READ),
+        self::STDOUT => array(self::DESC_PIPE, self::WRITE),
+        self::STDERR => array(self::DESC_PIPE, self::WRITE)
+    );
 
     /**
      * pipes are REFERENCE given to the function
@@ -102,6 +102,7 @@ class Command
      * has to be a string and the absolute position!
      *
      * default null
+     *
      * @var string
      */
     public $cwd = null;
@@ -137,17 +138,16 @@ class Command
      * @param array $env
      * @param array $other_option
      */
-    public function __construct($cmd, $descriptorspec = array(), $pipes, $cwd = '', $env = array(), $other_option = array() )
+    public function __construct($cmd, $descriptorspec = array(), $pipes, $cwd = '', $env = array(), $other_option = array())
     {
         $this->cmd = $cmd;
-        if ( count($this->descriptorspec) > 0)
-        {
-            $this->descriptorspec = array_merge((array) $this->descriptorspec,(array) $descriptorspec);
+        if (count($this->descriptorspec) > 0) {
+            $this->descriptorspec = array_merge((array)$this->descriptorspec, (array)$descriptorspec);
         }
 
-        $this->pipes = $pipes;
-        $this->cwd = $cwd;
-        $this->env = $env;
+        $this->pipes         = $pipes;
+        $this->cwd           = $cwd;
+        $this->env           = $env;
         $this->other_options = $other_option;
         $this->init();
     }
@@ -157,7 +157,8 @@ class Command
 
     }
 
-    public function exec(){
+    public function exec()
+    {
 
     }
 }

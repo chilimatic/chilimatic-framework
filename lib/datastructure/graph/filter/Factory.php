@@ -40,7 +40,7 @@ class Factory
         if ($this->transformer) {
             $class = __NAMESPACE__ . '\\' . $this->transformer->transform($filterName);
         } else {
-            $class =  __NAMESPACE__ . '\\' . $filterName;
+            $class = __NAMESPACE__ . '\\' . $filterName;
         }
 
         if (!class_exists($class)) {

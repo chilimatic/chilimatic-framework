@@ -10,6 +10,7 @@ namespace chilimatic\lib\log\client;
 
 /**
  * Interface ClientInterface
+ *
  * @package chilimatic\lib\log\client
  */
 Interface ClientInterface
@@ -23,6 +24,7 @@ Interface ClientInterface
     /**
      * @param string $message
      * @param mixed $data
+     *
      * @return self
      */
     public function log($message, $data);
@@ -30,6 +32,7 @@ Interface ClientInterface
     /**
      * @param string $message
      * @param mixed $data
+     *
      * @return self
      */
     public function info($message, $data);
@@ -37,6 +40,7 @@ Interface ClientInterface
     /**
      * @param string $message
      * @param $mixed $data
+     *
      * @return self
      */
     public function warn($message, $data);
@@ -44,6 +48,7 @@ Interface ClientInterface
     /**
      * @param string $message
      * @param mixed $data
+     *
      * @return self
      */
     public function error($message, $data);
@@ -51,6 +56,7 @@ Interface ClientInterface
     /**
      * @param string $message
      * @param mixed $data
+     *
      * @return self
      */
     public function trace($message, $data);
@@ -62,6 +68,7 @@ Interface ClientInterface
 
     /**
      * @param \chilimatic\lib\formater\Log $format
+     *
      * @return mixed
      */
     public function setFormat(\chilimatic\lib\formater\Log $format);

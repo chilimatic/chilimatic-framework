@@ -8,7 +8,8 @@
 
 namespace chilimatic\lib\http;
 
-Class Socket {
+Class Socket
+{
 
     /**
      * default port for http
@@ -30,14 +31,14 @@ Class Socket {
      *
      * @var string
      */
-    protected  $_user = '';
+    protected $_user = '';
 
     /**
      * password
      *
      * @var string
      */
-    protected  $_password = '';
+    protected $_password = '';
 
     /**
      * host
@@ -85,12 +86,14 @@ Class Socket {
 
     /**
      * the whole http request data as a string
+     *
      * @var string
      */
     public $request = '';
 
     /**
      * header of the return stream of couchdb
+     *
      * @var string
      */
     public $header = '';
@@ -142,7 +145,8 @@ Class Socket {
      *
      * @return \chilimatic\lib\http\Socket
      */
-    public function __construct($param){
+    public function __construct($param)
+    {
         // get the data object for http request based on the current standards
         $this->httpprotocol = new Protocol();
         $this->init($param);
@@ -155,15 +159,16 @@ Class Socket {
      *
      * @return bool
      */
-    public function init($param) {
+    public function init($param)
+    {
         // check for valid host
         if ($param->host && !$this->_validate_host($param->host)) return false;
 
         // add all the settings
-        $this->_host = $param->host;
-        $this->_user = (empty($param->user) ? null : $param->user);
+        $this->_host     = $param->host;
+        $this->_user     = (empty($param->user) ? null : $param->user);
         $this->_password = (empty($param->password) ? null : $param->password);
-        $this->_port = (empty($param->port)) ? self::DEFAULT_PORT : $param->port;
+        $this->_port     = (empty($param->port)) ? self::DEFAULT_PORT : $param->port;
         $this->_protocol = (isset($param->protocol) && $this->_validate_protocol($param->protocol)) ? $param->protocol : self::DEFAULT_PROTOCOL;
 
         // start the socket connection
@@ -177,11 +182,13 @@ Class Socket {
      * valid IP, url
      *  - 12.3.1.4
      *  - cb.example.com / example.com / example.co.com
+     *
      * @param string $host
      *
      * @return bool
      */
-    private function _validate_host($host) {
+    private function _validate_host($host)
+    {
         if (empty($host)) return false;
         // if it's an ip address
         if (preg_match('/^\d{1,3}[.]\d{1,3}[.]\d{1,3}[.]\d{1,3}$/', $host)) return true;
@@ -195,16 +202,20 @@ Class Socket {
      * returns true if it's https or http
      *
      * @param $protocol
+     *
      * @return bool
      */
-    private function _validate_protocol($protocol) {
+    private function _validate_protocol($protocol)
+    {
         if (empty($protocol)) return false;
+
         // protocol validation only http or https are valid for
         return (preg_match('#(https://|http://)#', $protocol) ? true : false);
     }
 
 
-    public function generateHTTPRequest(){
+    public function generateHTTPRequest()
+    {
 
     }
 
@@ -219,11 +230,11 @@ Class Socket {
      */
     public function send($method, $url, $data = null)
     {
-        $p = new \stdClass();
-        $p->method = $method;
-        $p->url = $url;
-        $p->data = $data;
-        $p->host = $this->_host;
+        $p           = new \stdClass();
+        $p->method   = $method;
+        $p->url      = $url;
+        $p->data     = $data;
+        $p->host     = $this->_host;
         $p->protocol = "HTTP/1.1";
 
 
@@ -232,7 +243,7 @@ Class Socket {
 
         // check if there is a user add user & pw base64 encoded
         if ($this->_user) {
-            $this->request->header = new SingleParam("Authorization", "Basic " .base64_encode("$this->_user:$this->_password"));
+            $this->request->header = new SingleParam("Authorization", "Basic " . base64_encode("$this->_user:$this->_password"));
         }
         $r = $this->request->__toString();
         // write it to the buffer
@@ -242,7 +253,7 @@ Class Socket {
         $response = stream_get_contents($this->_socket);
 
         // response data
-        if ( empty($response) ) return false;
+        if (empty($response)) return false;
 
         // explode the body and the header of the http request
         list($header, $this->body) = explode("\r\n\r\n", $response);
@@ -250,6 +261,7 @@ Class Socket {
         $this->_parse_header($header);
         // json decode the result body
         $this->result = json_decode($this->body);
+
         //return it
         return $this->result;
     }
@@ -259,32 +271,34 @@ Class Socket {
      * replaces the header property with a stdClass with the information
      *
      * @param $header
+     *
      * @return bool
      */
-    private function _parse_header($header) {
+    private function _parse_header($header)
+    {
         if (empty($header)) return false;
 
         $lines = explode("\r\n", $header);
-        $tmp = array_shift($lines);
-        $tmp = explode(" ", $tmp);
+        $tmp   = array_shift($lines);
+        $tmp   = explode(" ", $tmp);
         // set the first params
-        $this->header = new \stdClass();
-        $this->header->protocol = $tmp[0];
-        $this->header->status = $tmp[1];
+        $this->header              = new \stdClass();
+        $this->header->protocol    = $tmp[0];
+        $this->header->status      = $tmp[1];
         $this->header->status_text = $tmp[2];
 
         foreach ($lines as $line) {
-            $tmp = explode(':', $line);
-            $key = strtolower($tmp[0]);
+            $tmp   = explode(':', $line);
+            $key   = strtolower($tmp[0]);
             $value = trim($tmp[1]);
             // check if there are semicolon seperated values
             if (strpos($value, ';')) {
-                $tmp2 = explode(';', $value);
+                $tmp2  = explode(';', $value);
                 $value = trim($tmp2[0]);
                 // check if there is an assignment
                 if (strpos($tmp2[1], '=')) {
-                    $tmp2 = explode('=', $tmp2[1]);
-                    $key2 = strtolower(trim($tmp2[0]));
+                    $tmp2                = explode('=', $tmp2[1]);
+                    $key2                = strtolower(trim($tmp2[0]));
                     $this->header->$key2 = trim($tmp2[1]);
                 }
             }
@@ -299,7 +313,8 @@ Class Socket {
     /**
      * destruct
      */
-    public function __destruct(){
+    public function __destruct()
+    {
         fclose($this->_socket);
     }
 }

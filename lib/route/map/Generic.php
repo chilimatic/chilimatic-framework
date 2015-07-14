@@ -1,12 +1,15 @@
 <?php
 namespace chilimatic\lib\route\map;
+
 use chilimatic\lib\interfaces\IFlyWeightParser;
 
 /**
  * Class Generic
+ *
  * @package chilimatic\lib\route\map
  */
-abstract class Generic implements IMapStragey {
+abstract class Generic implements IMapStragey
+{
 
     /**
      * @var mixed
@@ -24,7 +27,8 @@ abstract class Generic implements IMapStragey {
      *
      * @internal param $type
      */
-    final public function __construct($config, IFlyWeightParser $parser = null) {
+    final public function __construct($config, IFlyWeightParser $parser = null)
+    {
         $this->config = $config;
         $this->init();
 
@@ -38,6 +42,7 @@ abstract class Generic implements IMapStragey {
 
     /**
      * @param $param
+     *
      * @return mixed
      */
     abstract function call($param = null);

@@ -1,5 +1,6 @@
 <?php
 namespace chilimatic\lib\datastructure\graph;
+
 use chilimatic\lib\datastructure\graph\filter\AbstractFilter;
 
 /**
@@ -10,8 +11,8 @@ use chilimatic\lib\datastructure\graph\filter\AbstractFilter;
  *
  * File: INode.php
  */
-
-interface INode {
+interface INode
+{
 
     /**
      * @param INode $parentNode

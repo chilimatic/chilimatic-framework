@@ -14,7 +14,8 @@ namespace chilimatic\lib\database;
  *
  * @package chilimatic\lib\database
  */
-class Factory {
+class Factory
+{
 
     /**
      * instance
@@ -26,7 +27,8 @@ class Factory {
     /**
      * private constructor
      */
-    private function __construct(){
+    private function __construct()
+    {
         return;
     }
 
@@ -39,7 +41,8 @@ class Factory {
      *
      * @return array
      */
-    public static function make($type, $param = null) {
+    public static function make($type, $param = null)
+    {
 
         if (self::$_instance) return self::$_instance;
     }

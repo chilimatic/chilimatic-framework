@@ -10,9 +10,11 @@
 
 namespace chilimatic\lib\database\orm;
 
-class EntityObjectStorage extends \SplObjectStorage implements \JsonSerializable{
+class EntityObjectStorage extends \SplObjectStorage implements \JsonSerializable
+{
 
-    public function jsonSerialize(){
+    public function jsonSerialize()
+    {
         $this->rewind();
         $arr = [];
 

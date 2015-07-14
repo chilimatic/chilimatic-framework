@@ -11,7 +11,6 @@ use test\testdata\DummyModel;
  *
  * File: ModelStorageTest.php
  */
-
 class ModelStorageTest extends PHPUnit_Framework_TestCase
 {
     protected $storage;
@@ -19,21 +18,24 @@ class ModelStorageTest extends PHPUnit_Framework_TestCase
     /**
      * @before
      */
-    public function createANewStorage() {
+    public function createANewStorage()
+    {
         $this->storage = new ModelStorage();
     }
 
     /**
      * @test
      */
-    public function storeAndRetriveOneModel() {
+    public function storeAndRetriveOneModel()
+    {
         $model = new DummyModel();
         $this->storage->attach($model, null);
         $retModel = $this->storage->get($model);
         $this->assertEquals($model, $retModel);
     }
 
-    public function storeAndFindAModelByParam(){
+    public function storeAndFindAModelByParam()
+    {
         $model = new DummyModel();
         $model->setId(12);
 
@@ -46,8 +48,6 @@ class ModelStorageTest extends PHPUnit_Framework_TestCase
 
 
     }
-
-
 
 
 }

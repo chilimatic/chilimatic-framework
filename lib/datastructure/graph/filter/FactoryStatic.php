@@ -8,6 +8,7 @@
  * File: FactoryStatic.php
  */
 namespace chilimatic\lib\datastructure\graph\filter;
+
 use chilimatic\lib\interfaces\IFlyWeightValidator;
 use chilimatic\lib\interfaces\IFlyWeightTransformer;
 
@@ -16,7 +17,8 @@ use chilimatic\lib\interfaces\IFlyWeightTransformer;
  *
  * @package chilimatic\lib\datastructure\graph\filter
  */
-class FactoryStatic {
+class FactoryStatic
+{
 
     /**
      * @var null|IFlyWeightTransformer
@@ -43,7 +45,7 @@ class FactoryStatic {
         if (self::$transformer) {
             $class = __NAMESPACE__ . '\\' . self::$transformer->transform($filterName);
         } else {
-            $class =  __NAMESPACE__ . '\\' . $filterName;
+            $class = __NAMESPACE__ . '\\' . $filterName;
         }
 
         if (!class_exists($class)) {

@@ -9,6 +9,7 @@
  */
 
 namespace chilimatic\lib\route\parser;
+
 use chilimatic\lib\interfaces\IFlyWeightParser;
 
 /**
@@ -53,13 +54,15 @@ class UrlParser implements IFlyWeightParser
 
     /**
      * parse method that fills the collection
+     *
      * @param string $content
      *
      * @return array
      */
-    public function parse($content) {
+    public function parse($content)
+    {
         // if there is no path it's not needed to try to get a clean one
-        if ( empty($content) ) return [];
+        if (empty($content)) return [];
 
         $path = $this->getCleanPath($content);
 
@@ -74,6 +77,7 @@ class UrlParser implements IFlyWeightParser
                 $this->delimiter,
                 $path
             );
+
             return $pathParts;
         }
 
@@ -81,8 +85,8 @@ class UrlParser implements IFlyWeightParser
         $pathParts = explode($this->delimiter, $path);
 
         // walk through the array and remove the empty entries
-        for ($i = 0, $c = count($pathParts); $i < $c; $i++ ) {
-            if ( empty($pathParts[$i]) ) unset($pathParts[$i]);
+        for ($i = 0, $c = count($pathParts); $i < $c; $i++) {
+            if (empty($pathParts[$i])) unset($pathParts[$i]);
         }
 
         // reindex them sort them

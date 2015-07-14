@@ -7,6 +7,7 @@
  */
 
 namespace chilimatic\lib\database;
+
 use \chilimatic\lib\interfaces\ISingeltonString;
 
 /**
@@ -14,7 +15,8 @@ use \chilimatic\lib\interfaces\ISingeltonString;
  *
  * @package chilimatic\lib\database
  */
-class Collection implements ISingeltonString {
+class Collection implements ISingeltonString
+{
 
     /**
      * collection of opened database objects
@@ -36,7 +38,8 @@ class Collection implements ISingeltonString {
      */
     public $current = null;
 
-    private  function __construct($database){
+    private function __construct($database)
+    {
         $this->_checkdatabase($database);
     }
 
@@ -44,12 +47,15 @@ class Collection implements ISingeltonString {
      * singelton constructor
      *
      * @param mixed $database
+     *
      * @return Pool
      */
-    public static function getInstance($database = null){
+    public static function getInstance($database = null)
+    {
 
         if (self::$instance instanceof Pool) {
             self::$instance->add($database);
+
             return self::$instance;
         }
 
@@ -58,7 +64,8 @@ class Collection implements ISingeltonString {
         return self::$instance;
     }
 
-    public static function add($database){
+    public static function add($database)
+    {
 
     }
 
@@ -66,23 +73,25 @@ class Collection implements ISingeltonString {
      * checks if a database already exists
      *
      * @param $database
+     *
      * @return $this
      */
-    private function _checkdatabase($database){
+    private function _checkdatabase($database)
+    {
 
         if (count($this->_collection) == 0) {
             $this->_collection[$database] = new $database();
+
             return $this->_collection[$database];
         }
 
         $new = false;
-        foreach ($this->_collection as $db)
-        {
-            if ( $db === $database ) continue;
+        foreach ($this->_collection as $db) {
+            if ($db === $database) continue;
             $new = true;
         }
 
-        if ( $new === true) {
+        if ($new === true) {
             $this->_collection[$database] = new $database();
         }
 

@@ -6,6 +6,7 @@
  * Time: 18:22
  */
 namespace chilimatic\lib\route\routesystem;
+
 use chilimatic\lib\route\Map;
 use chilimatic\lib\route\map\MapFactory;
 use chilimatic\lib\route\routesystem\noderoute\Node;
@@ -13,6 +14,7 @@ use chilimatic\lib\transformer\string\DynamicFunctionCallName;
 
 /**
  * Class AbstractRoute
+ *
  * @package chilimatic\lib\route\routesystem
  */
 abstract class AbstractRoute
@@ -35,7 +37,8 @@ abstract class AbstractRoute
     /**
      * @param string $path
      */
-    public function __construct($path){
+    public function __construct($path)
+    {
         $this->path = $path;
         $this->setTransformer(new DynamicFunctionCallName());
         $this->setMapFactory(new MapFactory());
@@ -44,6 +47,7 @@ abstract class AbstractRoute
 
     /**
      * @param $path
+     *
      * @return mixed
      */
     abstract public function getRoute($path);
@@ -52,8 +56,9 @@ abstract class AbstractRoute
      * @param $uri
      * @param $callback
      * @param string $delimiter
+     *
      * @return mixed
      */
-    abstract public function addRoute( $uri , $callback , $delimiter = Map::DEFAULT_URL_DELIMITER );
+    abstract public function addRoute($uri, $callback, $delimiter = Map::DEFAULT_URL_DELIMITER);
 
 }

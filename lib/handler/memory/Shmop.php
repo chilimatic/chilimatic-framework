@@ -1,5 +1,6 @@
 <?php
 namespace chilimatic\lib\handler\memory;
+
 use chilimatic\lib\handler\memory\shmop\Entry;
 
 /**
@@ -10,7 +11,6 @@ use chilimatic\lib\handler\memory\shmop\Entry;
  *
  * File: Shmop.php
  */
-
 class Shmop
 {
     /**
@@ -98,7 +98,8 @@ class Shmop
     /**
      * @param $options
      */
-    public function __construct($options) {
+    public function __construct($options)
+    {
         $this->setOptions($options);
     }
 
@@ -110,7 +111,8 @@ class Shmop
      *
      * @return Entry
      */
-    public function open($id, $mode = self::READ_MOD, $permission = self::DEFAULT_PERMISSIONS, $size = self::DEFAULT_SIZE) {
+    public function open($id, $mode = self::READ_MOD, $permission = self::DEFAULT_PERMISSIONS, $size = self::DEFAULT_SIZE)
+    {
         return new Entry($id, $mode, $permission, $size);
     }
 

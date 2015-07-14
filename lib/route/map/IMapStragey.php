@@ -11,9 +11,11 @@ use chilimatic\lib\interfaces\IFlyWeightParser;
 
 /**
  * Interface MapCallInterface
+ *
  * @package chilimatic\lib\route\map
  */
-Interface IMapStragey {
+Interface IMapStragey
+{
 
     /**
      * @param mixed $config
@@ -29,6 +31,7 @@ Interface IMapStragey {
 
     /**
      * @param $param
+     *
      * @return mixed
      */
     public function call($param);

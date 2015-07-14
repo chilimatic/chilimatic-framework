@@ -14,6 +14,7 @@ use chilimatic\lib\route\Map;
 
 /**
  * Class NodeRoute
+ *
  * @package chilimatic\lib\route\routesystem
  */
 class NodeRoute extends AbstractRoute
@@ -27,7 +28,8 @@ class NodeRoute extends AbstractRoute
     private $binaryTree;
 
 
-    public function __construct($path) {
+    public function __construct($path)
+    {
         $this->binaryTree = new BinaryTree();
         parent::__construct($path);
     }
@@ -36,7 +38,8 @@ class NodeRoute extends AbstractRoute
      * @return BinaryTree
      * @throws \chilimatic\lib\exception\RouteException
      */
-    public function getRoot() {
+    public function getRoot()
+    {
         if ($this->binaryTree->isEmpty()) {
             $this->binaryTree->insert('/', $this->getDefaultRoute());
         }
@@ -53,7 +56,7 @@ class NodeRoute extends AbstractRoute
      *
      * @throws RouteException
      */
-    public function getRoute( $path = null )
+    public function getRoute($path = null)
     {
 
         if (($map = $this->binaryTree->findByKey($path))) {
@@ -63,7 +66,7 @@ class NodeRoute extends AbstractRoute
         if (($map = $this->getStandardRouting($path))) {
             return $map;
         }
-        
+
         return $this->getRoot()->getData();
     }
 
@@ -77,14 +80,13 @@ class NodeRoute extends AbstractRoute
      * @throws RouteException
      * @return void
      */
-    public function addRoute( $uri , $callback , $delimiter = Map::DEFAULT_URL_DELIMITER )
+    public function addRoute($uri, $callback, $delimiter = Map::DEFAULT_URL_DELIMITER)
     {
-        try
-        {
+        try {
             /**
              * if the uri is empty throw an exception
              */
-            if ( empty($uri) ) {
+            if (empty($uri)) {
                 throw new RouteException(sprintf(_('There is no Route entered %s'), $uri));
             }
 
@@ -92,7 +94,7 @@ class NodeRoute extends AbstractRoute
             $route = new Map($uri, $callback, $delimiter);
             $this->rootNode->appendToBranch($uri, $route, Map::DEFAULT_URL_DELIMITER);
 
-        } catch ( RouteException $e ) {
+        } catch (RouteException $e) {
             throw $e;
         }
 

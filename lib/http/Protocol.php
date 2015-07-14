@@ -13,7 +13,8 @@ namespace chilimatic\lib\http;
  *
  * @package chilimatic\http
  */
-class Protocol {
+class Protocol
+{
 
     /**
      * put method http request
@@ -94,12 +95,12 @@ class Protocol {
      * @var array
      */
     public $status_code = array(
-        1 => array (
+        1 => array(
             100 => 'Continue',
             101 => 'Switching Protocols',
             102 => 'Processing'
         ),
-        2 => array (
+        2 => array(
             200 => 'OK',
             201 => 'Created',
             202 => 'Accepted',
@@ -111,7 +112,7 @@ class Protocol {
             208 => 'Already Reported',
             226 => 'IM Used'
         ),
-        3 => array (
+        3 => array(
             300 => 'Multiple Choices',
             301 => 'Moved Permanently',
             302 => 'Found',
@@ -122,7 +123,7 @@ class Protocol {
             307 => 'Temporary Redirect',
             308 => 'Permanent Redirect'
         ),
-        4 => array (
+        4 => array(
             400 => 'Bad Request',
             401 => 'Unauthorized',
             402 => 'Payment Required',
@@ -158,7 +159,7 @@ class Protocol {
             449 => 'The request should be retried after doing the appropriate action',
             451 => 'Unavailable For Legal Reasons'
         ),
-        5 => array (
+        5 => array(
             500 => 'Internal Server Error',
             501 => 'Not Implemented',
             502 => 'Bad Gateway',
@@ -171,7 +172,7 @@ class Protocol {
             509 => 'Bandwidth Limit Exceeded',
             510 => 'Not Extended'
         ),
-        9 => array (    // this can be read @
+        9 => array(    // this can be read @
             900 => 'Request Error',
             901 => 'Request Error',
             902 => 'Request Error',
@@ -183,18 +184,21 @@ class Protocol {
         )
     );
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->constant_array = $this->get_class_constants();
     }
 
 
     /**
      * get constants
+     *
      * @return array
      */
     public function get_class_constants()
     {
         $reflect = new \ReflectionClass(get_class($this));
+
         return $reflect->getConstants();
     }
 }

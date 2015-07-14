@@ -1,4 +1,5 @@
 <?php
+
 class System_SelfInfo
 {
 
@@ -86,7 +87,7 @@ class System_SelfInfo
     /**
      * cpu info linux
      * tail -n25 /proc/cpuinfo
-     * 
+     *
      * @var array
      */
     public $cpu_info = null;
@@ -123,12 +124,13 @@ class System_SelfInfo
     protected function refresh_info()
     {
 
-        $this->pid = (int) getmypid();
-        $this->gid = (int) getmygid();
-        $this->inode = (int) getmyinode();
-        $this->uid = (int) getmyuid();
-        $this->user = (string) get_current_user();
+        $this->pid   = (int)getmypid();
+        $this->gid   = (int)getmygid();
+        $this->inode = (int)getmyinode();
+        $this->uid   = (int)getmyuid();
+        $this->user  = (string)get_current_user();
         $this->uname = posix_uname();
+
         return true;
     }
 
@@ -142,19 +144,17 @@ class System_SelfInfo
     {
 
         $this->cpu_info = array();
-        if ( !stristr(PHP_OS, 'win') )
-        {
+        if (!stristr(PHP_OS, 'win')) {
             exec("cat /proc/cpuinfo", $output);
-            foreach ( $output as $line )
-            {
+            foreach ($output as $line) {
                 $parts = explode(':', $line);
-                
-                if ( empty($parts[0]) ) continue;
-                
+
+                if (empty($parts[0])) continue;
+
                 $this->cpu_info[trim($parts[0])] = (!empty($parts[1])) ? trim($parts[1]) : null;
             }
         }
-        
+
         return true;
     }
 
@@ -167,17 +167,16 @@ class System_SelfInfo
     {
 
         $this->system_memory_kb = array();
-        
+
         exec("cat /proc/meminfo", $output);
-        foreach ( $output as $line )
-        {
+        foreach ($output as $line) {
             $parts = explode(':', $line);
-            
-            if ( empty($parts[0]) ) continue;
+
+            if (empty($parts[0])) continue;
             // remove the KB sign and reduce it to a key value array
-            $this->system_memory_kb[trim($parts[0])] = (int) (!empty($parts[1]) ? trim(str_replace('kB', '', $parts[1])) : null);
+            $this->system_memory_kb[trim($parts[0])] = (int)(!empty($parts[1]) ? trim(str_replace('kB', '', $parts[1])) : null);
         }
-        
+
         return true;
     }
 
@@ -190,11 +189,11 @@ class System_SelfInfo
     protected function process_memory_info()
     {
 
-        $this->current_mem_use = (int) memory_get_usage();
-        $this->current_mem_peak = (int) memory_get_peak_usage();
-        $this->current_mem_peak_mb = (float) $this->current_mem_peak / 1024 / 1024;
-        $this->current_mem_use_mb = (float) $this->current_mem_use / 1024 / 1024;
-        
+        $this->current_mem_use     = (int)memory_get_usage();
+        $this->current_mem_peak    = (int)memory_get_peak_usage();
+        $this->current_mem_peak_mb = (float)$this->current_mem_peak / 1024 / 1024;
+        $this->current_mem_use_mb  = (float)$this->current_mem_use / 1024 / 1024;
+
         return true;
     }
 }

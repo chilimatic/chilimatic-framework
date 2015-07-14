@@ -8,6 +8,7 @@
  * File: abstractquerybuilder.class.php
  */
 namespace chilimatic\lib\database\orm\querybuilder;
+
 use chilimatic\lib\cache\engine\CacheInterface;
 use chilimatic\lib\database\AbstractDatabase;
 use chilimatic\lib\database\orm\AbstractModel;
@@ -64,9 +65,10 @@ abstract class AbstractQueryBuilder implements IQueryBuilder
      * @param CacheInterface $cache
      * @param AbstractDatabase $db
      */
-    public function __construct(CacheInterface $cache = null, AbstractDatabase $db) {
+    public function __construct(CacheInterface $cache = null, AbstractDatabase $db)
+    {
         $this->parser = new ORMParser();
-        $this->cache = $cache;
+        $this->cache  = $cache;
     }
 
     /**
@@ -83,6 +85,7 @@ abstract class AbstractQueryBuilder implements IQueryBuilder
         }
 
         $table = substr($reflection->getName(), strlen($reflection->getNamespaceName()));
+
         return strtolower(str_replace('\\', '', $table));
     }
 
@@ -108,13 +111,13 @@ abstract class AbstractQueryBuilder implements IQueryBuilder
      */
     public function prepareCacheData(AbstractModel $model)
     {
-        $tableData = new MySQLTableData($this->db);
+        $tableData  = new MySQLTableData($this->db);
         $reflection = new \ReflectionClass($model);
         $tableData->setTableName($this->parseTableName($reflection));
 
         return [
-            'tableData' => $tableData,
-            'reflection' => new \ReflectionClass($model),
+            'tableData'    => $tableData,
+            'reflection'   => new \ReflectionClass($model),
             'relationList' => $this->extractRelations($reflection),
         ];
     }
@@ -127,7 +130,7 @@ abstract class AbstractQueryBuilder implements IQueryBuilder
      */
     public function extractRelations(\ReflectionClass $reflection)
     {
-        $relation = new \SplFixedArray();
+        $relation     = new \SplFixedArray();
         $propertyList = $reflection->getDefaultProperties();
 
         if ($this->cache && $res = $this->cache->get(md5(json_encode($propertyList)))) {
@@ -136,14 +139,14 @@ abstract class AbstractQueryBuilder implements IQueryBuilder
 
         foreach ($propertyList as $name => $value) {
             $d = $this->parser->parse($reflection->getProperty($name)->getDocComment());
-            if ( !$d ) {
+            if (!$d) {
                 continue;
             }
             $relation->setSize($relation->getSize() + 1);
-            $relation[$relation->count()-1] = $d;
+            $relation[$relation->count() - 1] = $d;
         }
 
-        if ($this->cache){
+        if ($this->cache) {
             $this->cache->set(md5(json_encode($propertyList)), $relation, 300);
         }
 
@@ -186,6 +189,7 @@ abstract class AbstractQueryBuilder implements IQueryBuilder
     public function setDb(AbstractDatabase $db)
     {
         $this->db = $db;
+
         return $this;
     }
 }

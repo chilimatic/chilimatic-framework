@@ -10,7 +10,8 @@
 
 namespace chilimatic\lib\log\client;
 
-class ToFile extends AbstractClient {
+class ToFile extends AbstractClient
+{
 
     /**
      *

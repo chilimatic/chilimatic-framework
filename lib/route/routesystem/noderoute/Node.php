@@ -7,6 +7,7 @@
  */
 
 namespace chilimatic\lib\route\routesystem\noderoute;
+
 use chilimatic\lib\datastructure\graph\INode;
 use chilimatic\lib\route\Map;
 
@@ -41,8 +42,8 @@ class Node extends \chilimatic\lib\datastructure\graph\TreeNode
         $this->key = $key;
         // set the current value of the node
 
-        if ( empty($this->parentNode->$key)) {
-            $this->id = (string) $key;
+        if (empty($this->parentNode->$key)) {
+            $this->id = (string)$key;
         } else {
             $this->id = "{$this->parentNode->$key}.{$key}";
         }
@@ -65,7 +66,8 @@ class Node extends \chilimatic\lib\datastructure\graph\TreeNode
         $this->initChildren();
     }
 
-    public function getMap() {
+    public function getMap()
+    {
         return $this->getData();
     }
 
@@ -74,7 +76,8 @@ class Node extends \chilimatic\lib\datastructure\graph\TreeNode
      *
      * @return string
      */
-    public function getComment(){
+    public function getComment()
+    {
         return $this->comment;
     }
 
@@ -85,8 +88,10 @@ class Node extends \chilimatic\lib\datastructure\graph\TreeNode
      *
      * @return $this
      */
-    public function setComment($comment) {
+    public function setComment($comment)
+    {
         $this->comment = $comment;
+
         return $this;
     }
 }

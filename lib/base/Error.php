@@ -4,6 +4,7 @@ namespace chilimatic\lib\base;
 
 /**
  * Class Error
+ *
  * @package chilimatic\lib\base
  */
 class Error

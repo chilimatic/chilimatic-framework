@@ -10,7 +10,8 @@ namespace chilimatic\lib\http\response;
  * File: Status.php
  */
 
-class Status {
+class Status
+{
 
     /**
      * @var int
@@ -38,7 +39,7 @@ class Status {
     public function setCode($code, $message)
     {
         $this->message = $message;
-        $this->code = (int) $code;
+        $this->code    = (int)$code;
 
         return $this;
     }

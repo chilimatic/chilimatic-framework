@@ -9,7 +9,8 @@ namespace chilimatic\lib\database\orm\querybuilder;
  * File: ConsistencyTrait.php
  */
 
-Trait ConsistencyTrait {
+Trait ConsistencyTrait
+{
 
     /**
      * @return bool
@@ -21,9 +22,10 @@ Trait ConsistencyTrait {
         $relationList->rewind();
         foreach ($relationList as $entry) {
             if (!class_exists($entry[1])) {
-                throw new \ErrorException($entry[1]. ' Relations Class does not exist!');
+                throw new \ErrorException($entry[1] . ' Relations Class does not exist!');
             }
         }
+
         return true;
     }
 

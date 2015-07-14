@@ -20,7 +20,8 @@ use chilimatic\lib\config\Config;
  * Cache plugin for the Session that uses the
  * cache system
  */
-class Cache extends GenericEngine {
+class Cache extends GenericEngine
+{
 
     /**
      * cache engine container
@@ -34,9 +35,10 @@ class Cache extends GenericEngine {
      *
      * @return mixed
      */
-    public function init($config = []){
+    public function init($config = [])
+    {
 
-        if (isset($config['session_cache'])){
+        if (isset($config['session_cache'])) {
             $session_type = $config['session_cache'];
         } else {
             $session_type = $config['cache_type'];
@@ -45,8 +47,8 @@ class Cache extends GenericEngine {
         /**
          * initialize the current Cache
          */
-        $param = new \stdClass();
-        $param->type = (string) $session_type;
+        $param              = new \stdClass();
+        $param->type        = (string)$session_type;
         $param->credentials = (($s = Config::get('session_cache_settings') == '') ? Config::get('cache_settings') : $s);
         // write it to the cache
         $this->engine = CacheManager::getInstance($param);
@@ -60,17 +62,19 @@ class Cache extends GenericEngine {
      * reads a specific session
      *
      * @param $sessionId
+     *
      * @return mixed
      */
-    public function session_read( $sessionId )
+    public function session_read($sessionId)
     {
         // assign the current session id
-        $this->sessionId = (string) $sessionId;
+        $this->sessionId   = (string)$sessionId;
         $this->sessionData = $this->engine->get($this->sessionKey . $sessionId);
         // if the sessionData is "false" set it to be an array (casting would create an array with a false entry)
         if (!$this->sessionData) {
             $this->sessionData = [];
         }
+
         // session data is set uncompressed
         return $this->sessionData;
     }
@@ -80,14 +84,17 @@ class Cache extends GenericEngine {
      *
      * @param $sessionId
      * @param $sessionData
+     *
      * @return mixed
      */
-    public function session_write( $sessionId , $sessionData ){
-        $sessionData = (!$sessionData || !is_array($sessionData)) ? [] : $sessionData;
+    public function session_write($sessionId, $sessionData)
+    {
+        $sessionData       = (!$sessionData || !is_array($sessionData)) ? [] : $sessionData;
         $this->sessionData = (!$this->sessionData) ? [] : $this->sessionData;
 
         $this->sessionData = array_merge($sessionData, $this->sessionData);
         $this->engine->set($this->sessionKey . $sessionId, $this->sessionData, $this->sessionLifeTime);
+
         return true;
     }
 
@@ -96,9 +103,11 @@ class Cache extends GenericEngine {
      * destroys the session
      *
      * @param $sessionId
+     *
      * @return mixed
      */
-    public function session_destroy( $sessionId ) {
+    public function session_destroy($sessionId)
+    {
         $this->engine->delete($this->sessionKey . $sessionId);
     }
 }

@@ -23,21 +23,24 @@ class Log
     /**
      * @param $format
      */
-    public function __construct($format) {
+    public function __construct($format)
+    {
         $this->format = $format;
     }
 
     /**
      * @return string
      */
-    public function __toString(){
+    public function __toString()
+    {
         return $this->output();
     }
 
     /**
      * @return string
      */
-    public function output(){
+    public function output()
+    {
         return $this->input;
     }
 }

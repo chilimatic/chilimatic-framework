@@ -1,8 +1,8 @@
 <?php
 namespace query;
 
-class Query_From {
-    
-    
-    
+class Query_From
+{
+
+
 }

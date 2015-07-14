@@ -3,6 +3,7 @@ namespace chilimatic\lib\cache\engine;
 
 /**
  * Interface Cache_Interface
+ *
  * @package chilimatic\cache
  */
 Interface CacheInterface
@@ -25,7 +26,7 @@ Interface CacheInterface
 
     /**
      * Cache listing Save method [so an overview can be generated]
-     * 
+     *
      * @return boolean
      */
     public function saveCacheListing();
@@ -33,9 +34,9 @@ Interface CacheInterface
 
     /**
      * Gets a cache entry by key
-     * 
+     *
      * @param string $key
-     * 
+     *
      * @return boolean
      */
     public function get($key = null);
@@ -57,7 +58,7 @@ Interface CacheInterface
 
     /**
      * deletes the whole cache
-     * 
+     *
      * @return void
      */
     public function flush();
@@ -68,15 +69,16 @@ Interface CacheInterface
      *
      * @param string $key
      * @param int $time
+     *
      * @return
      * @internal param int $ttl
      */
-    public function delete($key , $time = 0);
+    public function delete($key, $time = 0);
 
 
     /**
      * cleans up the cache list
-     * 
+     *
      * @param array $key_array
      */
     public function deleteFromList($key_array = []);

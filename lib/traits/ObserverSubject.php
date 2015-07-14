@@ -9,7 +9,8 @@
  */
 namespace chilimatic\lib\traits;
 
-trait ObserverSubject {
+trait ObserverSubject
+{
 
     /**
      * @var \SplObjectStorage
@@ -19,7 +20,8 @@ trait ObserverSubject {
     /**
      * works only once
      */
-    public function initTrait(){
+    public function initTrait()
+    {
         if ($this->observerList) {
             return;
         }
@@ -30,21 +32,24 @@ trait ObserverSubject {
     /**
      * @param \SplObserver $observer
      */
-    public function attach(\SplObserver $observer) {
+    public function attach(\SplObserver $observer)
+    {
         $this->observerList->attach($observer);
     }
 
     /**
      * @param \SplObserver $observer
      */
-    public function detach(\SplObserver $observer) {
+    public function detach(\SplObserver $observer)
+    {
         $this->observerList->detach($observer);
     }
 
     /**
      * @var
      */
-    public function notify() {
+    public function notify()
+    {
         foreach ($this->observerList as $observer) {
             $observer->update($this);
         }

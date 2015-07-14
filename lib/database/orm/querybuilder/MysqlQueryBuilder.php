@@ -9,6 +9,7 @@
  */
 
 namespace chilimatic\lib\database\orm\querybuilder;
+
 use chilimatic\lib\cache\engine\CacheInterface;
 use chilimatic\lib\database\AbstractDatabase;
 use chilimatic\lib\database\orm\AbstractModel;
@@ -23,7 +24,8 @@ use chilimatic\lib\database\orm\querybuilder\strategy\MySQLUpdateStrategy;
  *
  * @package chilimatic\lib\database\orm
  */
-class MysqlQueryBuilder extends AbstractQueryBuilder {
+class MysqlQueryBuilder extends AbstractQueryBuilder
+{
 
     /**
      * trait for the annotation checks
@@ -52,7 +54,7 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
      */
     public function __construct(CacheInterface $cache = null, AbstractDatabase $db)
     {
-        $this->relation = new \SplFixedArray();
+        $this->relation       = new \SplFixedArray();
         $this->modelDataCache = [];
 
         parent::__construct($cache, $db);
@@ -112,18 +114,17 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
      */
     public function prepareModelData(AbstractModel $model, MySQLTableData $tableData)
     {
-        $data = $columData = [];
+        $data    = $columData = [];
         $keyList = $tableData->getPrimaryKey();
 
-        foreach ($tableData->getColumnNames() as $column)
-        {
-            $reflection = new \ReflectionClass($model);
+        foreach ($tableData->getColumnNames() as $column) {
+            $reflection        = new \ReflectionClass($model);
             $reflectedProperty = $reflection->getProperty($column);
             $reflectedProperty->setAccessible(true);
 
             $columData = [
                 'value' => $reflectedProperty->getValue($model),
-                'name' => $column
+                'name'  => $column
             ];
 
             if (in_array($column, $keyList)) {
@@ -160,7 +161,7 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
     public function generateUpdateForModel(AbstractModel $model, $diff = null)
     {
         $cacheData = $this->fetchCacheData($model);
-        $strategy = new MySQLUpdateStrategy(
+        $strategy  = new MySQLUpdateStrategy(
             $cacheData[self::TABLE_DATA_INDEX],
             $this->prepareModelData($model, $cacheData[self::TABLE_DATA_INDEX])
         );

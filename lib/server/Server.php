@@ -1,11 +1,11 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: j
  * Date: 05.04.14
  * Time: 16:35
  */
-
 class Server
 {
 
@@ -120,6 +120,7 @@ class Server
      * adds a host to the hostlist
      *
      * @param Host $host
+     *
      * @return $this
      */
     public function addHost(Host $host)
@@ -144,12 +145,12 @@ class Server
         // loop through the sockets
         if (count($this->client) > 0) {
             for ($i = 0; $i < $this->max_clients; $i++) {
-                if (isset($this->client[$i]) && $this->client[$i]['sock'] != null)
-                {
+                if (isset($this->client[$i]) && $this->client[$i]['sock'] != null) {
                     $read[$i + 1] = $this->client[$i]['sock'];
                 }
             }
         }
+
         return $read;
     }
 
@@ -162,8 +163,7 @@ class Server
     public function checkClient()
     {
         /* if a new connection is being made add it to the client array */
-        if (in_array($this->_socket_http, $this->read))
-        {
+        if (in_array($this->_socket_http, $this->read)) {
             for ($i = 0; $i < $this->max_clients; $i++) {
                 if (isset($this->client[$i]) && $this->client[$i]['sock'] == null) {
                     $this->client[$i]['sock'] = @socket_accept($this->_socket_http);
@@ -176,7 +176,7 @@ class Server
                 }
             }
 
-            if (--$this->ready <= 0)  {
+            if (--$this->ready <= 0) {
                 return false;
             }
         } // end if in_array
@@ -220,11 +220,11 @@ class Server
     public function start()
     {
         $this->_socket_http = socket_create(AF_INET, SOCK_STREAM, IPPROTO_IP);
-        if (!$this->_socket_http)  {
+        if (!$this->_socket_http) {
             throw new Exception("Unable to create socket\n");
         }
 
-        if (!socket_bind($this->_socket_http, self::SERVER_IP, self::LISTENING_PORT))  {
+        if (!socket_bind($this->_socket_http, self::SERVER_IP, self::LISTENING_PORT)) {
             throw new Exception('Could not bind address and port');
         }
 
@@ -233,8 +233,7 @@ class Server
             throw new Exception('Could not listen to main socket!');
         }
 
-        while (true)
-        {
+        while (true) {
             // Setup clients listen socket for reading
             $this->read = $this->checkSocket($this->_socket_http);
 
@@ -270,8 +269,7 @@ class Server
         // loop through the open client connections
         foreach ($this->client as $key => $client) {
             // if the client connection doesn exist in the current read iteration
-            if (!in_array($client['sock'], $this->read))
-            {
+            if (!in_array($client['sock'], $this->read)) {
                 // Close the socket
                 $this->close($client['sock']);
                 // flag for garbage collection
@@ -283,7 +281,9 @@ class Server
 
 
             // Zero length string meaning disconnected
-            if ($input == null) { unset($this->client[$key]); }
+            if ($input == null) {
+                unset($this->client[$key]);
+            }
             $n = trim($input);
 
             switch (true) {
@@ -303,7 +303,8 @@ class Server
     /**
      * @param $input
      */
-    public function getResponse($input) {
+    public function getResponse($input)
+    {
         $handler = null;
         switch (true) {
             case (strpos('HTTP', $input) !== false) :
@@ -319,6 +320,7 @@ class Server
      * are closed!
      *
      * @param $socket
+     *
      * @return bool
      */
     public function close($socket)
@@ -328,12 +330,14 @@ class Server
         }
 
         @socket_close($socket);
+
         return true;
     }
 }
 
 
-interface SocketHandlerInterface {
+interface SocketHandlerInterface
+{
     /**
      * constructor
      *
@@ -349,7 +353,8 @@ interface SocketHandlerInterface {
     public function response();
 }
 
-class HTTP_Handler implements SocketHandlerInterface{
+class HTTP_Handler implements SocketHandlerInterface
+{
 
     /**
      * @var string
@@ -370,7 +375,8 @@ class HTTP_Handler implements SocketHandlerInterface{
      *
      * @internal param string $input
      */
-    public function __construct($request_string) {
+    public function __construct($request_string)
+    {
         $this->request_string = $request_string;
     }
 
@@ -382,7 +388,8 @@ class HTTP_Handler implements SocketHandlerInterface{
      *
      * @return mixed|string
      */
-    protected function execute(){
+    protected function execute()
+    {
         return $this->request_string;
     }
 
@@ -392,7 +399,8 @@ class HTTP_Handler implements SocketHandlerInterface{
      *
      * @return mixed|string
      */
-    public function response() {
+    public function response()
+    {
         $this->response = $this->execute();
 
         return $this->response;
@@ -466,7 +474,7 @@ class Host
      */
     private function _check_mandatory()
     {
-        foreach($this->mandatory_properties as $property) {
+        foreach ($this->mandatory_properties as $property) {
             if (!$this->$property) {
                 throw new Exception('Missing Property: ' . $property);
             }
@@ -477,6 +485,7 @@ class Host
      * initializes the server variables
      *
      * @param array $setting
+     *
      * @return $this
      */
     public function init($setting = array())

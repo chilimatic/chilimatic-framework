@@ -2,6 +2,7 @@
 /**
  * little collection of useful functionality
  * Enter description here ...
+ *
  * @author j
  *
  */
@@ -34,65 +35,59 @@ class Tool
      *
      * @return array
      */
-    public static function generate_nested_array( $array_map , $map_keys , $bind_value )
+    public static function generate_nested_array($array_map, $map_keys, $bind_value)
     {
 
         $reference = &$array_map;
-        
-        while ( count($map_keys) > 0 )
-        {
+
+        while (count($map_keys) > 0) {
             // get next first key
             $new_map = array_shift($map_keys);
-            
+
             // if $reference isn't an array already, make it one
-            if ( !is_array($reference) )
-            {
+            if (!is_array($reference)) {
                 $reference = array();
             }
-            
+
             // moves the reference deeper
             $reference = &$reference[$new_map];
         }
         $reference = $bind_value;
-        
+
         // returns the nested array
         return $array_map;
-    }    
+    }
 
     /**
      * returns if an IP is valid
      *
-     * @param string $ip            
+     * @param string $ip
+     *
      * @return boolean
      */
-    public static function validate_ip( $ip = '' )
+    public static function validate_ip($ip = '')
     {
 
-        if ( empty($ip) ) return false;
-        
+        if (empty($ip)) return false;
+
         return (ip2long($ip) !== false) ? true : false;
     }
-
-
-
 
 
     /**
      * removes multiple slashes and backslashes
      *
-     * @param $path string            
+     * @param $path string
+     *
      * @return string
      */
-    public static function clean_up_path( $path )
+    public static function clean_up_path($path)
     {
 
-        if ( empty($path) ) return '';
-        if ( strpos($path, '\\') !== false )
-        {
+        if (empty($path)) return '';
+        if (strpos($path, '\\') !== false) {
             return str_replace("\\\\", "\\", $path);
-        }
-        else
-        {
+        } else {
             return str_replace("//", "/", $path);
         }
     }
@@ -101,22 +96,21 @@ class Tool
     /**
      * trims the content of an array
      *
-     * @param $array array            
+     * @param $array array
      *
      * @return array
      */
-    public static function trim_array( $array )
+    public static function trim_array($array)
     {
 
-        if ( empty($array) || !is_array($array) ) return $array;
-        
-        foreach ( $array as $key => $value )
-        {
+        if (empty($array) || !is_array($array)) return $array;
+
+        foreach ($array as $key => $value) {
             $array[$key] = trim($value);
         }
-        
+
         unset($key, $value);
-        
+
         return $array;
     }
 
@@ -131,33 +125,26 @@ class Tool
      *
      * @return array|bool
      */
-    public static function getSubArray( $thing , $key )
+    public static function getSubArray($thing, $key)
     {
 
-        if ( is_object($thing) )
-        {
+        if (is_object($thing)) {
             $array = get_object_vars($thing);
-        }
-        else
-        {
+        } else {
             $array = $thing;
         }
-        if ( !is_array($array) || empty($array) ) return false;
-        
+        if (!is_array($array) || empty($array)) return false;
+
         $res = array();
-        
-        foreach ( $array as $idx => $subarray )
-        {
-            if ( is_object($subarray) )
-            {
-                if ( isset($subarray->$key) ) $res[$idx] = $subarray->$key;
-            }
-            else
-            {
-                if ( isset($subarray[$key]) ) $res[$idx] = $subarray[$key];
+
+        foreach ($array as $idx => $subarray) {
+            if (is_object($subarray)) {
+                if (isset($subarray->$key)) $res[$idx] = $subarray->$key;
+            } else {
+                if (isset($subarray[$key])) $res[$idx] = $subarray[$key];
             }
         }
-        
+
         return $res;
     }
 
@@ -171,13 +158,13 @@ class Tool
      *
      * @return float
      */
-    public static function php_number_format( $number )
+    public static function php_number_format($number)
     {
 
         preg_match('/[.,](\d+)$/', $number, $matches);
-        
+
         $num_decimals = strlen($matches[1]);
-        
+
         return preg_replace('/[.,]/', '', $number) / pow(10, $num_decimals);
     }
 
@@ -192,54 +179,36 @@ class Tool
      *
      * @return mixed|string
      */
-    public static function updateQS( $key , $value , $reverseorder = false , $qs = '' )
+    public static function updateQS($key, $value, $reverseorder = false, $qs = '')
     {
 
-        if ( empty($qs) )
-        {
+        if (empty($qs)) {
             $qs = $_SERVER['QUERY_STRING'];
         }
-        if ( $reverseorder )
-        {
-            if ( preg_match("/ascdesc=ASC/", $qs) )
-            {
+        if ($reverseorder) {
+            if (preg_match("/ascdesc=ASC/", $qs)) {
                 $qs = self::updateQS('ascdesc', 'DESC', 0, $qs);
-            }
-            else
-            {
+            } else {
                 $qs = self::updateQS('ascdesc', 'ASC', 0, $qs);
             }
         }
-        if ( !$qs )
-        {
-            if ( $value )
-            {
+        if (!$qs) {
+            if ($value) {
                 return "$key=$value";
-            }
-            else
-            {
+            } else {
                 return "";
             }
         }
-        if ( preg_match("/$key=/", $qs) )
-        {
-            if ( $value )
-            {
+        if (preg_match("/$key=/", $qs)) {
+            if ($value) {
                 return preg_replace("/$key=[^&]+/", "$key=$value", $qs);
-            }
-            else
-            {
+            } else {
                 return preg_replace("/$key=[^&]?/", "", $qs);
             }
-        }
-        else
-        {
-            if ( $value )
-            {
+        } else {
+            if ($value) {
                 return $qs . "&$key=$value";
-            }
-            else
-            {
+            } else {
                 return $qs;
             }
         }
@@ -255,17 +224,16 @@ class Tool
      *
      * @return array
      */
-    public static function array_diff_multi( $array1 , $array2 )
+    public static function array_diff_multi($array1, $array2)
     {
 
         $res = array();
-        foreach ( $array1 as $entry )
-        {
-            if ( !in_array($entry, $array2) )
-            {
+        foreach ($array1 as $entry) {
+            if (!in_array($entry, $array2)) {
                 $res[] = $entry;
             }
         }
+
         return $res;
     }
 
@@ -279,46 +247,41 @@ class Tool
      *
      * @throws Exception_InvalidArgument
      */
-    public static function usortByArrayKey( &$array , $key , $asc = SORT_ASC )
+    public static function usortByArrayKey(&$array, $key, $asc = SORT_ASC)
     {
 
         $sort_flags = array(
-                            SORT_ASC, 
-                            SORT_DESC
+            SORT_ASC,
+            SORT_DESC
         );
-        
-        if ( !in_array($asc, $sort_flags) ) throw new Exception_InvalidArgument('sort flag only accepts SORT_ASC or SORT_DESC');
-        
-        $cmp = function ( array $a , array $b ) use($key , $asc , $sort_flags )
-        {
-            if ( !is_array($key) )
-            { // just one key and sort direction
-                if ( !isset($a[$key]) || !isset($b[$key]) )
-                {
+
+        if (!in_array($asc, $sort_flags)) throw new Exception_InvalidArgument('sort flag only accepts SORT_ASC or SORT_DESC');
+
+        $cmp = function (array $a, array $b) use ($key, $asc, $sort_flags) {
+            if (!is_array($key)) { // just one key and sort direction
+                if (!isset($a[$key]) || !isset($b[$key])) {
                     throw new \Exception('attempting to sort on non-existent keys');
                 }
-                if ( $a[$key] == $b[$key] ) return 0;
+                if ($a[$key] == $b[$key]) return 0;
+
                 return ($asc == SORT_ASC xor $a[$key] < $b[$key]) ? 1 : -1;
-            }
-            else
-            { // using multiple keys for sort and sub-sort
-                foreach ( $key as $sub_key => $sub_asc )
-                {
+            } else { // using multiple keys for sort and sub-sort
+                foreach ($key as $sub_key => $sub_asc) {
                     // array can come as 'sort_key'=>SORT_ASC|SORT_DESC or just
                     // 'sort_key', so need to detect which
-                    if ( !in_array($sub_asc, $sort_flags) )
-                    {
+                    if (!in_array($sub_asc, $sort_flags)) {
                         $sub_key = $sub_asc;
                         $sub_asc = $asc;
                     }
                     // just like above, except 'continue' in place of return 0
-                    if ( !isset($a[$sub_key]) || !isset($b[$sub_key]) )
-                    {
+                    if (!isset($a[$sub_key]) || !isset($b[$sub_key])) {
                         throw new \Exception('attempting to sort on non-existent keys');
                     }
-                    if ( $a[$sub_key] == $b[$sub_key] ) continue;
+                    if ($a[$sub_key] == $b[$sub_key]) continue;
+
                     return ($sub_asc == SORT_ASC xor $a[$sub_key] < $b[$sub_key]) ? 1 : -1;
                 }
+
                 return 0;
             }
         };
@@ -329,16 +292,17 @@ class Tool
     /**
      * Check for a valid email
      *
-     * @param $email string            
+     * @param $email string
+     *
      * @return boolean
      */
-    public static function checkValidEmail( $email )
+    public static function checkValidEmail($email)
     {
 
-        if ( !preg_match("#^[_a-z0-9+-]+(\\.[_a-z0-9+-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,6})$#", $email) )
-        {
+        if (!preg_match("#^[_a-z0-9+-]+(\\.[_a-z0-9+-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,6})$#", $email)) {
             return false;
         }
+
         return true;
     }
 
@@ -353,24 +317,24 @@ class Tool
      *
      * @return string
      */
-    public static function make_bitly_url( $url , $login = '' , $appkey = 'R_f0b76fa0948d2cb9f223fb5387ad09ba' , $format = 'xml' )
+    public static function make_bitly_url($url, $login = '', $appkey = 'R_f0b76fa0948d2cb9f223fb5387ad09ba', $format = 'xml')
     {
         // create the URL
         $bitly = 'http://api.bitly.com/v3/shorten?longUrl=' . urlencode($url) . '&login=' . urlencode($login) . '&apiKey=' . $appkey . '&format=' . $format;
-        
+
         // get the url
         // could also use cURL here
         $response = file_get_contents($bitly);
-        
+
         // parse depending on desired format
-        if ( strtolower($format) == 'json' )
-        {
+        if (strtolower($format) == 'json') {
             $json = @json_decode($response, true);
+
             return $json['results'][$url]['shortUrl'];
-        }
-        else // xml
+        } else // xml
         {
             $xml = simplexml_load_string($response);
+
             return Config::get('bitly_url') . $xml->data->hash;
         }
     }
@@ -387,36 +351,29 @@ class Tool
      *
      * @return array
      */
-    public static function assignByKey( $array , $key , $group = false )
+    public static function assignByKey($array, $key, $group = false)
     {
 
-        if ( empty($array) ) return $array;
-        
+        if (empty($array)) return $array;
+
         $res = array();
-        foreach ( $array as $subthing )
-        {
+        foreach ($array as $subthing) {
             $idx = null;
-            if ( is_object($subthing) && property_exists($subthing, $key) )
-            {
+            if (is_object($subthing) && property_exists($subthing, $key)) {
                 $idx = $subthing->$key;
-            }
-            elseif ( is_array($subthing) && isset($subthing[$key]) )
-            {
+            } elseif (is_array($subthing) && isset($subthing[$key])) {
                 $idx = $subthing[$key];
             }
-            if ( $idx !== null )
-            {
-                if ( !$group )
-                {
+            if ($idx !== null) {
+                if (!$group) {
                     $res[$idx] = $subthing;
-                }
-                else
-                {
-                    if ( !isset($res[$idx]) ) $res[$idx] = array();
+                } else {
+                    if (!isset($res[$idx])) $res[$idx] = array();
                     $res[$idx][] = $subthing;
                 }
             }
         }
+
         return $res;
     }
 

@@ -10,6 +10,7 @@ namespace chilimatic\lib\handler;
 
 /**
  * Class HTTPHandler
+ *
  * @package chilimatic\lib\handler
  */
 class HTTPHandler extends AbstractHandler
@@ -37,7 +38,7 @@ class HTTPHandler extends AbstractHandler
             throw new \LogicException('No Include Root has been passed along');
         }
 
-        $this->includeRoot = $param['include-root'];
+        $this->includeRoot          = $param['include-root'];
         $this->applicationNamespace = $param['application-namespace'];
     }
 
@@ -81,14 +82,14 @@ class HTTPHandler extends AbstractHandler
     public function getDefaultTemplate($className)
     {
         return INCLUDE_ROOT .
-            strtolower(
-                str_replace(array('\\'), '/',
-                    str_replace(
-                        $this->applicationNamespace, '', str_replace(
-                            'controller', 'view', $className
-                        )
+        strtolower(
+            str_replace(array('\\'), '/',
+                str_replace(
+                    $this->applicationNamespace, '', str_replace(
+                        'controller', 'view', $className
                     )
                 )
-            );
+            )
+        );
     }
 }

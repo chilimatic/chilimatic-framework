@@ -91,6 +91,7 @@ abstract class AbstractConnection
 
     /**
      * @param string $host
+     *
      * @return $this
      */
     public function setHost($host)
@@ -105,11 +106,12 @@ abstract class AbstractConnection
      */
     public function isSocket()
     {
-        return (bool) $this->socket;
+        return (bool)$this->socket;
     }
 
     /**
      * @param string $socket
+     *
      * @return $this
      */
     public function setSocket($socket)
@@ -129,6 +131,7 @@ abstract class AbstractConnection
 
     /**
      * @param string $username
+     *
      * @return $this
      */
     public function setUsername($username)
@@ -148,6 +151,7 @@ abstract class AbstractConnection
 
     /**
      * @param string $password
+     *
      * @return $this
      */
     public function setPassword($password)
@@ -167,6 +171,7 @@ abstract class AbstractConnection
 
     /**
      * @param string $database
+     *
      * @return $this
      */
     public function setDatabase($database)
@@ -186,6 +191,7 @@ abstract class AbstractConnection
 
     /**
      * @param int $port
+     *
      * @return $this
      */
     public function setPort($port)
@@ -205,6 +211,7 @@ abstract class AbstractConnection
 
     /**
      * @param boolean $active
+     *
      * @return $this
      */
     public function setActive($active)

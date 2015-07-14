@@ -26,7 +26,8 @@ abstract class AbstractFilter implements IFlyWeightFilter
      *
      * @return mixed
      */
-    public function __invoke($param = null) {
+    public function __invoke($param = null)
+    {
         return $this->filter($param);
     }
 }

@@ -15,13 +15,15 @@ namespace chilimatic\lib\Tool;
  *
  * @package chilimatic\lib\Tool
  */
-class TypeCast {
+class TypeCast
+{
 
     const METHODPREFIX = 'cast';
 
 
-    public static function castInt($var){
-        return (int) $var;
+    public static function castInt($var)
+    {
+        return (int)$var;
     }
 
 }

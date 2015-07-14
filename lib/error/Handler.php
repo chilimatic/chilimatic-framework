@@ -19,7 +19,8 @@ class Handler
     /**
      * @param \chilimatic\lib\log\client\AbstractClient $client
      */
-    public function __construct(\chilimatic\lib\log\client\AbstractClient $client) {
+    public function __construct(\chilimatic\lib\log\client\AbstractClient $client)
+    {
         if (!$client) {
             throw new \chilimatic\lib\exception\Dependency('No Client was declared');
         }
@@ -29,7 +30,8 @@ class Handler
     /**
      * @return mixed
      */
-    public function getClient() {
+    public function getClient()
+    {
         return $this->client;
     }
 }

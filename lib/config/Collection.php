@@ -11,7 +11,10 @@ namespace chilimatic\lib\config;
 
 /**
  * Class Config_NodeList
+ *
  * @package chilimatic\lib\config
  */
 
-class Collection extends \chilimatic\lib\datastructure\graph\Collection {}
+class Collection extends \chilimatic\lib\datastructure\graph\Collection
+{
+}

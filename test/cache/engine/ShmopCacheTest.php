@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @author j
@@ -7,13 +8,14 @@
  *
  * File: ShmopCacheTest.php
  */
-
-class ShmopCacheTest extends PHPUnit_Framework_TestCase {
+class ShmopCacheTest extends PHPUnit_Framework_TestCase
+{
 
     /**
      * @test
      */
-    public function checkIfShmopImplementsTheCorrectInterface() {
+    public function checkIfShmopImplementsTheCorrectInterface()
+    {
         $this->assertInstanceOf('\chilimatic\lib\cache\engine\CacheInterface', new \chilimatic\lib\cache\engine\Shmop());
     }
 }

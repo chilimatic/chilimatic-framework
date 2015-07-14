@@ -9,7 +9,7 @@ use chilimatic\lib\route\parser\RouteMethodAnnotaionParser;
 
 
 /**
- * @author j
+ * @author  j
  * @package chilimatic\lib\route
  */
 class Map
@@ -98,7 +98,7 @@ class Map
 
         if (empty($uri)) return;
 
-        $this->_delimiter = (!empty( $delimiter ) ? $delimiter : self::DEFAULT_URL_DELIMITER);
+        $this->_delimiter = (!empty($delimiter) ? $delimiter : self::DEFAULT_URL_DELIMITER);
 
         /**
          * inititalize the routing map
@@ -118,21 +118,19 @@ class Map
 
     private function validate($uri)
     {
-        try
-        {
+        try {
             // set to false as default
             $validate = false;
-            
+
             // check if there is the marker vor a special validation and or a / for complex routing
-            if (strpos($uri, self::VALIDATION_PREFIX) === false && strpos($uri, $this->getDelimiter()) === false ) {
+            if (strpos($uri, self::VALIDATION_PREFIX) === false && strpos($uri, $this->getDelimiter()) === false) {
                 return false;
             }
-            
-            $parts = explode( $this->_delimiter, $uri );
-            for ($i = 0, $c = count($parts); $i < $c; $i++)
-            {
-                if ( empty( $parts[$i] ) ) continue;
-                elseif ( (strpos( $parts[$i], self::VALIDATION_PREFIX )) === false ) { // if there's no placeholder in use for a specific type
+
+            $parts = explode($this->_delimiter, $uri);
+            for ($i = 0, $c = count($parts); $i < $c; $i++) {
+                if (empty($parts[$i])) continue;
+                elseif ((strpos($parts[$i], self::VALIDATION_PREFIX)) === false) { // if there's no placeholder in use for a specific type
 
                     $this->urlPart[] = $parts[$i];
                     continue;
@@ -141,7 +139,7 @@ class Map
                 // this is an option to map "polymorph" [differnt types differnt classes / methods]
                 $this->urlPart[] = $parts[$i];
                 // position within the route to be validated
-                $validate[] = new Validator($parts[$i]);
+                $validate[]     = new Validator($parts[$i]);
                 $this->validate = true;
             }
             unset($parts, $c, $i, $uri);
@@ -156,8 +154,9 @@ class Map
     /**
      * @return string
      */
-    public function __toString() {
-        return (string) implode( self::getDelimiter(), (array) $this->urlPart);
+    public function __toString()
+    {
+        return (string)implode(self::getDelimiter(), (array)$this->urlPart);
     }
 
     /**
@@ -165,54 +164,51 @@ class Map
      *
      * @param string $uri
      * @param mixed $callback
+     *
      * @throws RouteException
      *
      * @return boolean
      */
-    private function init( $uri, $callback )
+    private function init($uri, $callback)
     {
 
-        try
-        {
+        try {
             /**
              * check if there is a general type validation
              * can throw an exception
              */
             $this->validate($uri);
 
-            switch (true)
-            {
+            switch (true) {
                 /**
                  * check if the routing maps to an object via array or class
                  */
-                case (is_array( $callback ) || (is_object( $callback ) && !is_callable( $callback ))) :
+                case (is_array($callback) || (is_object($callback) && !is_callable($callback))) :
                     $this->setType(self::TYPE_O);
                     $this->strategy = StrategyFactory::make(self::TYPE_O, $callback, new RouteMethodAnnotaionParser());
                     break;
-                
+
                 /**
                  * maps a simple function
                  */
-                case (is_string( $callback )) :
+                case (is_string($callback)) :
                     $this->setType(self::TYPE_F);
                     $this->strategy = StrategyFactory::make(self::TYPE_F, $callback);
 
-                    if ( !function_exists( $callback ) ) {
-                        throw new RouteException( sprintf( _( 'There is no such Function like %s' ), $callback ) );
+                    if (!function_exists($callback)) {
+                        throw new RouteException(sprintf(_('There is no such Function like %s'), $callback));
                     }
                     break;
-                
+
                 /**
                  * Closure callback
                  */
-                case (is_callable( $callback )) :
+                case (is_callable($callback)) :
                     $this->setType(self::TYPE_LF);
                     $this->strategy = StrategyFactory::make(self::TYPE_LF, $callback);
                     break;
             }
-        } 
-        catch ( RouteException $e )
-        {
+        } catch (RouteException $e) {
             throw $e;
         }
 
@@ -221,9 +217,11 @@ class Map
 
     /**
      * @param null $param
+     *
      * @return mixed|null
      */
-    public function call($param = null) {
+    public function call($param = null)
+    {
         if (!$this->strategy) {
             return null;
         }
@@ -254,6 +252,7 @@ class Map
     public function getDelimiter()
     {
         if (empty($this->_delimiter)) $this->_delimiter = self::DEFAULT_URL_DELIMITER;
+
         return $this->_delimiter;
     }
 
@@ -267,11 +266,13 @@ class Map
 
     /**
      * @param mixed $validate
+     *
      * @return $this
      */
     public function setValidate(\chilimatic\lib\route\validator\AbstractValidator $validate)
     {
         $this->validate = $validate;
+
         return $this;
     }
 
@@ -292,6 +293,7 @@ class Map
     public function setType($type)
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -311,6 +313,7 @@ class Map
     public function setUrlPart(array $urlPart)
     {
         $this->urlPart = $urlPart;
+
         return $this;
     }
 }

@@ -32,7 +32,8 @@ class MysqlConnectionStorage
     /**
      * constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->storage = new \SplObjectStorage();
     }
 
@@ -43,14 +44,15 @@ class MysqlConnectionStorage
      * @param string $database
      * @param int $port
      */
-    public function addConnection($host, $username, $password, $database = '', $port = self::MYSQL_DEFAULT_PORT, $charset = '') {
+    public function addConnection($host, $username, $password, $database = '', $port = self::MYSQL_DEFAULT_PORT, $charset = '')
+    {
         $param = [
-            'host' => $host,
+            'host'     => $host,
             'username' => $username,
             'password' => $password,
             'database' => $database,
-            'port' => $port,
-            'charset' => $charset
+            'port'     => $port,
+            'charset'  => $charset
         ];
 
         $this->storage->attach(
@@ -63,7 +65,8 @@ class MysqlConnectionStorage
      *
      * @return null|object
      */
-    public function getConnection($pos) {
+    public function getConnection($pos)
+    {
         $this->storage->rewind();
         for ($i = 0; $this->storage->count() > $i; $i++) {
             if ($i == $pos) {
@@ -71,6 +74,7 @@ class MysqlConnectionStorage
             }
             $this->storage->next();
         }
+
         return null;
     }
 
@@ -79,7 +83,8 @@ class MysqlConnectionStorage
      *
      * @param $connection
      */
-    public function removeConnection($connection) {
+    public function removeConnection($connection)
+    {
         $this->storage->detach($connection);
     }
 }

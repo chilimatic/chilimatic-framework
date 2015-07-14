@@ -12,9 +12,11 @@ use chilimatic\lib\view\AbstractView;
 
 /**
  * Class HTTPController
+ *
  * @package chilimatic\lib\controller
  */
-abstract class HTTPController {
+abstract class HTTPController
+{
 
     /**
      * @var AbstractView mixed
@@ -24,7 +26,8 @@ abstract class HTTPController {
     /**
      * @param AbstractView|null $view
      */
-    public function __construct(AbstractView $view = null) {
+    public function __construct(AbstractView $view = null)
+    {
         $this->view = $view;
     }
 
@@ -48,6 +51,7 @@ abstract class HTTPController {
     public function setView($view)
     {
         $this->view = $view;
+
         return $this;
     }
 }

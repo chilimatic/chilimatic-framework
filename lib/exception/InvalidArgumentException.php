@@ -2,4 +2,6 @@
 
 namespace chilimatic\lib\exception;
 
-class InvalidArgumentException extends \Exception {}
+class InvalidArgumentException extends \Exception
+{
+}

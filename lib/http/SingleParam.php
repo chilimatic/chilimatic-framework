@@ -14,7 +14,8 @@ namespace chilimatic\lib\http;
  *
  * @package chilimatic\http
  */
-class SingleParam {
+class SingleParam
+{
 
     /**
      * field name
@@ -39,7 +40,8 @@ class SingleParam {
      * @param $field
      * @param string $param
      */
-    public function __construct($field, $param = '') {
+    public function __construct($field, $param = '')
+    {
         if (empty($field)) return;
 
         $this->field = $field;
@@ -51,7 +53,8 @@ class SingleParam {
      *
      * @return string
      */
-    public function getParam(){
+    public function getParam()
+    {
         return $this->param;
     }
 
@@ -59,10 +62,13 @@ class SingleParam {
      * sets the parameter
      *
      * @param $value
+     *
      * @return bool
      */
-    public function setParam($value) {
+    public function setParam($value)
+    {
         $this->param = $value;
+
         return true;
     }
 
@@ -71,7 +77,8 @@ class SingleParam {
      *
      * @return string
      */
-    public function __toString(){
+    public function __toString()
+    {
         return "$this->field: $this->param\r\n";
     }
 }

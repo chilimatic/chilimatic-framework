@@ -13,7 +13,8 @@ namespace chilimatic\lib\socket;
  *
  * @package chilimatic\lib\socket
  */
-class Socket {
+class Socket
+{
 
     public $header;
 
@@ -21,7 +22,8 @@ class Socket {
 
     public $message = [];
 
-    public function __construct($address, $port = 80) {
+    public function __construct($address, $port = 80)
+    {
         try {
             $this->bind($address, $port);
         } catch (HttpSocketException $e) {
@@ -30,9 +32,10 @@ class Socket {
     }
 
 
-    public function bind($address, $port) {
+    public function bind($address, $port)
+    {
 
-        if (!$this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP))  throw new HttpSocketException(__METHOD__ . "socket_create() failed");
+        if (!$this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP)) throw new HttpSocketException(__METHOD__ . "socket_create() failed");
         if (!socket_set_option($this->socket, SOL_SOCKET, SO_REUSEADDR, 1)) throw new HttpSocketException(__METHOD__ . "socket_set_option() failed");
         if (!socket_bind($this->socket, $address, $port)) throw new HttpSocketException(__METHOD__ . "socket_bind() failed");
         if (!socket_listen($this->socket, 20)) throw new HttpSocketException(__METHOD__ . "socket_bind() failed");
@@ -41,7 +44,8 @@ class Socket {
         $this->message[] = "Listening on   : " . $address . " port " . $port . "\n\n";
     }
 
-    public function connect(){
+    public function connect()
+    {
 
     }
 }

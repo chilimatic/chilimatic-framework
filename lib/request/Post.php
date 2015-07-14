@@ -14,7 +14,8 @@ namespace chilimatic\lib\request;
  *
  * @package chilimatic\lib\request
  */
-class Post extends Generic implements RequestInterface{
+class Post extends Generic implements RequestInterface
+{
 
 
     /**
@@ -26,8 +27,7 @@ class Post extends Generic implements RequestInterface{
      */
     public static function getInstance(array $array = array())
     {
-        if (!(self::$instance instanceof Post))
-        {
+        if (!(self::$instance instanceof Post)) {
             // construct the object
             self::$instance = new Post($array);
         }
