@@ -38,6 +38,17 @@ class ModelCache
     }
 
     /**
+     * removes the maybe existing object from the storage
+     *
+     * @param AbstractModel $model
+     *
+     * @return void
+     */
+    public function remove(AbstractModel $model) {
+        $this->modelStorage->detach($model);
+    }
+
+    /**
      * @param AbstractModel $model
      * @param null $param
      *

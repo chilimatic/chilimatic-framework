@@ -46,6 +46,15 @@ Trait GeneratorTrait {
      *
      * @return string
      */
+    public function generateDeleteClause(MySQLTableData $tableData) {
+        return "DELETE FROM " . $tableData->getTableNameWithPrefix();
+    }
+
+    /**
+     * @param MySQLTableData $tableData
+     *
+     * @return string
+     */
     public function generateUpdateClause(MySQLTableData $tableData) {
         return "UPDATE ". $tableData->getTableNameWithPrefix();
     }

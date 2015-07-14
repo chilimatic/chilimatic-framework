@@ -112,20 +112,22 @@ class EntityManager
      * @param \PDOStatement $stmt
      * @param $model
      *
-     * @return AbstractModel|EntityObjectStorage
+     * @return EntityObjectStorage
      */
     public function executeQuery($model,\PDOStatement $stmt)
     {
+        $objectStorage = new EntityObjectStorage();
         if ($stmt->execute()) {
             if ( $stmt->rowCount() > 1) {
                 return $this->getList($model, $stmt);
             }
-            return $this->hydrate($model, $stmt->fetchObject());
+            $objectStorage->attach($this->hydrate($model, $stmt->fetchObject()));
         } else {
             $this->log(ILog::T_ERROR, implode(',', $stmt->errorInfo()));
+            $objectStorage->attach($model);
         }
 
-        return $model;
+        return $objectStorage;
     }
 
 
@@ -172,7 +174,7 @@ class EntityManager
      * @param AbstractModel $model
      * @param $param
      *
-     * @return AbstractModel
+     * @return EntityObjectStorage
      */
     public function findBy(AbstractModel $model, $param = [])
     {
@@ -207,18 +209,7 @@ class EntityManager
      */
     public function findOneBy(AbstractModel $model, $param = [])
     {
-        $query = $this->queryBuilder->generateSelectForModel($model, $param);
-        $result = $this->executeQuery(
-            $model,
-            $this->prepare(
-                $query,
-                $this->prepareParam($param)
-            )
-        );
-
-        if ($result instanceof AbstractModel) {
-            return $result;
-        }
+        $result = $this->findBy($model, $param);
 
         $result->rewind();
         return $result->current();
@@ -285,6 +276,25 @@ class EntityManager
         return $model;
     }
 
+    public function delete(AbstractModel $model)
+    {
+
+        $data = $this->queryBuilder->generateDeleteForModel($model);
+
+        if ($this->modelCache->get($model)) {
+            $this->modelCache->remove($model);
+        }
+        
+        $stmt = $this->prepare($data[0], $data[1]);
+        //return $stmt->execute();
+    }
+
+
+    /**
+     * @param AbstractModel $model
+     *
+     * @return bool
+     */
     public function persist(AbstractModel $model)
     {
         // create a query based on if the model exists or not (update or insert)

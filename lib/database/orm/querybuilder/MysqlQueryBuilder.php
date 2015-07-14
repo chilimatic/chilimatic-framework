@@ -13,6 +13,7 @@ use chilimatic\lib\cache\engine\CacheInterface;
 use chilimatic\lib\database\AbstractDatabase;
 use chilimatic\lib\database\orm\AbstractModel;
 use chilimatic\lib\database\orm\querybuilder\meta\MySQLTableData;
+use chilimatic\lib\database\orm\querybuilder\strategy\MySQLDeleteStrategy;
 use chilimatic\lib\database\orm\querybuilder\strategy\MySQLInsertStrategy;
 use chilimatic\lib\database\orm\querybuilder\strategy\MySQLSelectStrategy;
 use chilimatic\lib\database\orm\querybuilder\strategy\MySQLUpdateStrategy;
@@ -174,7 +175,14 @@ class MysqlQueryBuilder extends AbstractQueryBuilder {
      */
     public function generateDeleteForModel(AbstractModel $model)
     {
-        // TODO: Implement generateDeleteForModel() method.
+        $cacheData = $this->fetchCacheData($model);
+
+        $strategy = new MySQLDeleteStrategy(
+            $cacheData[self::TABLE_DATA_INDEX],
+            $this->prepareModelData($model, $cacheData[self::TABLE_DATA_INDEX])
+        );
+
+        return [$strategy->generateSQLStatement(), $strategy->getModelData()];
     }
 
     /**
