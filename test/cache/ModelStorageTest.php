@@ -1,6 +1,6 @@
 <?php
 use chilimatic\lib\cache\handler\storage\ModelStorage;
-use chilimatic\lib\cache\handler\storage\ModelStorageDecorator;
+
 use test\testdata\DummyModel;
 
 /**
@@ -13,6 +13,10 @@ use test\testdata\DummyModel;
  */
 class ModelStorageTest extends PHPUnit_Framework_TestCase
 {
+
+    /**
+     * @var ModelStorage
+     */
     protected $storage;
 
     /**
@@ -45,8 +49,6 @@ class ModelStorageTest extends PHPUnit_Framework_TestCase
         $this->storage->attach($model);
         $this->storage->attach($model2);
         $this->storage->attach($model);
-
-
     }
 
 
