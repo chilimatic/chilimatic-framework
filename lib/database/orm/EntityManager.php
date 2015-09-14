@@ -100,8 +100,13 @@ class EntityManager
         $stmt = $this->db->prepare($query);
 
         foreach ($param as $set) {
-            $value = &$set[1];
-            $key   = $set[0];
+            if (isset($set['value'])) {
+                $value = &$set['value'];
+                $key   = $set['name'];
+            } else {
+                $value = &$set[1];
+                $key   = $set[0];
+            }
             $stmt->bindParam($key, $value);
         }
 
@@ -165,6 +170,7 @@ class EntityManager
             return [];
         }
         $ret = [];
+
         foreach ($param as $key => $value) {
             $ret[] = [':' . md5($key), $value];
         }

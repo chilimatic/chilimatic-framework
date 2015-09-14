@@ -1,6 +1,7 @@
 <?php
 namespace chilimatic\lib\database\orm\querybuilder\strategy;
 use chilimatic\lib\database\orm\querybuilder\meta\MySQLTableData;
+use chilimatic\lib\transformer\string\DynamicSQLParameter;
 
 /**
  *
@@ -11,6 +12,29 @@ use chilimatic\lib\database\orm\querybuilder\meta\MySQLTableData;
  * File: GeneratorTrait.php
  */
 Trait GeneratorTrait {
+
+    /**
+     * @var \chilimatic\lib\interfaces\IFlyWeightTransformer
+     */
+    protected $transformer;
+
+    /**
+     * @param \chilimatic\lib\interfaces\IFlyWeightTransformer $transformer
+     *
+     * @return $this
+     */
+    public function setTransformer(\chilimatic\lib\interfaces\IFlyWeightTransformer $transformer) {
+        $this->transformer = $transformer;
+        return $this;
+    }
+
+    /**
+     * @return \chilimatic\lib\interfaces\IFlyWeightTransformer|null
+     */
+    public function getTransformer() {
+        return $this->transformer;
+    }
+
 
     /**
      * @param MySQLTableData $tableData
@@ -56,7 +80,7 @@ Trait GeneratorTrait {
      * @return string
      */
     public function generateUpdateClause(MySQLTableData $tableData) {
-        return "UPDATE ". $tableData->getTableNameWithPrefix();
+        return "UPDATE " . $tableData->getTableNameWithPrefix();
     }
 
     /**
@@ -65,7 +89,7 @@ Trait GeneratorTrait {
      * @return string
      */
     public function generateSetClause($fieldList) {
-        return "SET " .  implode(', ',$this->generatePredicateList($fieldList));
+        return "SET " .  implode(', ', $this->generatePredicateList($fieldList));
     }
 
     /**
@@ -84,10 +108,15 @@ Trait GeneratorTrait {
      *
      * @return string
      */
-    public function generatePredicateList($fieldList) {
+    public function generatePredicateList($fieldList)
+    {
+        if (!$this->transformer) {
+            throw new \LogicException('Missing transformer for generic ids in SQL!');
+        }
+
         $predicateList = [];
         foreach ($fieldList as $name) {
-            $predicateList[] = "$name = :" . md5($name);
+            $predicateList[] = "$name = " . $this->transformer->transform($name);
         }
 
         return $predicateList;

@@ -18,6 +18,7 @@ use chilimatic\lib\database\orm\querybuilder\strategy\MySQLDeleteStrategy;
 use chilimatic\lib\database\orm\querybuilder\strategy\MySQLInsertStrategy;
 use chilimatic\lib\database\orm\querybuilder\strategy\MySQLSelectStrategy;
 use chilimatic\lib\database\orm\querybuilder\strategy\MySQLUpdateStrategy;
+use chilimatic\lib\transformer\string\DynamicSQLParameter;
 
 /**
  * Class MysqlQueryBuilder
@@ -45,7 +46,6 @@ class MysqlQueryBuilder extends AbstractQueryBuilder
      */
     const RELATION_PROPERTY = "fieldMapping";
 
-
     /**
      * init cache connection
      *
@@ -56,6 +56,11 @@ class MysqlQueryBuilder extends AbstractQueryBuilder
     {
         $this->relation       = new \SplFixedArray();
         $this->modelDataCache = [];
+        /**
+         * @todo DI for the future
+         */
+        $this->tableData = new MySQLTableData($db);
+        $this->paramTransformer = new DynamicSQLParameter();
 
         parent::__construct($cache, $db);
     }
@@ -82,28 +87,9 @@ class MysqlQueryBuilder extends AbstractQueryBuilder
             array_keys($param)
         );
 
+        $strategy->setTransformer($this->paramTransformer);
+
         return $strategy->generateSQLStatement();
-    }
-
-    /**
-     * @return string
-     */
-    public function generateCondition($param)
-    {
-        if (empty($param)) {
-            return '';
-        }
-
-        $str = ' WHERE ';
-        foreach ($param as $key => $value) {
-            if ($value) {
-                $str .= " $key = ? AND";
-            } else {
-                $str .= " $key AND";
-            }
-        }
-
-        return substr($str, 0, -3);
     }
 
     /**
@@ -147,11 +133,36 @@ class MysqlQueryBuilder extends AbstractQueryBuilder
 
         $strategy = new MySQLInsertStrategy(
             $cacheData[self::TABLE_DATA_INDEX],
-            $this->prepareModelData($model, $cacheData[self::TABLE_DATA_INDEX])
+            $this->prepareModelData(
+                $model,
+                $cacheData[self::TABLE_DATA_INDEX]
+            )
         );
 
-        return [$strategy->generateSQLStatement(), $strategy->getModelData()];
+        $strategy->setTransformer($this->paramTransformer);
+
+
+        return [
+            $strategy->generateSQLStatement(),
+            $this->prepareModelDataForStatement($strategy->getModelData())
+        ];
     }
+
+    /**
+     * @param $modelData
+     *
+     * @return array
+     */
+    public function prepareModelDataForStatement($modelData)
+    {
+        $newModelData = [];
+        foreach ($modelData as $column) {
+            $newModelData[] = [$this->paramTransformer->transform($column['name']), $column['value']];
+        }
+
+        return $newModelData;
+    }
+
 
     /**
      * @param AbstractModel $model
@@ -163,10 +174,18 @@ class MysqlQueryBuilder extends AbstractQueryBuilder
         $cacheData = $this->fetchCacheData($model);
         $strategy  = new MySQLUpdateStrategy(
             $cacheData[self::TABLE_DATA_INDEX],
-            $this->prepareModelData($model, $cacheData[self::TABLE_DATA_INDEX])
+            $this->prepareModelData(
+                $model,
+                $cacheData[self::TABLE_DATA_INDEX]
+            )
         );
 
-        return [$strategy->generateSQLStatement(), $strategy->getModelData()];
+        $strategy->setTransformer($this->paramTransformer);
+
+        return [
+            $strategy->generateSQLStatement(),
+            $strategy->getModelData()
+        ];
     }
 
     /**
@@ -180,10 +199,18 @@ class MysqlQueryBuilder extends AbstractQueryBuilder
 
         $strategy = new MySQLDeleteStrategy(
             $cacheData[self::TABLE_DATA_INDEX],
-            $this->prepareModelData($model, $cacheData[self::TABLE_DATA_INDEX])
+            $this->prepareModelData(
+                $model,
+                $cacheData[self::TABLE_DATA_INDEX]
+            )
         );
 
-        return [$strategy->generateSQLStatement(), $strategy->getModelData()];
+        $strategy->setTransformer($this->paramTransformer);
+
+        return [
+            $strategy->generateSQLStatement(),
+            $strategy->getModelData()
+        ];
     }
 
     /**

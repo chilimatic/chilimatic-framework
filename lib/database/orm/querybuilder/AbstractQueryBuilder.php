@@ -55,9 +55,19 @@ abstract class AbstractQueryBuilder implements IQueryBuilder
     protected $modelDataCache;
 
     /**
+     * @var \chilimatic\lib\database\orm\querybuilder\meta\AbstractSQLTableData
+     */
+    protected $tableData;
+
+    /**
      * @var $string
      */
     protected $position;
+
+    /**
+     * @var \chilimatic\lib\interfaces\IFlyWeightTransformer
+     */
+    protected $paramTransformer;
 
     /**
      * constructor
@@ -111,7 +121,10 @@ abstract class AbstractQueryBuilder implements IQueryBuilder
      */
     public function prepareCacheData(AbstractModel $model)
     {
-        $tableData  = new MySQLTableData($this->db);
+        /**
+         * @todo change MySQLTableData to a usecase based one
+         */
+        $tableData  = clone $this->tableData;
         $reflection = new \ReflectionClass($model);
         $tableData->setTableName($this->parseTableName($reflection));
 

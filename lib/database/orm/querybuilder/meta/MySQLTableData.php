@@ -16,62 +16,13 @@ use chilimatic\lib\database\AbstractDatabase;
  *
  * @package chilimatic\lib\database\orm
  */
-class MySQLTableData
+class MySQLTableData extends AbstractSQLTableData
 {
-    /**
-     * @var string
-     */
-    private $tableName;
 
     /**
-     * @var array
+     * @return void
      */
-    private $columnNames;
-
-    /**
-     * @var array
-     */
-    private $columnNamesWithPrefix;
-
-    /**
-     * @var array
-     */
-    private $columnData;
-
-    /**
-     * @var string
-     */
-    private $prefix;
-
-    /**
-     * @var AbstractDatabase
-     */
-    private $db;
-
-    /**
-     * @var array
-     */
-    private $primaryKey = [];
-
-
-    /**
-     * @param AbstractDatabase $db
-     */
-    public function __construct(AbstractDatabase $db) {
-        $this->db = $db;
-    }
-
-    /**
-     * @param string $tableName
-     *
-     * @return string
-     */
-    private function generatePrefix($tableName) {
-        return substr(md5($tableName), 0, 4);
-    }
-
-
-    private function fetchTableMetaData()
+    protected function fetchTableMetaData()
     {
         if (!$this->db || !$this->tableName) {
             return;
@@ -133,7 +84,7 @@ class MySQLTableData
     /**
      * fills in the column data
      */
-    private function fetchLazy()
+    protected function fetchLazy()
     {
         if ($this->columnData && $this->columnNamesWithPrefix && $this->columnNames){
             return;
@@ -144,50 +95,6 @@ class MySQLTableData
             $this->columnNamesWithPrefix[$value['Field']] = "`$this->prefix`.`{$value['Field']}`";
             $this->columnNames[] = $value['Field'];
         }
-    }
-
-    /**
-     * @return AbstractDatabase
-     */
-    public function getDb()
-    {
-        return $this->db;
-    }
-
-    /**
-     * @param AbstractDatabase $db
-     *
-     * @return $this
-     */
-    public function setDb(AbstractDatabase $db)
-    {
-        $this->db = $db;
-
-        return $this;
-    }
-
-    public function getTableNameWithPrefix() {
-        return "$this->tableName `$this->prefix`";
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTableName()
-    {
-        return $this->tableName;
-    }
-
-    /**
-     * @param mixed $tableName
-     *
-     * @return $this
-     */
-    public function setTableName($tableName)
-    {
-        $this->tableName = $tableName;
-        $this->setPrefix($this->generatePrefix($tableName));
-        return $this;
     }
 
 
@@ -239,26 +146,4 @@ class MySQLTableData
 
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getPrefix()
-    {
-        return $this->prefix;
-    }
-
-    /**
-     * @param mixed $prefix
-     *
-     * @return $this
-     */
-    public function setPrefix($prefix)
-    {
-        $this->prefix = $prefix;
-
-        return $this;
-    }
-
-
 }
