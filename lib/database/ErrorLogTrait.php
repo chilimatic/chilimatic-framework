@@ -13,10 +13,13 @@ namespace chilimatic\lib\database;
 use chilimatic\lib\log\client\ToFile;
 use chilimatic\lib\log\ILog;
 
+/**
+ * Class ErrorLogTrait
+ *
+ * @package chilimatic\lib\database
+ */
 trait ErrorLogTrait
 {
-
-
     /**
      * @var ToFile()
      */
@@ -47,9 +50,6 @@ trait ErrorLogTrait
         }
     }
 
-    /**
-     *
-     */
     public function initLog()
     {
         $this->log = new ToFile();

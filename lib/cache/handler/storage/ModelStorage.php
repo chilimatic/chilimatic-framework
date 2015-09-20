@@ -8,8 +8,7 @@
  * File: Model.php
  */
 namespace chilimatic\lib\cache\handler\storage;
-
-use chilimatic\lib\database\orm\AbstractModel;
+use chilimatic\lib\database\sql\orm\AbstractModel;
 
 class ModelStorage implements \Countable, \Iterator, \Serializable
 {

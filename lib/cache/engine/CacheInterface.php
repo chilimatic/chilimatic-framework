@@ -49,8 +49,6 @@ Interface CacheInterface
      * @param mixed $value
      * @param int $expiration
      *
-     * @internal param mixed $ttl
-     *
      * @return boolean
      */
     public function set($key, $value = null, $expiration = 0);

@@ -10,7 +10,7 @@
 
 namespace chilimatic\lib\cache\handler\storage;
 
-use chilimatic\lib\database\orm\AbstractModel;
+use chilimatic\lib\database\sql\orm\AbstractModel;
 
 /**
  * Class ModelStorageDecorator

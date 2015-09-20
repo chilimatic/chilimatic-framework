@@ -10,7 +10,7 @@
 
 namespace test\testdata;
 
-use chilimatic\lib\database\orm\AbstractModel;
+use chilimatic\lib\database\sql\orm\AbstractModel;
 
 class DummyModel extends AbstractModel
 {
