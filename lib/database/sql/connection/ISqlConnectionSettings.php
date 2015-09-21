@@ -30,6 +30,4 @@ interface ISqlConnectionSettings {
      * @return mixed
      */
     public function setConnectionParam($host, $username, $password, $database = null, $settingList = []);
-
-
 }

@@ -24,22 +24,11 @@ interface ISqlConnectionStorage
 
     /**
      * @param AbstractSqlConnectionSettings $connectionSettings
+     * @param string $adapterName
      *
      * @return mixed
      */
-    public function addConnectionBySetting(AbstractSqlConnectionSettings $connectionSettings);
-
-    /**
-     * @param $host
-     * @param $username
-     * @param $password
-     * @param string $database
-     * @param int $port
-     * @param array $settingList
-     *
-     * @return mixed
-     */
-    public function addConnectionByParameters($host, $username, $password, $database = null, $port = null, $settingList = []);
+    public function addConnectionBySetting(AbstractSqlConnectionSettings $connectionSettings, $adapterName = '');
 
     /**
      * @param AbstractSqlConnection $connection

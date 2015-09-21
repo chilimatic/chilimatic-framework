@@ -93,7 +93,6 @@ abstract class AbstractSqlConnectionSettings implements IDatabaseConnectionSetti
      */
     abstract function setSettings($settingList = []);
 
-
     /**
      * @return string
      */

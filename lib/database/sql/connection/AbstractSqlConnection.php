@@ -2,15 +2,16 @@
 namespace chilimatic\lib\database\sql\connection;
 
 use chilimatic\lib\database\connection\IDatabaseConnection;
+use chilimatic\lib\database\connection\IDatabaseConnectionAdapter;
 use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
-use chilimatic\lib\interfaces\IFlyWeightValidator;
+use chilimatic\lib\exception\DatabaseException;
 
 /**
  * Class AbstractSqlConnection
  *
  * @package chilimatic\lib\database\sql
  */
-abstract class AbstractSqlConnection implements IDatabaseConnection{
+abstract class AbstractSqlConnection implements IDatabaseConnection, ISqlConnection {
 
     /**
      * if it's active (in use)
@@ -39,6 +40,12 @@ abstract class AbstractSqlConnection implements IDatabaseConnection{
     private $reconnectCount;
 
     /**
+     * connection Role
+     * @var int
+     */
+    private $connectionRole;
+
+    /**
      * amount of max reconnects
      *
      * @var int
@@ -55,39 +62,29 @@ abstract class AbstractSqlConnection implements IDatabaseConnection{
     /**
      * the connection
      *
-     * @var IDatabase
+     * @var IDatabaseConnectionAdapter
      */
-    private $db;
+    private $dbAdapter;
 
-    /**
-     * @var IDatabaseConnectionSettings
-     */
-    private $connectionSettings;
-
-    /**
-     * @var IFlyweightValidator
-     */
-    private $validator;
 
     /**
      * @param IDatabaseConnectionSettings $connectionSettings
+     * @param string $adapterName
      */
-    public function __construct(IDatabaseConnectionSettings $connectionSettings) {
-        $this->setConnectionSettings($connectionSettings);
-        $this->prepareConnectionMetaData();
+    public function __construct(IDatabaseConnectionSettings $connectionSettings, $adapterName = '') {
+        // initializes the needed steps for the Connection
+        $this->prepareConnectionMetaData($connectionSettings, $adapterName);
     }
 
     /**
-     * @return bool
-     */
-    public function connectionDataIsValid() {
-       return $this->getValidator()->validate($this->getConnectionSettings());
-    }
-
-    /**
+     * @param IDatabaseConnectionSettings $connectionSettings
+     * @param $adapterName
+     *
+     * @throws DatabaseException
+     *
      * @return mixed
      */
-    abstract public function prepareConnectionMetaData();
+    abstract public function prepareConnectionMetaData(IDatabaseConnectionSettings $connectionSettings, $adapterName);
 
     /**
      * @return mixed
@@ -100,25 +97,6 @@ abstract class AbstractSqlConnection implements IDatabaseConnection{
      */
     abstract public function reconnect();
 
-    /**
-     * @return IFlyWeightValidator
-     */
-    public function getValidator()
-    {
-        return $this->validator;
-    }
-
-    /**
-     * @param IFlyWeightValidator $validator
-     *
-     * @return $this
-     */
-    public function setValidator($validator)
-    {
-        $this->validator = $validator;
-
-        return $this;
-    }
 
     /**
      * @return boolean
@@ -156,26 +134,6 @@ abstract class AbstractSqlConnection implements IDatabaseConnection{
     public function setSocket($socket)
     {
         $this->socket = $socket;
-
-        return $this;
-    }
-
-    /**
-     * @return IDatabaseConnectionSettings
-     */
-    public function getConnectionSettings()
-    {
-        return $this->connectionSettings;
-    }
-
-    /**
-     * @param IDatabaseConnectionSettings $connectionSettings
-     *
-     * @return $this
-     */
-    public function setConnectionSettings(IDatabaseConnectionSettings $connectionSettings)
-    {
-        $this->connectionSettings = $connectionSettings;
 
         return $this;
     }
@@ -268,21 +226,41 @@ abstract class AbstractSqlConnection implements IDatabaseConnection{
     }
 
     /**
-     * @return IDatabase
+     * @return IDatabaseConnectionAdapter
      */
-    public function getDb()
+    public function getDbAdapter()
     {
-        return $this->db;
+        return $this->dbAdapter;
     }
 
     /**
-     * @param IDatabase $db
+     * @param IDatabaseConnectionAdapter $dbAdapter
      *
      * @return $this
      */
-    public function setDb($db)
+    public function setDbAdapter(IDatabaseConnectionAdapter $dbAdapter)
     {
-        $this->db = $db;
+        $this->dbAdapter = $dbAdapter;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getConnectionRole()
+    {
+        return $this->connectionRole;
+    }
+
+    /**
+     * @param int $connectionRole
+     *
+     * @return $this
+     */
+    public function setConnectionRole($connectionRole)
+    {
+        $this->connectionRole = $connectionRole;
 
         return $this;
     }

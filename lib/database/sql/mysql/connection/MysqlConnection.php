@@ -10,8 +10,12 @@
 
 namespace chilimatic\lib\database\sql\mysql\connection;
 
+use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
+use chilimatic\lib\database\mock\MockConnectionAdapter;
 use chilimatic\lib\database\sql\connection\AbstractSqlConnection;
-use chilimatic\lib\database\sql\connection\AbstractSqlConnectionSettings;
+use chilimatic\lib\database\sql\mysql\connection\adapter\MySQLiConnectionAdapter;
+use chilimatic\lib\database\sql\mysql\connection\adapter\PDOConnectionAdapter;
+use chilimatic\lib\exception\DatabaseException;
 
 
 /**
@@ -26,101 +30,50 @@ use chilimatic\lib\database\sql\connection\AbstractSqlConnectionSettings;
  */
 class MysqlConnection extends AbstractSqlConnection
 {
-
-    /**
-     * if it's a master connection
-     *
-     * @var bool
-     */
-    protected $master;
-
-
     /**
      * the currently available connection Interfaces
+     * and the mocking interface
      *
      * @var string
      */
-    const CONNECTION_API_PDO = 'PDO';
-    const CONNECTION_API_MYSQLI = 'MYSQL';
+    const CONNECTION_PDO = 'pdo';
+    const CONNECTION_MYSQLI = 'mysqli';
+    const CONNECTION_MOCK = 'mock';
+
 
     /**
-     * @var string
+     * @param IDatabaseConnectionSettings $connectionSettings
+     * @param string $adapterName
+     *
+     * @throws DatabaseException
+     *
+     * @return mixed
      */
-    private $api = self::CONNECTION_API_PDO;
-
-    public function prepareConnectionMetaData()
+    public function prepareConnectionMetaData(IDatabaseConnectionSettings $connectionSettings, $adapterName)
     {
-        // TODO: Implement prepareConnectionMetaData() method.
+        if (!$adapterName) {
+            throw new \InvalidArgumentException('The AdapterName was not specified, this field is not Optional in the MySQL Connection');
+        }
+
+        switch ($adapterName) {
+            case self::CONNECTION_PDO:
+                $this->setDbAdapter(new PDOConnectionAdapter($connectionSettings));
+            break;
+            case self::CONNECTION_MYSQLI:
+                $this->setDbAdapter(new MySQLiConnectionAdapter($connectionSettings));
+                break;
+            case self::CONNECTION_MOCK:
+                $this->setDbAdapter(new MockConnectionAdapter($connectionSettings));
+                break;
+            default:
+                throw new \InvalidArgumentException('The AdapterName was wrong only pdo and mysqli are allowed');
+        }
     }
 
     public function connectionSettingsAreValid()
     {
         // TODO: Implement connectionSettingsAreValid() method.
     }
-
-
-    /**
-     * simplifaction for connection strings
-     * @todo move into generator
-     *
-     * @return string
-     */
-    public function getPDOConnectionString()
-    {
-
-        $dsn = 'mysql:';
-
-        if ($this->isSocket()) {
-            $dsn .= (string)'unix_socket=' . $this->getHost() . ';';
-        } else {
-            $dsn .= (string)'host=' . $this->getHost() . ';';
-            if ($this->getPort()) {
-                $dsn .= 'port=' . $this->getPort() . ';';
-            }
-        }
-
-        if ($this->getDatabase()) {
-            $dsn .= "dbname=" . $this->getDatabase() . ';';
-        }
-
-        if ($this->getCharset()) {
-            $dsn .= "charset=" . $this->getCharset() . ';';
-        }
-
-        return $dsn;
-    }
-
-    /**
-     * simple check if it's a socket connection or not
-     * (can be set manual as well)
-     *
-     * @return void
-     */
-    private function findConnectionType()
-    {
-        switch (true) {
-            /**
-             * Unix only setting the localhost will try to connect directly through a domainsocket
-             */
-            case ($this->getHost() == 'localhost' && mb_stripos(PHP_OS, 'win') === false):
-                $this->setSocket(true);
-                break;
-            /**
-             * if it's a path we can asume it's a socket
-             */
-            case (strpos($this->getHost(), '/') === 0):
-                $this->setSocket(true);
-                break;
-            /**
-             * everything else is a TCP connection
-             */
-            default:
-                $this->setSocket(false);
-                break;
-        }
-    }
-
-
 
     /**
      * Ping

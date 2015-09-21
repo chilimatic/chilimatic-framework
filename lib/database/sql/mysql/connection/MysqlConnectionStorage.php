@@ -12,6 +12,7 @@ namespace chilimatic\lib\database\sql\mysql\connection;
 use chilimatic\lib\database\sql\connection\AbstractSqlConnection;
 use chilimatic\lib\database\sql\connection\AbstractSqlConnectionSettings;
 use chilimatic\lib\database\sql\connection\ISqlConnectionStorage;
+use JMS\Serializer\Exception\InvalidArgumentException;
 
 /**
  * Class MysqlConnectionStorage
@@ -48,28 +49,9 @@ class MysqlConnectionStorage implements ISqlConnectionStorage
      *
      * @return void
      */
-    public function addConnectionBySetting(AbstractSqlConnectionSettings $connectionSettings) {
+    public function addConnectionBySetting(AbstractSqlConnectionSettings $connectionSettings, $adapterName = '') {
         $this->storage->attach(
-            new MysqlConnection($connectionSettings)
-        );
-    }
-
-    /**
-     * @param string $host
-     * @param string $username
-     * @param string $password
-     * @param string $database
-     * @param int $port
-     * @param array $settingList
-     *
-     * @return void
-     */
-    public function addConnectionByParameters($host, $username, $password, $database = null, $port = null, $settingList = [])
-    {
-        $this->storage->attach(
-            new MysqlConnection(
-                new MysqlConnectionSettings($host, $username, $password, $database, $port, $settingList)
-            )
+            new MysqlConnection($connectionSettings, $adapterName)
         );
     }
 

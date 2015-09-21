@@ -31,6 +31,11 @@ class MysqlConnectionSettings extends AbstractSqlConnectionSettings
     private $charset;
 
     /**
+     * @var array
+     */
+    private $options;
+
+    /**
      * @param $host
      * @param $username
      * @param $password
@@ -50,7 +55,6 @@ class MysqlConnectionSettings extends AbstractSqlConnectionSettings
         }
     }
 
-
     /**
      * @param array $settingList
      *
@@ -69,7 +73,6 @@ class MysqlConnectionSettings extends AbstractSqlConnectionSettings
             $this->setCharset($settingList['charset']);
         }
     }
-
 
     /**
      * connectionDataIsSet
@@ -127,5 +130,29 @@ class MysqlConnectionSettings extends AbstractSqlConnectionSettings
 
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * set PDO Options here
+     *
+     * @param array $options
+     *
+     * @return $this
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+
 
 }
