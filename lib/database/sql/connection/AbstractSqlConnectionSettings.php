@@ -21,7 +21,7 @@ abstract class AbstractSqlConnectionSettings implements IDatabaseConnectionSetti
 {
 
     /**
-     * @validator type\string\isInt
+     * @validator type\scalar\isInt
      * @validator generic\NotEmpty
      *
      * the host ip
@@ -32,7 +32,7 @@ abstract class AbstractSqlConnectionSettings implements IDatabaseConnectionSetti
 
     /**
      * @validator type\scalar\isString
-     * @validator type\scalar\NotEmpty
+     * @validator generic\NotEmpty
      *
      * the username
      *
@@ -206,6 +206,23 @@ abstract class AbstractSqlConnectionSettings implements IDatabaseConnectionSetti
     }
 
     /**
+     * @param \ReflectionClass $reflection
+     *
+     * @return \ReflectionProperty[]
+     */
+    public function getReflectionPropertiesRecursive(\ReflectionClass $reflection)
+    {
+        $properties = $reflection->getProperties();
+
+        if ($reflection->getParentClass()) {
+            return $properties + $this->getReflectionPropertiesRecursive($reflection->getParentClass());
+        }
+
+        return $properties;
+    }
+
+
+    /**
      * returns the reflection Properties as Traversable
      *
      * @return \Generator
@@ -213,7 +230,9 @@ abstract class AbstractSqlConnectionSettings implements IDatabaseConnectionSetti
     public function getParameterGenerator()
     {
         $reflection = new \ReflectionClass($this);
-        foreach ($reflection->getProperties() as $property) {
+        $propertyList = $this->getReflectionPropertiesRecursive($reflection);
+
+        foreach ($propertyList as $property) {
             yield $property;
         }
     }

@@ -94,7 +94,7 @@ class MysqlConnectionTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function checkIfValidatorIsWorking() {
+    public function checkIfValidatorGeneratorIsWorking() {
         $con = new MysqlConnection($this->generateMysqlSettings(), MysqlConnection::CONNECTION_MOCK);
 
         $this->assertFalse($con->connectionSettingsAreValid());

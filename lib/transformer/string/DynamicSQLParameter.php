@@ -32,10 +32,21 @@ class DynamicSQLParameter implements IFlyWeightTransformer
 
     /**
      * @param string $content
+     * @param array $options
      *
      * @return string
      */
-    public function transform($content)
+    public function __invoke($content, $options = []) {
+        return $this->transform($content);
+    }
+
+    /**
+     * @param string $content
+     * @param array $options
+     *
+     * @return string
+     */
+    public function transform($content, $options = [])
     {
         if (!$content) {
             return $content;

@@ -2,10 +2,10 @@
 /**
  *
  * @author j
- * Date: 3/7/15
- * Time: 7:47 PM
+ * Date: 9/27/15
+ * Time: 7:06 PM
  *
- * File: DynamicClassCallName.php
+ * File: validatorNameSpaceClassName.php
  */
 
 namespace chilimatic\lib\transformer\string;
@@ -13,20 +13,16 @@ namespace chilimatic\lib\transformer\string;
 use chilimatic\lib\interfaces\IFlyWeightTransformer;
 
 /**
- * Class DynamicFunctionCallName
+ * Class ValidatorNameSpaceClassName
  *
  * @package chilimatic\lib\transformer\string
  */
-class DynamicObjectCallName implements IFlyWeightTransformer
+class AnnotationValidatorClassName implements IFlyWeightTransformer
 {
-
     /**
-     * the local Parser
-     *
      * @var string
      */
-    const TRANSFORM_DELIMITER = '-';
-
+    const NAMESPACE_DELIMITER = '\\';
 
     /**
      * @param string $content
@@ -46,20 +42,17 @@ class DynamicObjectCallName implements IFlyWeightTransformer
      */
     public function transform($content, $options = [])
     {
-        if (!$content) {
-            return $content;
-        }
-
-        if (strpos($content, self::TRANSFORM_DELIMITER) === false) {
+        // if there is no namespace we assume the first letter is uppercase
+        if (!$content || strpos($content, self::NAMESPACE_DELIMITER) === false) {
             return ucfirst($content);
         }
 
-        $tmp = explode('-', $content);
-        array_walk($tmp, function (&$a) {
-            $a = ucfirst($a);
-        });
+        // get the last character after the last backslash and set it to uppercase
+        if (($pos = strrpos($content, self::NAMESPACE_DELIMITER)) !== false) {
+            $content[$pos+1] = ucfirst($content[$pos+1]);
+        }
 
-        return (string)implode('', $tmp);
+        return $content;
     }
 
 }

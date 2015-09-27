@@ -6,9 +6,6 @@
         <testsuite name="database">
             <directory>./test/database</directory>
         </testsuite>
-        <testsuite name="mysql">
-
-        </testsuite>
         <testsuite name="orm">
             <directory>./test/database/ORM</directory>
         </testsuite>

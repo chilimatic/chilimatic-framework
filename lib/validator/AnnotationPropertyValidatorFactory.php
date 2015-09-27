@@ -3,6 +3,8 @@
 namespace chilimatic\lib\validator;
 
 use chilimatic\lib\interfaces\IFlyWeightParser;
+use chilimatic\lib\transformer\string\AnnotationValidatorClassName;
+use chilimatic\lib\transformer\string\AnnotationValidatorPrependNameSpace;
 
 /**
  *
@@ -32,7 +34,7 @@ class AnnotationPropertyValidatorFactory {
      *
      * @param \ReflectionProperty $reflectionParameter
      *
-     * @return \SplObjectStorage|null
+     * @return \SplObjectStorage
      */
     public function make(\ReflectionProperty $reflectionParameter)
     {
@@ -44,20 +46,27 @@ class AnnotationPropertyValidatorFactory {
             $reflectionParameter->getDocComment()
         );
 
-        if (!$result) {
-            return null;
-        }
 
         $validatorStorage = new \SplObjectStorage();
+        if (!$result) {
+            return $validatorStorage;
+        }
+
         $missingValidators = [];
+        $classNameTransformer = new AnnotationValidatorClassName();
+        $namespaceTransformer = new AnnotationValidatorPrependNameSpace();
+
+
         foreach ($result as $valdiatorClassName) {
             // check if the annotation is with the full namespace already otherwise put it relative
-            if (strpos($valdiatorClassName, __NAMESPACE__) === false) {
-                echo $valdiatorClassName;
-                $className = __NAMESPACE__ . '\\' . $valdiatorClassName;
-            } else {
-                $className = $valdiatorClassName;
-            }
+            $className = $namespaceTransformer(
+                $classNameTransformer(
+                    $valdiatorClassName
+                ),
+                [
+                    AnnotationValidatorPrependNameSpace::NAMESPACE_OPTION_INDEX => __NAMESPACE__
+                ]
+            );
 
             if (class_exists($className, true)) {
                 $validatorStorage->attach(new $className());

@@ -29,17 +29,13 @@ class ConfigFile_Test extends PHPUnit_Framework_TestCase
     private $testDataDir;
 
 
-    public function __construct()
-    {
-        $this->testDataDir = __DIR__ . '/../testdata/';
-    }
-
     /**
      * @before
      */
     public function createConfigs()
     {
 
+        $this->testDataDir = __DIR__ . '/../testdata/';
         $data = "value1=test\nvalue2=\"test\"\nvalue3='test'\nvalue4=123\nvalue5=12.23\nvalue6={\"test\":123}\nvalue7=a:1:{i:23;i:12;}";
         file_put_contents($this->testDataDir . '*.cfg', $data);
         $data2 = "value1=test2\nvalue7=teststring";
