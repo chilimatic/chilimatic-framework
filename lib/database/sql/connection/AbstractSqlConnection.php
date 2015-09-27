@@ -6,6 +6,7 @@ use chilimatic\lib\database\connection\IDatabaseConnectionAdapter;
 use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
 use chilimatic\lib\database\sql\mysql\connection\MysqlConnectionSettings;
 use chilimatic\lib\exception\DatabaseException;
+use chilimatic\lib\interfaces\IFlyWeightValidator;
 use chilimatic\lib\parser\AnnotationValidatorParser;
 use chilimatic\lib\validator\AnnotationPropertyValidatorFactory;
 
@@ -127,9 +128,12 @@ abstract class AbstractSqlConnection implements IDatabaseConnection, ISqlConnect
 
             $validatorObject->rewind();
 
-            foreach ($validatorObject->current() as $validator) {
+            /**
+             * @var IFlyweightValidator $validator
+             */
+            foreach ($validatorObject as $validator) {
                 $property->setAccessible(true); //
-                $property->getValue($connectionSettings);
+
                 if (!$validator($property->getValue($connectionSettings))) {
                     return false;
                 }

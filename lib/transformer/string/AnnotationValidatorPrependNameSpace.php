@@ -35,18 +35,20 @@ class AnnotationValidatorPrependNameSpace implements \chilimatic\lib\interfaces\
         }
 
         // prepend slashes if necessary
-        if (strpos((string) $content, self::NAMESPACE_DELIMITER) != 0) {
+        if (strpos((string) $content, self::NAMESPACE_DELIMITER) !== 0) {
             $content = self::NAMESPACE_DELIMITER . $content;
         }
-
-
 
         if (empty($options[self::NAMESPACE_OPTION_INDEX])) {
             return $content;
         }
 
         if (strpos($content, $options[self::NAMESPACE_OPTION_INDEX]) === false) {
-            $content = self::NAMESPACE_DELIMITER . $options[self::NAMESPACE_OPTION_INDEX] . $content;
+            if (strpos($options[self::NAMESPACE_OPTION_INDEX], self::NAMESPACE_DELIMITER) !== 0) {
+                $content = self::NAMESPACE_DELIMITER . $options[self::NAMESPACE_OPTION_INDEX] . $content;
+            } else {
+                $content = $options[self::NAMESPACE_OPTION_INDEX] . $content;
+            }
         }
 
         return $content;
