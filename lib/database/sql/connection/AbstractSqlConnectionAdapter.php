@@ -13,6 +13,42 @@ abstract class AbstractSqlConnectionAdapter implements IDatabaseConnectionAdapte
 {
 
     /**
+     * index definitiosn for the options array
+     *
+     * @var string
+     */
+    const RESULT_TYPE_INDEX = 'type';
+    const RESULT_MODE_INDEX = 'result_mode';
+    const RESULT_RETURN_MODE_INDEX = 'return_mode';
+
+    /**
+     * possible return types
+     *
+     * @var string
+     */
+    const RETURN_TYPE_OBJ = 'object';
+    const RETURN_TYPE_ASSOC = 'assoc';
+    const RETURN_TYPE_NUM = 'num';
+    const RETURN_TYPE_MYSQLI_ROW = 'row';
+    const RETURN_TYPE_BOTH = 'both';
+
+    /**
+     * return value types
+     *
+     * @var string
+     */
+    const RESULT_TYPE_GENERATOR = 'generator';
+    const RESULT_TYPE_ASSOC_ARRAY = 'assoc_array';
+    const RESULT_TYPE_NUM_ARRAY = 'num_array';
+    const RESULT_TYPE_OBJECT_ARRAY = 'obj_array';
+    const RESULT_TYPE_ITERATOR = 'iterator';
+
+    /**
+     * @var mixed
+     */
+    private $result;
+
+    /**
      * @var bool
      */
     private $socket = false;
@@ -39,6 +75,80 @@ abstract class AbstractSqlConnectionAdapter implements IDatabaseConnectionAdapte
      * @return mixed
      */
     abstract public function initResource();
+
+
+    /**
+     * checks if the current connection is pingable
+     *
+     * @return bool
+     */
+    abstract public function ping();
+
+    /**
+     * executes a query direct in the connection
+     *
+     * @param string $sql
+     * @param array $options
+     *
+     * @return mixed
+     */
+    abstract public function query($sql, $options = []);
+
+    /**
+     * prepares a statement optional are values
+     *
+     * @param $sql
+     * @param array $options
+     *
+     * @return mixed
+     */
+    abstract public function prepare($sql, $options = []);
+
+    /**
+     * excutes the query / inserts an deletes
+     *
+     * @param string $sql
+     *
+     * @return bool
+     */
+    abstract public function execute($sql);
+
+    /**
+     * starts an transaction
+     *
+     * @return mixed
+     */
+    abstract public function beginTransaction();
+
+    /**
+     * @return mixed
+     */
+    abstract public function inTransaction();
+
+    /**
+     * rollbacks a transaction
+     *
+     * @return mixed
+     */
+    abstract public function rollback();
+
+    /**
+     * commits the transaction
+     *
+     * @return mixed
+     */
+    abstract public function commit();
+
+    /**
+     * @return mixed
+     */
+    abstract public function getErrorCode();
+
+    /**
+     * @return mixed
+     */
+    abstract public function getErrorInfo();
+
 
 
     /**
@@ -100,5 +210,26 @@ abstract class AbstractSqlConnectionAdapter implements IDatabaseConnectionAdapte
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
+     * @param mixed $result
+     *
+     * @return $this
+     */
+    public function setResult($result)
+    {
+        $this->result = $result;
+
+        return $this;
+    }
+
 
 }

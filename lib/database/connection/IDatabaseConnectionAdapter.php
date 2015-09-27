@@ -22,4 +22,26 @@ interface IDatabaseConnectionAdapter {
      * @return mixed
      */
     public function initResource();
+
+    /**
+     * @return mixed
+     */
+    public function getResource();
+
+    /**
+     * @param $resource
+     *
+     * @return mixed
+     */
+    public function setResource($resource);
+
+    /**
+     * @return mixed
+     */
+    public function getResult();
+
+    /**
+     * @return mixed
+     */
+    public function setResult($result);
 }

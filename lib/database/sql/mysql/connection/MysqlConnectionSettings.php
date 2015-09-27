@@ -14,18 +14,24 @@ class MysqlConnectionSettings extends AbstractSqlConnectionSettings
     /**
      * Mysql default Port
      *
+     * @validator type\scalar\isInt
+     * @validator generic\NotEmpty
+     *
      * @var int
      */
     CONST MYSQL_DEFAULT_PORT = 3306;
 
     /**
      * connection type
+     * @validator type\scalar\isBool
      *
      * @var bool
      */
     private $persistent = false;
 
     /**
+     * @validator type\scalar\isString
+     *
      * @var string
      */
     private $charset;
@@ -152,7 +158,4 @@ class MysqlConnectionSettings extends AbstractSqlConnectionSettings
 
         return $this;
     }
-
-
-
 }

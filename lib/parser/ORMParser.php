@@ -17,7 +17,7 @@ class ORMParser implements IFlyWeightParser
     /**
      * @var string
      */
-    private $pattern = '/@ORM[\s]*(\w*)=(.*);/';
+    const PATTERN = '/@ORM[\s]*(\w*)=(.*);/';
 
     /**
      * @param string $content
@@ -30,7 +30,7 @@ class ORMParser implements IFlyWeightParser
             return null;
         }
 
-        if (preg_match($this->pattern, $content, $matches)) {
+        if (preg_match(self::PATTERN, $content, $matches)) {
             return (new \SplFixedArray(2))->fromArray([$matches[1], $matches[2]]);
         }
 

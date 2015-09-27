@@ -11,7 +11,7 @@
 namespace chilimatic\lib\database\sql\mysql\connection;
 
 use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
-use chilimatic\lib\database\mock\MockConnectionAdapter;
+use chilimatic\lib\database\mock\adapter\MockMysqlConnectionAdapter;
 use chilimatic\lib\database\sql\connection\AbstractSqlConnection;
 use chilimatic\lib\database\sql\mysql\connection\adapter\MySQLiConnectionAdapter;
 use chilimatic\lib\database\sql\mysql\connection\adapter\PDOConnectionAdapter;
@@ -63,16 +63,11 @@ class MysqlConnection extends AbstractSqlConnection
                 $this->setDbAdapter(new MySQLiConnectionAdapter($connectionSettings));
                 break;
             case self::CONNECTION_MOCK:
-                $this->setDbAdapter(new MockConnectionAdapter($connectionSettings));
+                $this->setDbAdapter(new MockMysqlConnectionAdapter($connectionSettings));
                 break;
             default:
                 throw new \InvalidArgumentException('The AdapterName was wrong only pdo and mysqli are allowed');
         }
-    }
-
-    public function connectionSettingsAreValid()
-    {
-        // TODO: Implement connectionSettingsAreValid() method.
     }
 
     /**
@@ -85,16 +80,7 @@ class MysqlConnection extends AbstractSqlConnection
      */
     public function ping()
     {
-        if (method_exists($this->getDb(), 'ping')) {
-            $this->getDb()->ping();
-        } else if ($this->isConnected() && $this->getDb()) { // PDO condition
-            try {
-                $this->getDb()->query("SELECT 1");
-            } catch (\PDOException $e) {
-                $this->getDb()->init();
-            }
-        }
-
+        $this->getDbAdapter()->ping();
         return true;
     }
 

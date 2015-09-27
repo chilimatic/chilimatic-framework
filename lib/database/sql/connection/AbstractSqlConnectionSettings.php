@@ -21,6 +21,9 @@ abstract class AbstractSqlConnectionSettings implements IDatabaseConnectionSetti
 {
 
     /**
+     * @validator type\string\isInt
+     * @validator generic\NotEmpty
+     *
      * the host ip
      *
      * @var string
@@ -28,6 +31,9 @@ abstract class AbstractSqlConnectionSettings implements IDatabaseConnectionSetti
     private $host;
 
     /**
+     * @validator type\scalar\isString
+     * @validator type\scalar\NotEmpty
+     *
      * the username
      *
      * @var string
@@ -35,6 +41,8 @@ abstract class AbstractSqlConnectionSettings implements IDatabaseConnectionSetti
     private $username;
 
     /**
+     * @validator type\scalar\isString
+     * @validator generic\NotEmpty
      * the password
      *
      * @var string
@@ -42,11 +50,15 @@ abstract class AbstractSqlConnectionSettings implements IDatabaseConnectionSetti
     private $password;
 
     /**
+     * @validator type\scalar\isString
+     *
      * @var string
      */
     private $database;
 
     /**
+     * @validator type\scalar\isInt
+     *
      * @var int
      */
     private $port;
@@ -191,5 +203,18 @@ abstract class AbstractSqlConnectionSettings implements IDatabaseConnectionSetti
         $this->port = $port;
 
         return $this;
+    }
+
+    /**
+     * returns the reflection Properties as Traversable
+     *
+     * @return \Generator
+     */
+    public function getParameterGenerator()
+    {
+        $reflection = new \ReflectionClass($this);
+        foreach ($reflection->getProperties() as $property) {
+            yield $property;
+        }
     }
 }

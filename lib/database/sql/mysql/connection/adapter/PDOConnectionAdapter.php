@@ -10,6 +10,10 @@ use chilimatic\lib\database\sql\connection\AbstractSqlConnectionAdapter;
  */
 class PDOConnectionAdapter extends AbstractSqlConnectionAdapter
 {
+    /**
+     * trait that contains similar code for
+     * both PDO and Mysqli
+     */
     use MysqlConnectionTypeTrait;
 
     public function initResource()
@@ -29,7 +33,6 @@ class PDOConnectionAdapter extends AbstractSqlConnectionAdapter
 
     /**
      * simplifaction for connection strings
-     * @todo move into generator
      *
      * @return string
      */
@@ -60,4 +63,100 @@ class PDOConnectionAdapter extends AbstractSqlConnectionAdapter
         return $dsn;
     }
 
+    /**
+     * @return bool
+     */
+    public function ping()
+    {
+        try {
+           $this->getResource()->query("SELECT 1");
+        } catch (\PDOException $e){
+           $this->initResource();
+        }
+
+        return true;
+    }
+
+
+    /**
+     * @param string $sql
+     * @param array $options
+     *
+     * generates a small set an executes the query accordingly
+     *
+     * @return mixed
+     */
+    public function query($sql, $options = [])
+    {
+        return $this->getResource()->query($sql);
+    }
+
+    /**
+     * @param string $sql
+     * @param array $options
+     *
+     * @return mixed
+     */
+    public function prepare($sql, $options = [])
+    {
+        return $this->getResource()->prepare($sql, $options);
+    }
+
+    /**
+     * @param $sql
+     *
+     * @return int
+     */
+    public function execute($sql)
+    {
+        return $this->getResource()->exec($sql);
+    }
+
+    /**
+     * @return bool
+     */
+    public function beginTransaction()
+    {
+        return $this->getResource()->beginTransaction();
+    }
+
+    /**
+     * @return bool
+     */
+    public function rollback()
+    {
+        return $this->getResource()->rollback();
+    }
+
+    /**
+     * @return bool
+     */
+    public function commit()
+    {
+        return $this->getResource()->commit();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function inTransaction()
+    {
+        return $this->getResource()->inTransaction();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getErrorCode()
+    {
+        return $this->getResource()->errorCode();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getErrorInfo()
+    {
+        return $this->getResource()->errorInfo();
+    }
 }

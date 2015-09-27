@@ -127,4 +127,14 @@ class MysqlConnectionSettingsTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('utf8', $connectionSettings->getCharset());
     }
+
+    /**
+     * @test
+     */
+    public function checkIfTheGeneratorIsProvideForValidation()
+    {
+        $connectionSettings = new MysqlConnectionSettings('','','', null, null, ['charset' => 'utf8'] );
+        $this->assertInstanceOf('\Generator', $connectionSettings->getParameterGenerator());
+    }
+
 }

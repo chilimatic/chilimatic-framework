@@ -1,5 +1,5 @@
 <?php
-namespace chilimatic\lib\database\mock;
+namespace chilimatic\lib\database\mock\adapter;
 use chilimatic\lib\database\connection\IDatabaseConnectionAdapter;
 use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
 
@@ -13,6 +13,11 @@ use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
  */
 
 
+/**
+ * Class MockConnectionAdapter
+ *
+ * @package chilimatic\lib\database\mock\adapter\mock
+ */
 class MockConnectionAdapter implements IDatabaseConnectionAdapter {
     /**
      * @var IDatabaseConnectionSettings
@@ -74,6 +79,25 @@ class MockConnectionAdapter implements IDatabaseConnectionAdapter {
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getResult()
+    {
+        return [];
+    }
+
+    /**
+     * @param $result
+     *
+     * @return $this
+     */
+    public function setResult($result)
+    {
+        $this->result = $result;
+
+        return $this;
+    }
 
 
 }

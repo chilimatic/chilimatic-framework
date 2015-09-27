@@ -99,4 +99,17 @@ interface ISqlConnection
      * @return $this
      */
     public function setDbAdapter(IDatabaseConnectionAdapter $dbAdapter);
+
+
+    /**
+     * @return int
+     */
+    public function getConnectionRole();
+
+    /**
+     * @param int $connectionRole
+     *
+     * @return $this
+     */
+    public function setConnectionRole($connectionRole);
 }

@@ -31,7 +31,7 @@ class MysqlConnectionStorageTest extends PHPUnit_Framework_TestCase
         $storage = new MysqlConnectionStorage();
         $setting = new MysqlConnectionSettings('','','');
         try {
-            $storage->addConnectionBySetting($setting, 'mock');
+            $storage->addConnectionBySetting($setting, MysqlConnection::CONNECTION_MOCK);
         } catch(PDOException $e) {
             // do nothing
         }
@@ -49,12 +49,12 @@ class MysqlConnectionStorageTest extends PHPUnit_Framework_TestCase
 
         $storage->addConnectionBySetting(
             new MysqlConnectionSettings('','',''),
-            'mock'
+            MysqlConnection::CONNECTION_MOCK
         );
 
         $storage->addConnectionBySetting(
             $setting,
-            'mock'
+            MysqlConnection::CONNECTION_MOCK
         );
 
         $this->assertEquals($setting, $storage->getConnectionByPosition(1)->getDbAdapter()->getConnectionSettings());
@@ -68,7 +68,7 @@ class MysqlConnectionStorageTest extends PHPUnit_Framework_TestCase
         $storage = new MysqlConnectionStorage();
         $con = new MysqlConnection(
             new MysqlConnectionSettings('','',''),
-            'mock'
+            MysqlConnection::CONNECTION_MOCK
         );
 
         $storage->addConnection($con);
@@ -84,7 +84,7 @@ class MysqlConnectionStorageTest extends PHPUnit_Framework_TestCase
         $storage = new MysqlConnectionStorage();
         $con = new MysqlConnection(
             new MysqlConnectionSettings('','',''),
-            'mock'
+            MysqlConnection::CONNECTION_MOCK
         );
 
         $storage->addConnection($con);
@@ -99,7 +99,7 @@ class MysqlConnectionStorageTest extends PHPUnit_Framework_TestCase
         $storage = new MysqlConnectionStorage();
         $con = new MysqlConnection(
             new MysqlConnectionSettings('','',''),
-            'mock'
+            MysqlConnection::CONNECTION_MOCK
         );
 
         $storage->addConnection($con);

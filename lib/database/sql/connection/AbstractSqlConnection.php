@@ -4,7 +4,10 @@ namespace chilimatic\lib\database\sql\connection;
 use chilimatic\lib\database\connection\IDatabaseConnection;
 use chilimatic\lib\database\connection\IDatabaseConnectionAdapter;
 use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
+use chilimatic\lib\database\sql\mysql\connection\MysqlConnectionSettings;
 use chilimatic\lib\exception\DatabaseException;
+use chilimatic\lib\parser\AnnotationValidatorParser;
+use chilimatic\lib\validator\AnnotationPropertyValidatorFactory;
 
 /**
  * Class AbstractSqlConnection
@@ -18,7 +21,7 @@ abstract class AbstractSqlConnection implements IDatabaseConnection, ISqlConnect
      *
      * @var bool
      */
-    protected $active;
+    protected $active = false;
 
     /**
      * the socket
@@ -87,6 +90,57 @@ abstract class AbstractSqlConnection implements IDatabaseConnection, ISqlConnect
     abstract public function prepareConnectionMetaData(IDatabaseConnectionSettings $connectionSettings, $adapterName);
 
     /**
+     * a database connection needs certain parameters to work
+     *
+     * Host | Username | Password these are the minimum requirements which have to be checked
+     * the secondary parameters like database and port need to be checked if they're set as well
+     *
+     * @return bool
+     */
+    public function connectionSettingsAreValid()
+    {
+        // if there is no adapter how can we initialize the correct validator to check it
+        if (!$this->getDbAdapter()) {
+            return false;
+        }
+
+        /**
+         * @var MysqlConnectionSettings $connectionSettings
+         */
+        $connectionSettings = $this->getDbAdapter()->getConnectionSettings();
+        if (!$connectionSettings) {
+            return false;
+        }
+
+        $validatorFactory = new AnnotationPropertyValidatorFactory(
+            new AnnotationValidatorParser()
+        );
+
+        /**
+         * @var $property \ReflectionProperty
+         */
+        foreach ($connectionSettings->getParameterGenerator() as $property) {
+            $validatorObject = $validatorFactory->make($property);
+            if (!$validatorObject->count()) {
+                continue;
+            }
+
+            $validatorObject->rewind();
+
+            foreach ($validatorObject->current() as $validator) {
+                $property->setAccessible(true); //
+                $property->getValue($connectionSettings);
+                if (!$validator($property->getValue($connectionSettings))) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
      * @return mixed
      */
     abstract public function ping();
@@ -103,7 +157,7 @@ abstract class AbstractSqlConnection implements IDatabaseConnection, ISqlConnect
      */
     public function isActive()
     {
-        return $this->active;
+        return (bool) $this->active;
     }
 
     /**
@@ -226,7 +280,7 @@ abstract class AbstractSqlConnection implements IDatabaseConnection, ISqlConnect
     }
 
     /**
-     * @return IDatabaseConnectionAdapter
+     * @return AbstractSqlConnectionAdapter
      */
     public function getDbAdapter()
     {
@@ -248,8 +302,7 @@ abstract class AbstractSqlConnection implements IDatabaseConnection, ISqlConnect
     /**
      * @return int
      */
-    public function getConnectionRole()
-    {
+    public function getConnectionRole()    {
         return $this->connectionRole;
     }
 
