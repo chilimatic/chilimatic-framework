@@ -9,14 +9,14 @@ namespace chilimatic\lib\database\mock\adapter;
  *
  * File: MockMysqlConnectionAdapter.php
  */
-use chilimatic\lib\database\sql\connection\AbstractSqlConnectionAdapter;
+use chilimatic\lib\database\sql\connection\AbstractSQLConnectionAdapter;
 
 /**
  * Class MockMysqlConnectionAdapter
  *
  * @package chilimatic\lib\database\mock\adapter\mock
  */
-class MockMysqlConnectionAdapter extends AbstractSqlConnectionAdapter
+class MockMysqlConnectionAdapter extends AbstractSQLConnectionAdapter
 {
     /**
      * @var bool

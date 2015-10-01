@@ -9,9 +9,9 @@
  */
 
 namespace chilimatic\lib\database\sql\mysql\connection;
-use chilimatic\lib\database\sql\connection\AbstractSqlConnection;
-use chilimatic\lib\database\sql\connection\AbstractSqlConnectionSettings;
-use chilimatic\lib\database\sql\connection\ISqlConnectionStorage;
+use chilimatic\lib\database\sql\connection\AbstractSQLConnection;
+use chilimatic\lib\database\sql\connection\AbstractSQLConnectionSettings;
+use chilimatic\lib\database\sql\connection\ISQLConnectionStorage;
 use JMS\Serializer\Exception\InvalidArgumentException;
 
 /**
@@ -19,7 +19,7 @@ use JMS\Serializer\Exception\InvalidArgumentException;
  *
  * @package chilimatic\lib\database\sql\mysql\connection
  */
-class MysqlConnectionStorage implements ISqlConnectionStorage
+class MySQLConnectionStorage implements ISQLConnectionStorage
 {
     /**
      * @var \SplObjectStorage
@@ -36,29 +36,29 @@ class MysqlConnectionStorage implements ISqlConnectionStorage
 
 
     /**
-     * @param AbstractSqlConnection $connection
+     * @param AbstractSQLConnection $connection
      *
      * @return void
      */
-    public function addConnection(AbstractSqlConnection $connection){
+    public function addConnection(AbstractSQLConnection $connection){
         $this->storage->attach($connection);
     }
 
     /**
-     * @param AbstractSqlConnectionSettings $connectionSettings
+     * @param AbstractSQLConnectionSettings $connectionSettings
      *
      * @return void
      */
-    public function addConnectionBySetting(AbstractSqlConnectionSettings $connectionSettings, $adapterName = '') {
+    public function addConnectionBySetting(AbstractSQLConnectionSettings $connectionSettings, $adapterName = '') {
         $this->storage->attach(
-            new MysqlConnection($connectionSettings, $adapterName)
+            new MySQLConnection($connectionSettings, $adapterName)
         );
     }
 
     /**
      * @param $pos
      *
-     * @return null|AbstractSqlConnection
+     * @return null|AbstractSQLConnection
      */
     public function getConnectionByPosition($pos)
     {
@@ -74,11 +74,11 @@ class MysqlConnectionStorage implements ISqlConnectionStorage
     }
 
     /**
-     * @param AbstractSqlConnection $connection
+     * @param AbstractSQLConnection $connection
      *
      * @return bool
      */
-    public function findConnection(AbstractSqlConnection $connection)
+    public function findConnection(AbstractSQLConnection $connection)
     {
         if ($this->storage->contains($connection)) {
             return true;
@@ -91,11 +91,11 @@ class MysqlConnectionStorage implements ISqlConnectionStorage
     /**
      * removes a connection of the pool
      *
-     * @param AbstractSqlConnection $connection
+     * @param AbstractSQLConnection $connection
      *
      * @return void
      */
-    public function removeConnection(AbstractSqlConnection $connection)
+    public function removeConnection(AbstractSQLConnection $connection)
     {
         $this->storage->detach($connection);
     }

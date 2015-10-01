@@ -26,9 +26,9 @@ class MysqlDetail
     /**
      * constructor
      *
-     * @param Mysql $db
+     * @param MySQL $db
      */
-    public function __construct(Mysql $db)
+    public function __construct(MySQL $db)
     {
 
         if (empty($db)) return;

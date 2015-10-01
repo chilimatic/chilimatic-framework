@@ -1,5 +1,5 @@
 <?php
-use chilimatic\lib\database\sql\mysql\connection\MysqlConnectionSettings;
+use chilimatic\lib\database\sql\mysql\connection\MySQLConnectionSettings;
 
 /**
  *
@@ -15,7 +15,7 @@ class MysqlConnectionSettingsTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfTheConnectionSettingsInterfaceIsImplemented() {
-        $connectionSettings = new MysqlConnectionSettings('','','');
+        $connectionSettings = new MySQLConnectionSettings('','','');
 
         $this->assertInstanceOf('\chilimatic\lib\database\connection\IDatabaseConnectionSettings', $connectionSettings);
     }
@@ -24,7 +24,7 @@ class MysqlConnectionSettingsTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfTheSqlConnectionSettingsInterfaceIsImplemented() {
-        $connectionSettings = new MysqlConnectionSettings('','','');
+        $connectionSettings = new MySQLConnectionSettings('','','');
 
         $this->assertInstanceOf('\chilimatic\lib\database\sql\connection\ISqlConnectionSettings', $connectionSettings);
     }
@@ -33,7 +33,7 @@ class MysqlConnectionSettingsTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfThePersitentFlagIsOff() {
-        $connectionSettings = new MysqlConnectionSettings('','','');
+        $connectionSettings = new MySQLConnectionSettings('','','');
 
         $this->assertFalse($connectionSettings->isPersistent());
     }
@@ -42,7 +42,7 @@ class MysqlConnectionSettingsTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfTheCharsetIsNullPerDefault() {
-        $connectionSettings = new MysqlConnectionSettings('','','');
+        $connectionSettings = new MySQLConnectionSettings('','','');
 
         $this->assertNull($connectionSettings->getCharset());
     }
@@ -51,7 +51,7 @@ class MysqlConnectionSettingsTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfTheAbstractSqlConnectionSettingsAreExtended() {
-        $connectionSettings = new MysqlConnectionSettings('','','');
+        $connectionSettings = new MySQLConnectionSettings('','','');
 
         $this->assertInstanceOf('\chilimatic\lib\database\sql\connection\AbstractSqlConnectionSettings', $connectionSettings);
     }
@@ -60,7 +60,7 @@ class MysqlConnectionSettingsTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfTheDefaultPortHasBeenSetIfNoPortHasBeenGivenInTheSettingList() {
-        $connectionSettings = new MysqlConnectionSettings('','','');
+        $connectionSettings = new MySQLConnectionSettings('','','');
 
         $this->assertEquals(3306, $connectionSettings->getPort());
     }
@@ -69,7 +69,7 @@ class MysqlConnectionSettingsTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfTheHostHasBeenSetAsParameter(){
-        $connectionSettings = new MysqlConnectionSettings('localhost','','');
+        $connectionSettings = new MySQLConnectionSettings('localhost','','');
 
         $this->assertEquals('localhost', $connectionSettings->getHost());
     }
@@ -78,7 +78,7 @@ class MysqlConnectionSettingsTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfTheUsernameHasBeenSetAsParameter() {
-        $connectionSettings = new MysqlConnectionSettings('','username','');
+        $connectionSettings = new MySQLConnectionSettings('','username','');
 
         $this->assertEquals('username', $connectionSettings->getUsername());
     }
@@ -87,7 +87,7 @@ class MysqlConnectionSettingsTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfThePasswordHasBeenSetAsParameter() {
-        $connectionSettings = new MysqlConnectionSettings('','','password');
+        $connectionSettings = new MySQLConnectionSettings('','','password');
 
         $this->assertEquals('password', $connectionSettings->getPassword());
     }
@@ -96,7 +96,7 @@ class MysqlConnectionSettingsTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfTheDatabaseHasBeenSetAsParameter() {
-        $connectionSettings = new MysqlConnectionSettings('','','', 'myDatabase');
+        $connectionSettings = new MySQLConnectionSettings('','','', 'myDatabase');
 
         $this->assertEquals('myDatabase', $connectionSettings->getDatabase());
     }
@@ -105,7 +105,7 @@ class MysqlConnectionSettingsTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfThePortHasBeenSetAsParameter() {
-        $connectionSettings = new MysqlConnectionSettings('','','', '', 1234);
+        $connectionSettings = new MySQLConnectionSettings('','','', '', 1234);
 
         $this->assertEquals(1234, $connectionSettings->getPort());
     }
@@ -114,7 +114,7 @@ class MysqlConnectionSettingsTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfThePersitentFlagHasBeenSetAsSettingListParameter() {
-        $connectionSettings = new MysqlConnectionSettings('','','', null, null, ['persistent' => true]);
+        $connectionSettings = new MySQLConnectionSettings('','','', null, null, ['persistent' => true]);
 
         $this->assertTrue($connectionSettings->isPersistent());
     }
@@ -123,7 +123,7 @@ class MysqlConnectionSettingsTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfTheCharsetHasBeenSetAsSettingListParameter() {
-        $connectionSettings = new MysqlConnectionSettings('','','', null, null, ['charset' => 'utf8'] );
+        $connectionSettings = new MySQLConnectionSettings('','','', null, null, ['charset' => 'utf8'] );
 
         $this->assertEquals('utf8', $connectionSettings->getCharset());
     }
@@ -133,7 +133,7 @@ class MysqlConnectionSettingsTest extends PHPUnit_Framework_TestCase
      */
     public function checkIfTheGeneratorIsProvideForValidation()
     {
-        $connectionSettings = new MysqlConnectionSettings('','','', null, null, ['charset' => 'utf8'] );
+        $connectionSettings = new MySQLConnectionSettings('','','', null, null, ['charset' => 'utf8'] );
         $this->assertInstanceOf('\Generator', $connectionSettings->getParameterGenerator());
     }
 

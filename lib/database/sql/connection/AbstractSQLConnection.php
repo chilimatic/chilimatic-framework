@@ -4,7 +4,7 @@ namespace chilimatic\lib\database\sql\connection;
 use chilimatic\lib\database\connection\IDatabaseConnection;
 use chilimatic\lib\database\connection\IDatabaseConnectionAdapter;
 use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
-use chilimatic\lib\database\sql\mysql\connection\MysqlConnectionSettings;
+use chilimatic\lib\database\sql\mysql\connection\MySQLConnectionSettings;
 use chilimatic\lib\exception\DatabaseException;
 use chilimatic\lib\interfaces\IFlyWeightValidator;
 use chilimatic\lib\parser\AnnotationValidatorParser;
@@ -15,7 +15,7 @@ use chilimatic\lib\validator\AnnotationPropertyValidatorFactory;
  *
  * @package chilimatic\lib\database\sql
  */
-abstract class AbstractSqlConnection implements IDatabaseConnection, ISqlConnection {
+abstract class AbstractSQLConnection implements IDatabaseConnection, ISQLConnection {
 
     /**
      * if it's active (in use)
@@ -77,7 +77,7 @@ abstract class AbstractSqlConnection implements IDatabaseConnection, ISqlConnect
      */
     public function __construct(IDatabaseConnectionSettings $connectionSettings, $adapterName = '') {
         // initializes the needed steps for the Connection
-        $this->prepareConnectionMetaData($connectionSettings, $adapterName);
+        $this->prepareAndInitilizeAdapter($connectionSettings, $adapterName);
     }
 
     /**
@@ -88,7 +88,7 @@ abstract class AbstractSqlConnection implements IDatabaseConnection, ISqlConnect
      *
      * @return mixed
      */
-    abstract public function prepareConnectionMetaData(IDatabaseConnectionSettings $connectionSettings, $adapterName);
+    abstract public function prepareAndInitilizeAdapter(IDatabaseConnectionSettings $connectionSettings, $adapterName);
 
     /**
      * a database connection needs certain parameters to work
@@ -106,7 +106,7 @@ abstract class AbstractSqlConnection implements IDatabaseConnection, ISqlConnect
         }
 
         /**
-         * @var MysqlConnectionSettings $connectionSettings
+         * @var MySQLConnectionSettings $connectionSettings
          */
         $connectionSettings = $this->getDbAdapter()->getConnectionSettings();
         if (!$connectionSettings) {
@@ -284,7 +284,7 @@ abstract class AbstractSqlConnection implements IDatabaseConnection, ISqlConnect
     }
 
     /**
-     * @return AbstractSqlConnectionAdapter
+     * @return AbstractSQLConnectionAdapter
      */
     public function getDbAdapter()
     {

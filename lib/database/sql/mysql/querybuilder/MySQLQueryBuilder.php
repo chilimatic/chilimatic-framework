@@ -27,7 +27,7 @@ use chilimatic\lib\transformer\string\DynamicSQLParameter;
  *
  * @package chilimatic\lib\database\orm
  */
-class MysqlQueryBuilder extends AbstractQueryBuilder
+class MySQLQueryBuilder extends AbstractQueryBuilder
 {
 
     /**

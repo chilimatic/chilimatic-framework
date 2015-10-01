@@ -2,14 +2,14 @@
 
 namespace chilimatic\lib\database\sql\mysql\connection;
 
-use chilimatic\lib\database\sql\connection\AbstractSqlConnectionSettings;
+use chilimatic\lib\database\sql\connection\AbstractSQLConnectionSettings;
 
 /**
  * Class MysqlConnectionSettings
  *
  * @package chilimatic\lib\database\sql\mysql\connection
  */
-class MysqlConnectionSettings extends AbstractSqlConnectionSettings
+class MySQLConnectionSettings extends AbstractSQLConnectionSettings
 {
     /**
      * Mysql default Port

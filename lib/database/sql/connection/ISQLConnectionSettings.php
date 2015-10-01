@@ -9,7 +9,7 @@ namespace chilimatic\lib\database\sql\connection;
  * File: ISQLConnectionSettings.php
  */
 
-interface ISqlConnectionSettings {
+interface ISQLConnectionSettings {
 
     /**
      * @param $host

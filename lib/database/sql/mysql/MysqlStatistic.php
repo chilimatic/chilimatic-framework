@@ -9,7 +9,7 @@ use \chilimatic\lib\exception\DatabaseException;
  *
  * @package chilimatic\lib\database
  */
-class MysqlStatistic extends Mysql
+class MySQLStatistic extends MySQL
 {
 
 
@@ -47,9 +47,9 @@ class MysqlStatistic extends Mysql
     /**
      * constructor
      *
-     * @param mysql $db
+     * @param MySQL $db
      */
-    public function __construct(Mysql $db = null)
+    public function __construct(MySQL $db = null)
     {
 
         if (empty($db)) return;
@@ -70,7 +70,7 @@ class MysqlStatistic extends Mysql
 
         try {
             if (empty($this->db)) {
-                throw new DatabaseException(__METHOD__ . 'No Database Object has been given', Mysql::ERR_NO_CREDENTIALS, Mysql::SEVERITY_LOG, __FILE__, __LINE__);
+                throw new DatabaseException(__METHOD__ . 'No Database Object has been given', MySQL::ERR_NO_CREDENTIALS, MySQL::SEVERITY_LOG, __FILE__, __LINE__);
             }
 
             $sql = (string)"SHOW FULL PROCESSLIST";
@@ -96,7 +96,7 @@ class MysqlStatistic extends Mysql
 
         try {
             if (empty($this->db)) {
-                throw new DatabaseException(__METHOD__ . 'No Database Object has been given', Mysql::ERR_NO_CREDENTIALS, Mysql::SEVERITY_LOG, __FILE__, __LINE__);
+                throw new DatabaseException(__METHOD__ . 'No Database Object has been given', MySQL::ERR_NO_CREDENTIALS, MySQL::SEVERITY_LOG, __FILE__, __LINE__);
             }
 
             $sql = (string)"SELECT * FROM `information_schema`.`tables`";

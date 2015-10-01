@@ -9,7 +9,7 @@ use chilimatic\lib\database\connection\IDatabaseConnectionAdapter;
  *
  * @package chilimatic\lib\database\sql\connection
  */
-interface ISqlConnection
+interface ISQLConnection
 {
     /**
      * @return boolean

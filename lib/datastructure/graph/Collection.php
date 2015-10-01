@@ -173,7 +173,7 @@ class Collection
 
         $resultSet = new \SplDoublyLinkedList();
         foreach ($this->idList as $id => $node) {
-            if (strpos($id, "{$node->keyDelimiter}$key{$node->keyDelimiter}") !== false) {
+            if (strpos($id, "{$node->keyDelimiter}{$key}{$node->keyDelimiter}") !== false) {
                 $resultSet->push($node);
             }
         }

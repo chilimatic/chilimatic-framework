@@ -1,20 +1,20 @@
 <?php
 namespace chilimatic\lib\database\sql\mysql\connection\adapter;
 
-use chilimatic\lib\database\sql\connection\AbstractSqlConnectionAdapter;
+use chilimatic\lib\database\sql\connection\AbstractSQLConnectionAdapter;
 
 /**
  * Class PDOConnectionAdapter
  *
  * @package chilimatic\lib\database\sql\mysql\connection\adapter
  */
-class PDOConnectionAdapter extends AbstractSqlConnectionAdapter
+class PDOConnectionAdapter extends AbstractSQLConnectionAdapter
 {
     /**
      * trait that contains similar code for
      * both PDO and Mysqli
      */
-    use MysqlConnectionTypeTrait;
+    use MySQLConnectionTypeTrait;
 
     public function initResource()
     {

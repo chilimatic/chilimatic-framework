@@ -1,7 +1,7 @@
 <?php
-use chilimatic\lib\database\sql\mysql\connection\MysqlConnection;
-use chilimatic\lib\database\sql\mysql\connection\MysqlConnectionSettings;
-use chilimatic\lib\database\sql\mysql\connection\MysqlConnectionStorage;
+use chilimatic\lib\database\sql\mysql\connection\MySQLConnection;
+use chilimatic\lib\database\sql\mysql\connection\MySQLConnectionSettings;
+use chilimatic\lib\database\sql\mysql\connection\MySQLConnectionStorage;
 
 /**
  *
@@ -19,7 +19,7 @@ class MysqlConnectionStorageTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfMySqlConnectionStorageImplementsTheStorageInterface() {
-        $storage =  new MysqlConnectionStorage();
+        $storage =  new MySQLConnectionStorage();
 
         $this->assertInstanceOf('\chilimatic\lib\database\sql\connection\ISqlConnectionStorage',$storage);
     }
@@ -28,10 +28,10 @@ class MysqlConnectionStorageTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfAMySqlConnectionCanBeAddedBySettingsToTheMysqlConnectionStorage() {
-        $storage = new MysqlConnectionStorage();
-        $setting = new MysqlConnectionSettings('','','');
+        $storage = new MySQLConnectionStorage();
+        $setting = new MySQLConnectionSettings('','','');
         try {
-            $storage->addConnectionBySetting($setting, MysqlConnection::CONNECTION_MOCK);
+            $storage->addConnectionBySetting($setting, MySQLConnection::CONNECTION_MOCK);
         } catch(PDOException $e) {
             // do nothing
         }
@@ -44,17 +44,17 @@ class MysqlConnectionStorageTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfASpecificMysqlConnectionSettingsCanBeRetrieved() {
-        $storage = new MysqlConnectionStorage();
-        $setting = new MysqlConnectionSettings('','','');
+        $storage = new MySQLConnectionStorage();
+        $setting = new MySQLConnectionSettings('','','');
 
         $storage->addConnectionBySetting(
-            new MysqlConnectionSettings('','',''),
-            MysqlConnection::CONNECTION_MOCK
+            new MySQLConnectionSettings('','',''),
+            MySQLConnection::CONNECTION_MOCK
         );
 
         $storage->addConnectionBySetting(
             $setting,
-            MysqlConnection::CONNECTION_MOCK
+            MySQLConnection::CONNECTION_MOCK
         );
 
         $this->assertEquals($setting, $storage->getConnectionByPosition(1)->getDbAdapter()->getConnectionSettings());
@@ -65,10 +65,10 @@ class MysqlConnectionStorageTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfAMysqlConnectionCanBeAdded() {
-        $storage = new MysqlConnectionStorage();
-        $con = new MysqlConnection(
-            new MysqlConnectionSettings('','',''),
-            MysqlConnection::CONNECTION_MOCK
+        $storage = new MySQLConnectionStorage();
+        $con = new MySQLConnection(
+            new MySQLConnectionSettings('','',''),
+            MySQLConnection::CONNECTION_MOCK
         );
 
         $storage->addConnection($con);
@@ -81,10 +81,10 @@ class MysqlConnectionStorageTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfAMysqlConnectionCanBeFound() {
-        $storage = new MysqlConnectionStorage();
-        $con = new MysqlConnection(
-            new MysqlConnectionSettings('','',''),
-            MysqlConnection::CONNECTION_MOCK
+        $storage = new MySQLConnectionStorage();
+        $con = new MySQLConnection(
+            new MySQLConnectionSettings('','',''),
+            MySQLConnection::CONNECTION_MOCK
         );
 
         $storage->addConnection($con);
@@ -96,10 +96,10 @@ class MysqlConnectionStorageTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfAMysqlConnectionCanBeRemoved() {
-        $storage = new MysqlConnectionStorage();
-        $con = new MysqlConnection(
-            new MysqlConnectionSettings('','',''),
-            MysqlConnection::CONNECTION_MOCK
+        $storage = new MySQLConnectionStorage();
+        $con = new MySQLConnection(
+            new MySQLConnectionSettings('','',''),
+            MySQLConnection::CONNECTION_MOCK
         );
 
         $storage->addConnection($con);

@@ -21,7 +21,7 @@ use chilimatic\lib\exception\DatabaseException;
  *
  * @package chilimatic\lib\database
  */
-class Mysql extends AbstractDatabase
+class MySQL extends AbstractDatabase
 {
 
     /**
@@ -663,7 +663,7 @@ class Mysql extends AbstractDatabase
      *
      * @return MysqlDetail
      */
-    public function getDatabaseDetail(Mysql $db = null)
+    public function getDatabaseDetail(MySQL $db = null)
     {
 
         if (empty($db) || empty($db->db)) {

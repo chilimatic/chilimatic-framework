@@ -1,6 +1,6 @@
 <?php
-use chilimatic\lib\database\sql\mysql\connection\MysqlConnection;
-use chilimatic\lib\database\sql\mysql\connection\MysqlConnectionSettings;
+use chilimatic\lib\database\sql\mysql\connection\MySQLConnection;
+use chilimatic\lib\database\sql\mysql\connection\MySQLConnectionSettings;
 
 /**
  *
@@ -14,14 +14,14 @@ class MysqlConnectionTest extends PHPUnit_Framework_TestCase
 {
 
     /**
-     * @return MysqlConnectionSettings
+     * @return MySQLConnectionSettings
      */
     public function generateMysqlSettings() {
-        return new MysqlConnectionSettings(
-            'localhost',
-            '',
-            '',
-            null,
+        return new MySQLConnectionSettings(
+            '127.0.0.1',
+            'unittest',
+            'test123123',
+            'unittest',
             null,
             $settingList = []
         );
@@ -31,7 +31,7 @@ class MysqlConnectionTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function implementsISqlConnection() {
-        $con = new MysqlConnection($this->generateMysqlSettings(), MysqlConnection::CONNECTION_MOCK);
+        $con = new MySQLConnection($this->generateMysqlSettings(), MySQLConnection::CONNECTION_MOCK);
         $this->assertInstanceOf('\chilimatic\lib\database\sql\connection\ISqlConnection', $con);
     }
 
@@ -40,7 +40,7 @@ class MysqlConnectionTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function extendsAbstractSqlConnection() {
-        $con = new MysqlConnection($this->generateMysqlSettings(), MysqlConnection::CONNECTION_MOCK);
+        $con = new MySQLConnection($this->generateMysqlSettings(), MySQLConnection::CONNECTION_MOCK);
         $this->assertInstanceOf('\chilimatic\lib\database\sql\connection\AbstractSqlConnection', $con);
     }
 
@@ -49,7 +49,7 @@ class MysqlConnectionTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfTheConnectionIsActive() {
-        $con = new MysqlConnection($this->generateMysqlSettings(), MysqlConnection::CONNECTION_MOCK);
+        $con = new MySQLConnection($this->generateMysqlSettings(), MySQLConnection::CONNECTION_MOCK);
         $this->assertFalse($con->isActive());
     }
 
@@ -57,7 +57,7 @@ class MysqlConnectionTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfReconnectIsImpossibleIfTheLimitIsSetToTwoAndThreeRetries() {
-        $con = new MysqlConnection($this->generateMysqlSettings(), MysqlConnection::CONNECTION_MOCK);
+        $con = new MySQLConnection($this->generateMysqlSettings(), MySQLConnection::CONNECTION_MOCK);
 
         $con->setMaxReconnects(2);
         $con->increaseReconnectCount();
@@ -72,7 +72,7 @@ class MysqlConnectionTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfReconnectIsPossibleIfTheLimitIsSetToFiveAndThreeRetries() {
-        $con = new MysqlConnection($this->generateMysqlSettings(), MysqlConnection::CONNECTION_MOCK);
+        $con = new MySQLConnection($this->generateMysqlSettings(), MySQLConnection::CONNECTION_MOCK);
 
         $con->setMaxReconnects(5);
         $con->increaseReconnectCount();
@@ -86,7 +86,7 @@ class MysqlConnectionTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfPingIsWorking() {
-        $con = new MysqlConnection($this->generateMysqlSettings(), MysqlConnection::CONNECTION_MOCK);
+        $con = new MySQLConnection($this->generateMysqlSettings(), MySQLConnection::CONNECTION_MOCK);
 
         $this->assertTrue($con->ping());
     }
@@ -95,10 +95,37 @@ class MysqlConnectionTest extends PHPUnit_Framework_TestCase
      * @test
      */
     public function checkIfValidatorGeneratorIsWorking() {
-        $con = new MysqlConnection($this->generateMysqlSettings(), MysqlConnection::CONNECTION_MOCK);
+        $con = new MySQLConnection($this->generateMysqlSettings(), MySQLConnection::CONNECTION_MOCK);
 
         $this->assertFalse($con->connectionSettingsAreValid());
     }
 
+    /**
+     * @test
+     */
+    public function connectToARealDatabaseWithThePdoAdapter() {
+        try {
+            $con = new MySQLConnection($this->generateMysqlSettings(), MySQLConnection::CONNECTION_PDO);
+        } catch (\Exception $e) { // will only work with >=php7
+            $this->fail($e->getMessage());
+        }
+
+        $this->assertTrue($con->isConnected());
+    }
+
+    /**
+     * @test
+     *
+     * this will fail if mariadb is used because of library inconsistencies
+     */
+    public function connectToARealDatabaseWithTheMysqliAdapter() {
+        try {
+            $con = new MySQLConnection($this->generateMysqlSettings(), MySQLConnection::CONNECTION_MYSQLI);
+        } catch (\Exception $e) {
+            $this->fail($e->getMessage());
+        }
+
+        $this->assertTrue($con->isConnected());
+    }
 
 }

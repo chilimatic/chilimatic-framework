@@ -9,7 +9,7 @@ use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
  *
  * @package chilimatic\lib\database\sql\connection
  */
-abstract class AbstractSqlConnectionAdapter implements IDatabaseConnectionAdapter
+abstract class AbstractSQLConnectionAdapter implements IDatabaseConnectionAdapter
 {
 
     /**
@@ -145,7 +145,15 @@ abstract class AbstractSqlConnectionAdapter implements IDatabaseConnectionAdapte
     abstract public function getErrorCode();
 
     /**
-     * @return mixed
+     * generalized for all mysql adapters
+     * @todo mysqli adapter function that wraps the interface needs to be built
+     *
+     * @return array
+     *
+     * 0 SQLSTATE error code (a five characters alphanumeric identifier defined in the ANSI SQL standard).
+     * 1 Driver-specific error code.
+     * 2 Driver-specific error message.
+     *
      */
     abstract public function getErrorInfo();
 

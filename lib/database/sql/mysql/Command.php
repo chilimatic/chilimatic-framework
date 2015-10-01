@@ -15,14 +15,14 @@ class Command
     /**
      * database object
      *
-     * @var Mysql
+     * @var MySQL
      */
     public $db = null;
 
     /**
      * constructor
      *
-     * @param Mysql $db
+     * @param MySQL $db
      */
     public function __construct($db = null)
     {
@@ -30,7 +30,7 @@ class Command
         if (!empty($db) && is_resource($db)) {
             $this->db = $db;
         } else {
-            $this->db = new Mysql(Config::get('mysql_host'), Config::get('mysql_user'), Config::get('mysql_password'), Config::get('mysql_db'));
+            $this->db = new MySQL(Config::get('mysql_host'), Config::get('mysql_user'), Config::get('mysql_password'), Config::get('mysql_db'));
         }
     }
 

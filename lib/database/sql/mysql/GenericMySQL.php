@@ -44,7 +44,7 @@ class GenericMySQL
     /**
      * database handler
      *
-     * @var \PDO|Mysql
+     * @var \PDO|MySQL
      */
     public $db = null;
 
@@ -222,7 +222,7 @@ class GenericMySQL
 
         if ($stmt = $this->db->prepare($sql)) return $this;
 
-        $this->result = $stmt->fetchAll(Mysql::FETCH_OBJ);
+        $this->result = $stmt->fetchAll(MySQL::FETCH_OBJ);
 
         return $this;
     }
@@ -296,7 +296,7 @@ class GenericMySQL
 
         if (!$stmt->execute()) return;
 
-        $this->result = $stmt->fetchAll(Mysql::FETCH_OBJ);
+        $this->result = $stmt->fetchAll(MySQL::FETCH_OBJ);
     }
 
     /**
@@ -320,7 +320,7 @@ class GenericMySQL
         $this->last_sql = $sql;
         if (!$stmt->execute()) return $this;
 
-        $this->result = $stmt->fetchAll(Mysql::FETCH_OBJ);
+        $this->result = $stmt->fetchAll(MySQL::FETCH_OBJ);
 
         return $this;
     }

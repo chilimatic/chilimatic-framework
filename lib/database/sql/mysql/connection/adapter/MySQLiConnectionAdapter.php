@@ -1,19 +1,19 @@
 <?php
 namespace chilimatic\lib\database\sql\mysql\connection\adapter;
 
-use chilimatic\lib\database\sql\connection\AbstractSqlConnectionAdapter;
+use chilimatic\lib\database\sql\connection\AbstractSQLConnectionAdapter;
 
 /**
  * Class MySQLiConnectionAdapter
  *
  * @package chilimatic\lib\database\sql\mysql\connection\adapter
  */
-class MySQLiConnectionAdapter extends AbstractSqlConnectionAdapter
+class MySQLiConnectionAdapter extends AbstractSQLConnectionAdapter
 {
     /**
      * Connection Trait
      */
-    use MysqlConnectionTypeTrait;
+    use MySQLConnectionTypeTrait;
 
     /**
      * @var bool

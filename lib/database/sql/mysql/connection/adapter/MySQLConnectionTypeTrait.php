@@ -9,7 +9,7 @@ namespace chilimatic\lib\database\sql\mysql\connection\adapter;
  * File: AbstractMysqlConnectionAdapter.php
  */
 
-Trait MysqlConnectionTypeTrait
+Trait MySQLConnectionTypeTrait
 {
     /**
      * simple check if it's a socket connection or not

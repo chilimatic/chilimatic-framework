@@ -41,10 +41,12 @@ class ConfigFile_Test extends PHPUnit_Framework_TestCase
         $data2 = "value1=test2\nvalue7=teststring";
         file_put_contents($this->testDataDir . '*.test.com.cfg', $data2);
 
-        $this->config = \chilimatic\lib\config\ConfigFactory::make('File', [
-            \chilimatic\lib\config\File::CONFIG_PATH_INDEX => $this->testDataDir,
-            'host_id'                                      => 'www.test.com'
-        ]);
+        $this->config = \chilimatic\lib\config\ConfigFactory::make('File',
+            [
+                \chilimatic\lib\config\File::CONFIG_PATH_INDEX => $this->testDataDir,
+                'host_id'                                      => 'www.test.com'
+            ]
+        );
     }
 
     /**

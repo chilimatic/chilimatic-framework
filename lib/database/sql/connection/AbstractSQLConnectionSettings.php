@@ -17,7 +17,7 @@ use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
  *
  * @package chilimatic\lib\database\sql\connection
  */
-abstract class AbstractSqlConnectionSettings implements IDatabaseConnectionSettings, ISqlConnectionSettings
+abstract class AbstractSQLConnectionSettings implements IDatabaseConnectionSettings, ISQLConnectionSettings
 {
 
     /**

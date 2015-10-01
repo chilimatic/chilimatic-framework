@@ -12,7 +12,7 @@ namespace chilimatic\lib\database\sql\mysql\connection;
 
 use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
 use chilimatic\lib\database\mock\adapter\MockMysqlConnectionAdapter;
-use chilimatic\lib\database\sql\connection\AbstractSqlConnection;
+use chilimatic\lib\database\sql\connection\AbstractSQLConnection;
 use chilimatic\lib\database\sql\mysql\connection\adapter\MySQLiConnectionAdapter;
 use chilimatic\lib\database\sql\mysql\connection\adapter\PDOConnectionAdapter;
 use chilimatic\lib\exception\DatabaseException;
@@ -28,7 +28,7 @@ use chilimatic\lib\exception\DatabaseException;
  *
  * @package chilimatic\lib\database\sql\mysql\connection
  */
-class MysqlConnection extends AbstractSqlConnection
+class MySQLConnection extends AbstractSQLConnection
 {
     /**
      * the currently available connection Interfaces
@@ -49,7 +49,7 @@ class MysqlConnection extends AbstractSqlConnection
      *
      * @return mixed
      */
-    public function prepareConnectionMetaData(IDatabaseConnectionSettings $connectionSettings, $adapterName)
+    public function prepareAndInitilizeAdapter(IDatabaseConnectionSettings $connectionSettings, $adapterName)
     {
         if (!$adapterName) {
             throw new \InvalidArgumentException('The AdapterName was not specified, this field is not Optional in the MySQL Connection');
@@ -57,18 +57,38 @@ class MysqlConnection extends AbstractSqlConnection
 
         switch ($adapterName) {
             case self::CONNECTION_PDO:
-                $this->setDbAdapter(new PDOConnectionAdapter($connectionSettings));
+                $this
+                    ->setDbAdapter(new PDOConnectionAdapter($connectionSettings))
+                    ->checkForConnectionStatus();
             break;
             case self::CONNECTION_MYSQLI:
-                $this->setDbAdapter(new MySQLiConnectionAdapter($connectionSettings));
+                $this
+                    ->setDbAdapter(new MySQLiConnectionAdapter($connectionSettings))
+                    ->checkForConnectionStatus();
+
                 break;
             case self::CONNECTION_MOCK:
-                $this->setDbAdapter(new MockMysqlConnectionAdapter($connectionSettings));
+                $this
+                    ->setDbAdapter(new MockMysqlConnectionAdapter($connectionSettings))
+                    ->checkForConnectionStatus();
+
                 break;
             default:
                 throw new \InvalidArgumentException('The AdapterName was wrong only pdo and mysqli are allowed');
         }
     }
+
+    /**
+     * checks if the adapter ha a valid connection
+     */
+    private function checkForConnectionStatus() {
+        if ($this->ping()) {
+            $this->setConnected(true);
+            return;
+        }
+        $this->setConnected(false);
+    }
+
 
     /**
      * Ping
@@ -80,8 +100,7 @@ class MysqlConnection extends AbstractSqlConnection
      */
     public function ping()
     {
-        $this->getDbAdapter()->ping();
-        return true;
+        return $this->getDbAdapter()->ping();
     }
 
 
@@ -99,11 +118,9 @@ class MysqlConnection extends AbstractSqlConnection
             return false;
         }
 
-        $this->ping();
+
         $this->increaseReconnectCount();
-
-        return true;
+        // returns the state if the ping was possible
+        return $this->ping();
     }
-
-
 }

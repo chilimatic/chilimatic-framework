@@ -9,7 +9,7 @@ use \chilimatic\lib\exception\DatabaseException as DatabaseException;
  *
  * @package chilimatic\lib\database
  */
-class MySQLClone extends Mysql
+class MySQLClone extends MySQL
 {
 
 

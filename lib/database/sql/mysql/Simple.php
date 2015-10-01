@@ -16,7 +16,7 @@ namespace chilimatic\lib\database\sql\mysql;
  *
  * @package chilimatic\lib\database
  */
-final class Simple extends Mysql
+final class Simple extends MySQL
 {
 
 

@@ -165,7 +165,7 @@ class Statement
 
             foreach ($this->param_list as $placeholder => $param) {
                 if (strpos($this->prepared_sql, $placeholder) === false) {
-                    throw new DatabaseException(__METHOD__ . " missing bound placeholder: $placeholder in sql $this->prepared_sql", Mysql::ERR_CONN, Mysql::SEVERITY_LOG, __FILE__, __LINE__);
+                    throw new DatabaseException(__METHOD__ . " missing bound placeholder: $placeholder in sql $this->prepared_sql", MySQL::ERR_CONN, MySQL::SEVERITY_LOG, __FILE__, __LINE__);
                 }
 
 
@@ -226,17 +226,17 @@ class Statement
     {
         try {
             if ($this->res === false) {
-                throw new DatabaseException(__METHOD__ . " No ressource has been given", Mysql::NO_RESSOURCE, Mysql::SEVERITY_DEBUG, __FILE__, __LINE__);
+                throw new DatabaseException(__METHOD__ . " No ressource has been given", MySQL::NO_RESSOURCE, MySQL::SEVERITY_DEBUG, __FILE__, __LINE__);
             }
 
             switch ($type) {
-                case Mysql::FETCH_ASSOC:
+                case MySQL::FETCH_ASSOC:
                     return $this->_db->fetch_assoc_list($this->res);
                     break;
-                case Mysql::FETCH_NUM:
+                case MySQL::FETCH_NUM:
                     return $this->_db->fetch_num_list($this->res);
                     break;
-                case Mysql::FETCH_OBJ:
+                case MySQL::FETCH_OBJ:
                 default:
                     return $this->_db->fetch_object_list($this->res);
                     break;
