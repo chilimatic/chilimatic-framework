@@ -17,9 +17,18 @@ interface IFlyWeightTransformer
 {
 
     /**
-     * @param $content
+     * @param string $content
+     * @param array $options
      *
-     * @return mixed
+     * @return string
      */
-    public function transform($content);
+    public function transform($content, $options = []);
+
+    /**
+     * @param string $content
+     * @param array $options
+     *
+     * @return string
+     */
+    public function __invoke($content, $options = []);
 }

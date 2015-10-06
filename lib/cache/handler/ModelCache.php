@@ -10,9 +10,8 @@
 
 namespace chilimatic\lib\cache\handler;
 
-use chilimatic\lib\cache\engine\CacheInterface;
 use chilimatic\lib\cache\handler\storage\ModelStorage;
-use chilimatic\lib\database\orm\AbstractModel;
+use chilimatic\lib\database\sql\orm\AbstractModel;
 
 class ModelCache
 {
