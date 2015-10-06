@@ -24,7 +24,7 @@ class Collection
     public $list = null;
 
     /**
-     * list of all ids WITHIN ALL CHILD AN PARENT NODES !!!! this is a reference ! :)
+     * list of all ids WITHIN ALL CHILD AND PARENT NODES !!!! this is a reference ! :)
      *
      * @var array|null
      */
@@ -193,7 +193,7 @@ class Collection
         if (!isset($this->keyList[$key])) {
             return null;
         }
-
+        
         // returns the last entry
         return $this->keyList[$key]->top();
     }

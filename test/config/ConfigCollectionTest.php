@@ -73,5 +73,54 @@ class ConfigCollectionTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('\SPLObjectStorage', $retStorage);
     }
 
+    /**
+     * @test
+     */
+    public function testGraphCollectionGetUnambigiosSpecificNode() {
+
+        $node1 = new \chilimatic\lib\config\Node(null, '*', null);
+        $node2 = new \chilimatic\lib\config\Node(null, '.', null);
+        $collection = new chilimatic\lib\config\Collection();
+        $collection->addNode($node1);
+        $collection->addNode($node2);
+
+        $retNode = $collection->getLastByKey('.');
+
+        $this->assertEquals($node2, $retNode);
+    }
+
+
+    /**
+     * @test
+     */
+    public function testGraphCollectionGetAmbigiousSpecificNode() {
+
+        $node1 = new \chilimatic\lib\config\Node(null, '*', null);
+        $node2 = new \chilimatic\lib\config\Node(null, '*', null);
+        $collection = new chilimatic\lib\config\Collection();
+        $collection->addNode($node1);
+        $collection->addNode($node2);
+
+        $retNode = $collection->getLastByKey('*');
+
+        $this->assertEquals($node2, $retNode);
+    }
+
+
+    /**
+     * @test
+     */
+    public function testGraphCollectionGetSpecificUnambigousChildNode() {
+
+        $node1 = new \chilimatic\lib\config\Node(null, '*', null);
+        $node2 = new \chilimatic\lib\config\Node(null, '.', null);
+        $node1->addChild($node2);
+
+        $collection = new chilimatic\lib\config\Collection($node1->children->idList, $node1->children->keyList);
+        $collection->addNode($node1);
+        $retNode = $collection->getLastByKey('.');
+
+        $this->assertEquals($node2, $retNode);
+    }
 
 }
