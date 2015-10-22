@@ -16,7 +16,7 @@ namespace chilimatic\lib\database\sql\orm;
 use chilimatic\lib\cache\handler\ModelCache;
 use chilimatic\lib\database\AbstractDatabase;
 use chilimatic\lib\database\ErrorLogTrait;
-use chilimatic\lib\database\sql\orm\querybuilder\AbstractQueryBuilder;
+use chilimatic\lib\database\sql\querybuilder\AbstractQueryBuilder;
 use chilimatic\lib\log\ILog;
 
 
@@ -43,7 +43,7 @@ class EntityManager
     public $db;
 
     /**
-     * @var \chilimatic\lib\database\sql\orm\querybuilder\AbstractQueryBuilder
+     * @var \chilimatic\lib\database\sql\querybuilder\AbstractQueryBuilder
      */
     public $queryBuilder;
 

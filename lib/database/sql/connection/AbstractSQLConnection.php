@@ -7,7 +7,7 @@ use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
 use chilimatic\lib\database\sql\mysql\connection\MySQLConnectionSettings;
 use chilimatic\lib\exception\DatabaseException;
 use chilimatic\lib\interfaces\IFlyWeightValidator;
-use chilimatic\lib\parser\AnnotationValidatorParser;
+use chilimatic\lib\parser\annotation\ValidatorParser;
 use chilimatic\lib\validator\AnnotationPropertyValidatorFactory;
 
 /**
@@ -114,7 +114,7 @@ abstract class AbstractSQLConnection implements IDatabaseConnection, ISQLConnect
         }
 
         $validatorFactory = new AnnotationPropertyValidatorFactory(
-            new AnnotationValidatorParser()
+            new ValidatorParser()
         );
 
         /**

@@ -71,24 +71,5 @@ class PHtml extends AbstractView
         return $this->content;
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplateFile()
-    {
-        return $this->templateFile;
-    }
 
-    /**
-     * @param string $templateFile
-     *
-     * @return $this
-     */
-    public function setTemplateFile($templateFile)
-    {
-        if (!$templateFile) return $this;
-        $this->templateFile = (string)$templateFile;
-
-        return $this;
-    }
 }

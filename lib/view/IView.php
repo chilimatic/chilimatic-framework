@@ -8,12 +8,6 @@ namespace chilimatic\lib\view;
  */
 Interface IView
 {
-
-    /**
-     * constructor
-     */
-    public function __construct();
-
     /**
      * initializes the specific render presets
      *
@@ -28,10 +22,4 @@ Interface IView
      * @param string $templateFile
      */
     public function render($templateFile = '');
-
-
-    /**
-     * generic destructor
-     */
-    public function __destruct();
 }

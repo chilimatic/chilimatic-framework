@@ -16,7 +16,7 @@ abstract class AbstractClient implements ClientInterface
     protected $format;
 
     /**
-     * @var \SPLFixedArray
+     * @var \SPLQueue
      */
     protected $logMessages;
 
@@ -26,7 +26,7 @@ abstract class AbstractClient implements ClientInterface
     public function __construct(\chilimatic\lib\formater\Log $format = null)
     {
         $this->format      = $format;
-        $this->logMessages = new \SPLFixedArray();
+        $this->logMessages = new \SPLQueue();
     }
 
     function __toString()
@@ -42,14 +42,12 @@ abstract class AbstractClient implements ClientInterface
      */
     public function log($message, $data)
     {
-        $this->logMessages->setSize($this->logMessages->getSize() + 1);
-
         // TODO: Implement log() method.
-        $this->logMessages[] = [
+        $this->logMessages->enqueue([
             'date'    => date('Y-m-d H:i:s'),
             'message' => $message,
             'data'    => $data
-        ];
+        ]);
 
         return $this;
     }
@@ -62,14 +60,12 @@ abstract class AbstractClient implements ClientInterface
      */
     public function info($message, $data)
     {
-        $this->logMessages->setSize($this->logMessages->getSize() + 1);
-        // TODO: Implement info() method.
-        $this->logMessages[] = [
+        $this->logMessages->enqueue([
             'prefix'  => 'info',
             'date'    => date('Y-m-d H:i:s'),
             'message' => $message,
             'data'    => $data
-        ];
+        ]);
 
         return $this;
     }
@@ -82,14 +78,12 @@ abstract class AbstractClient implements ClientInterface
      */
     public function warn($message, $data)
     {
-        $this->logMessages->setSize($this->logMessages->getSize() + 1);
-        // TODO: Implement warn() method.
-        $this->logMessages[] = [
+        $this->logMessages->enqueue([
             'prefix'  => 'warn',
             'date'    => date('Y-m-d H:i:s'),
             'message' => $message,
             'data'    => $data
-        ];
+        ]);
 
         return $this;
     }
@@ -103,12 +97,12 @@ abstract class AbstractClient implements ClientInterface
     public function error($message, $data)
     {
         // TODO: Implement error() method.
-        $this->logMessages[] = [
+        $this->logMessages->enqueue([
             'prefix'  => 'error',
             'date'    => date('Y-m-d H:i:s'),
             'message' => $message,
             'data'    => $data
-        ];
+        ]);
 
         return $this;
     }
@@ -122,11 +116,11 @@ abstract class AbstractClient implements ClientInterface
     public function trace($message, $data)
     {
         // TODO: Implement trace() method.
-        $this->logMessages[] = [
+        $this->logMessages->enqueue([
             'date'    => date('Y-m-d H:i:s'),
             'message' => $message,
             'data'    => $data
-        ];
+        ]);
 
         return $this;
     }

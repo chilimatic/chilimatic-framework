@@ -5,19 +5,19 @@
  * Date: 9/27/15
  * Time: 4:19 PM
  *
- * File: AnnotationValidatorParser.php
+ * File: ValidatorParser.php
  */
 
-namespace chilimatic\lib\parser;
+namespace chilimatic\lib\parser\Annotation;
 
 use chilimatic\lib\interfaces\IFlyWeightParser;
 
 /**
- * Class AnnotationValidatorParser
+ * Class ValidatorParser
  *
- * @package chilimatic\lib\parser
+ * @package chilimatic\lib\parser\annotation
  */
-class AnnotationValidatorParser implements IFlyWeightParser
+class ValidatorParser implements IFlyWeightParser
 {
     /**
      * pattern for validator annotations for properties

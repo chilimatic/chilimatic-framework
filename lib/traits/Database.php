@@ -4,8 +4,8 @@ namespace chilimatic\lib\traits;
 use chilimatic\lib\config\Config;
 use chilimatic\lib\database\CouchDB;
 use chilimatic\lib\database\Mongo;
-use chilimatic\lib\database\mysql\Mysql;
-use chilimatic\lib\database\mysql\MysqlConnection;
+use chilimatic\lib\database\sql\mysql\Mysql;
+use chilimatic\lib\database\sql\mysql\connection\MysqlConnection;
 use chilimatic\lib\exception\DatabaseException;
 
 /**

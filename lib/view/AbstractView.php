@@ -20,6 +20,11 @@ abstract class AbstractView implements IView
      */
     protected $_engine = null;
 
+    /**
+     * @var string
+     */
+    private $templateFile;
+
 
     /**
      * sets the engine vars to the current engine
@@ -61,13 +66,25 @@ abstract class AbstractView implements IView
 
 
     /**
-     * (non-PHPdoc)
-     *
-     * @see View_Generic_Interface::__destruct()
+     * @return string
      */
-    public function __destruct()
+    public function getTemplateFile()
     {
+        return $this->templateFile;
+    }
 
-        return;
+    /**
+     * @param string $templateFile
+     *
+     * @return $this
+     */
+    public function setTemplateFile($templateFile)
+    {
+        if (!$templateFile) {
+            return $this;
+        }
+        $this->templateFile = (string) $templateFile;
+
+        return $this;
     }
 }

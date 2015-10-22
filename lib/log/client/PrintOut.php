@@ -10,12 +10,10 @@ namespace chilimatic\lib\log\client;
 
 class PrintOut extends AbstractClient
 {
-
     public function send()
     {
         foreach ($this->logMessages as $message) {
-            echo $message['date'] . '-' . $message['message'] . '-' . print_r($message['data'], true);
+            echo $message['date'] . '-' . $message['message'] . '-' . print_r($message['data'], true) . "\n";
         }
     }
-
 }

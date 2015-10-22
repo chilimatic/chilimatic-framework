@@ -42,16 +42,18 @@ trait ViewTrait
         return;
     }
 
-
     /**
-     * (non-PHPdoc)
+     * @param string $key
+     * @param mixed $value
      *
-     * @see View_Generic_Interface::set_config_variable()
+     * @return $this|bool
      */
     public function setConfigVariable($key, $value)
     {
 
-        if (empty($key)) return false;
+        if (!$key) {
+            return false;
+        }
 
         $this->setting->$key = $value;
 
@@ -60,9 +62,9 @@ trait ViewTrait
 
 
     /**
-     * (non-PHPdoc)
+     * @param array $param
      *
-     * @see View_Generic_Interface::set_config_variable_list()
+     * @return $this|bool
      */
     public function setConfigVariableList(array $param)
     {
@@ -79,9 +81,10 @@ trait ViewTrait
 
 
     /**
-     * (non-PHPdoc)
+     * @param string $key
+     * @param mixed $value
      *
-     * @see View_Generic_Interface::set_render_variable()
+     * @return $this|bool
      */
     public function set($key, $value)
     {
@@ -96,8 +99,8 @@ trait ViewTrait
     /**
      * just adds a variable to the others
      *
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param mixed $value
      *
      * @return $this|bool
      */
@@ -120,9 +123,9 @@ trait ViewTrait
 
 
     /**
-     * (non-PHPdoc)
+     * @param array $param
      *
-     * @see View_Generic_Interface::set_render_variable_list()
+     * @return $this|bool
      */
     public function setList(array $param)
     {
@@ -162,9 +165,9 @@ trait ViewTrait
 
 
     /**
-     * (non-PHPdoc)
+     * @param $variable
      *
-     * @see View_Generic_Interface::get_variable()
+     * @return bool
      */
     public function getConfigVariable($variable)
     {
@@ -177,9 +180,9 @@ trait ViewTrait
 
 
     /**
-     * (non-PHPdoc)
+     * @param array $param
      *
-     * @see View_Generic_Interface::get_variable_list()
+     * @return array|bool
      */
     public function getConfigVariableList(array $param)
     {

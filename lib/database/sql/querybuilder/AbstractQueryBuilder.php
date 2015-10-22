@@ -12,7 +12,7 @@ namespace chilimatic\lib\database\sql\querybuilder;
 use chilimatic\lib\cache\engine\CacheInterface;
 use chilimatic\lib\database\AbstractDatabase;
 use chilimatic\lib\database\sql\orm\AbstractModel;
-use chilimatic\lib\parser\ORMParser;
+use chilimatic\lib\parser\annotation\ORMParser;
 
 /**
  * Class AbstractQueryBuilder

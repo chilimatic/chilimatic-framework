@@ -8,7 +8,7 @@
  * File: querybuilder.php
  */
 
-namespace chilimatic\lib\database\sql\orm\querybuilder;
+namespace chilimatic\lib\database\sql\mysql\querybuilder;
 
 use chilimatic\lib\cache\engine\CacheInterface;
 use chilimatic\lib\database\AbstractDatabase;
@@ -19,6 +19,7 @@ use chilimatic\lib\database\sql\mysql\querybuilder\strategy\MySQLInsertStrategy;
 use chilimatic\lib\database\sql\mysql\querybuilder\strategy\MySQLSelectStrategy;
 use chilimatic\lib\database\sql\mysql\querybuilder\strategy\MySQLUpdateStrategy;
 use chilimatic\lib\database\sql\querybuilder\AbstractQueryBuilder;
+use chilimatic\lib\database\sql\querybuilder\ConsistencyTrait;
 use chilimatic\lib\database\sql\querybuilder\meta\AbstractSQLTableData;
 use chilimatic\lib\transformer\string\DynamicSQLParameter;
 

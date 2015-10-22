@@ -22,6 +22,11 @@ class AnnotationPropertyValidatorFactory {
     private $parser;
 
     /**
+     * @var array
+     */
+    private $missingValidators;
+
+    /**
      * @param IFlyWeightParser $parser
      */
     public function __construct(IFlyWeightParser $parser)
@@ -52,7 +57,7 @@ class AnnotationPropertyValidatorFactory {
             return $validatorStorage;
         }
 
-        $missingValidators = [];
+        $this->missingValidators = [];
         $classNameTransformer = new AnnotationValidatorClassName();
         $namespaceTransformer = new AnnotationValidatorPrependNameSpace();
 
@@ -71,12 +76,12 @@ class AnnotationPropertyValidatorFactory {
             if (class_exists($className, true)) {
                 $validatorStorage->attach(new $className());
             } else {
-                $missingValidators[] = $className;
+                $this->missingValidators[] = $className;
             }
         }
 
-        if ($missingValidators) {
-            throw new \RuntimeException("There is one or more Validators Missing: " . implode(',', $missingValidators));
+        if ($this->missingValidators) {
+            throw new \RuntimeException("There is one or more Validators Missing: " . implode(',', $this->missingValidators));
         }
 
         return $validatorStorage;

@@ -17,6 +17,8 @@
  * File: MySQLUpdateStrategy.php
  */
 namespace chilimatic\lib\database\sql\mysql\querybuilder\strategy;
+use chilimatic\lib\database\sql\querybuilder\strategy\AbstractStrategy;
+use chilimatic\lib\database\sql\querybuilder\strategy\GeneratorTrait;
 
 /**
  * Class MySQLUpdateStrategy

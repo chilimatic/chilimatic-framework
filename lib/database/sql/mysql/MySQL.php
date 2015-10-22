@@ -14,6 +14,9 @@ namespace chilimatic\lib\database\sql\mysql;
 use chilimatic\lib\database\AbstractDatabase;
 use chilimatic\lib\config\Config;
 use chilimatic\lib\database\AbstractConnection;
+use chilimatic\lib\database\connection\IDatabaseConnection;
+use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
+use chilimatic\lib\database\sql\connection\AbstractSQLConnection;
 use chilimatic\lib\exception\DatabaseException;
 
 /**
@@ -313,15 +316,17 @@ class MySQL extends AbstractDatabase
     protected $slaveConnection;
 
     /**
-     * @param AbstractConnection $masterConnection
-     * @param AbstractConnection $slaveConnection
+     * @param IDatabaseConnection $masterConnection
+     * @param IDatabaseConnection $slaveConnection
      *
      * @throws DatabaseException
      * @throws \Exception
      */
-    public function __construct(AbstractConnection $masterConnection, AbstractConnection $slaveConnection = null)
+    public function __construct(IDatabaseConnection $masterConnection, IDatabaseConnection $slaveConnection = null)
     {
-        if (!$masterConnection->connectionDataIsSet()) return;
+        if (!$masterConnection->connectionSettingsAreValid()) {
+            throw new \Exception('connection Data is not Valid');
+        }
 
         $this->masterConnection = $masterConnection;
         $this->connect($this->masterConnection);

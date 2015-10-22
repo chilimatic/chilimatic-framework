@@ -8,7 +8,7 @@
  * File: ORMParser.php
  */
 
-namespace chilimatic\lib\parser;
+namespace chilimatic\lib\parser\annotation;
 
 use chilimatic\lib\interfaces\IFlyWeightParser;
 

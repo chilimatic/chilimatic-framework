@@ -9,6 +9,9 @@
         <testsuite name="orm">
             <directory>./test/database/ORM</directory>
         </testsuite>
+        <testsuite name="validator">
+            <directory>./test/validator</directory>
+        </testsuite>
         <testsuite name="di">
             <directory>./test/di</directory>
         </testsuite>

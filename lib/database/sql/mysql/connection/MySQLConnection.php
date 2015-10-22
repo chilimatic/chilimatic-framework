@@ -118,7 +118,6 @@ class MySQLConnection extends AbstractSQLConnection
             return false;
         }
 
-
         $this->increaseReconnectCount();
         // returns the state if the ping was possible
         return $this->ping();

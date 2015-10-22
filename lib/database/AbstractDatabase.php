@@ -9,7 +9,7 @@
  */
 
 namespace chilimatic\lib\database;
-use chilimatic\lib\database\connection\AbstractConnection;
+use chilimatic\lib\database\connection\IDatabaseConnection;
 
 /**
  * Class AbstractDatabase
@@ -19,10 +19,10 @@ use chilimatic\lib\database\connection\AbstractConnection;
 abstract class AbstractDatabase implements DatabaseInterface
 {
     /**
-     * @param AbstractConnection $masterConnection
-     * @param AbstractConnection $slaveConnection
+     * @param IDatabaseConnection $masterConnection
+     * @param IDatabaseConnection $slaveConnection
      */
-    abstract public function __construct(AbstractConnection $masterConnection, AbstractConnection $slaveConnection = null);
+    abstract public function __construct(IDatabaseConnection $masterConnection, IDatabaseConnection $slaveConnection = null);
 
     /**
      * @param string $query
