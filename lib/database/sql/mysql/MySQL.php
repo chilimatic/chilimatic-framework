@@ -13,10 +13,8 @@ namespace chilimatic\lib\database\sql\mysql;
 
 use chilimatic\lib\database\AbstractDatabase;
 use chilimatic\lib\config\Config;
-use chilimatic\lib\database\AbstractConnection;
 use chilimatic\lib\database\connection\IDatabaseConnection;
-use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
-use chilimatic\lib\database\sql\connection\AbstractSQLConnection;
+use chilimatic\lib\database\sql\mysql\connection\MySQLConnection;
 use chilimatic\lib\exception\DatabaseException;
 
 /**
@@ -386,16 +384,6 @@ class MySQL extends AbstractDatabase
     public function connect(MysqlConnection $connection)
     {
         try {
-            if (!$connection->connectionDataIsSet()) {
-                throw new DatabaseException(__METHOD__ . _(sprintf(" One or More missing Parameters \nhost:%s\nusername:\n%s\npassword:%s"), $connection->getHost(), $connection->getUsername(), $connection->getPassword()), self::ERR_NO_CREDENTIALS, self::SEVERITY_LOG, __FILE__, __LINE__);
-            }
-            // because mariadb has a completely new header setting
-            $db = @new \PDO($connection->getPDOConnectionString(), $connection->getUsername(), $connection->getPassword());
-            //$db = @new \Mysqli((string) $connection->getHost(), (string) $connection->getUsername(), (string) $connection->getPassword(), $connection->getDatabase());
-            $connection->setDb($db);
-
-            // checks if it's connected or not
-            $connection->setConnected($db ? true : false);
 
             // if no connection to master and slave is possible
             if (!$connection->isConnected()) {
@@ -407,24 +395,15 @@ class MySQL extends AbstractDatabase
                 $this->db_detail = $this->getDatabaseDetail($this);
             }
 
-            // sets the charset based on the client_encoding
-            $this->setCharset((!empty($this->db_detail) ? $this->db_detail->character_set_database : MysqlConnection::STANDARD_CHARSET), $connection->getDb());
         } catch (DatabaseException $ed) {
             throw $ed;
         }
 
         if (!$this->db) {
-            $connection->setMaster(true);
             $this->db = $connection;
         }
 
         return true;
-    }
-
-
-    public function fetch($res, $mode = '')
-    {
-
     }
 
 
@@ -653,7 +632,7 @@ class MySQL extends AbstractDatabase
                 throw new DatabaseException(__METHOD__ . " No Database Connection opened", self::NO_RESSOURCE, self::SEVERITY_DEBUG, __FILE__, __LINE__);
             }
 
-            return $this->db->getDb()->prepare($query);
+            return $this->db->getDbAdapter()->prepare($query);
         } catch (DatabaseException $e) {
             throw $e;
         }
@@ -664,7 +643,7 @@ class MySQL extends AbstractDatabase
      * wrapper for the db_detail object the parameter should be a valid db
      * object
      *
-     * @param \chilimatic\lib\database\mysql\mysql|object $db
+     * @param \chilimatic\lib\database\sql\mysql\mysql|object $db
      *
      * @return MysqlDetail
      */
@@ -705,11 +684,11 @@ class MySQL extends AbstractDatabase
     }
 
     /**
-     * @return AbstractConnection|MysqlConnection
+     * @return resource
      */
     public function getDb()
     {
-        return $this->db->getDb();
+        return $this->db->getDbAdapter()->getResource();
     }
 
     /**

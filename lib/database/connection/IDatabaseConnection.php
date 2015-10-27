@@ -49,7 +49,7 @@ interface IDatabaseConnection
      *
      * @return mixed
      */
-    public function prepareAndInitilizeAdapter(IDatabaseConnectionSettings $connectionSettings, $adapterName);
+    public function prepareAndInitializeAdapter(IDatabaseConnectionSettings $connectionSettings, $adapterName);
 
 
     /**

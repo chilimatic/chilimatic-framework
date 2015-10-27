@@ -18,12 +18,14 @@ class PrintOutWebTemplate extends AbstractClient implements IAnnotationTemplate
     use MethodAnnotationTemplateHelper;
 
     /**
-     * @view Phtml
-     * @viewTemplate app/main/view/Ooops.phtml
+     * @view chilimatic\lib\view\PHtml
+     * @viewTemplate app/module/main/view/Ooops.phtml
      */
     public function send()
     {
-        $this->getView(__METHOD__);
+        $view = $this->getView(__FUNCTION__);
+        $view->logMessages = $this->logMessages;
+        echo $view->render();
     }
 
 }

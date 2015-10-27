@@ -7,7 +7,8 @@ use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
 use chilimatic\lib\database\sql\mysql\connection\MySQLConnectionSettings;
 use chilimatic\lib\exception\DatabaseException;
 use chilimatic\lib\interfaces\IFlyWeightValidator;
-use chilimatic\lib\parser\annotation\ValidatorParser;
+use chilimatic\lib\interpreter\operator\InterpreterOperatorFactory;
+use chilimatic\lib\parser\annotation\AnnotationValidatorParser;
 use chilimatic\lib\validator\AnnotationPropertyValidatorFactory;
 
 /**
@@ -77,7 +78,7 @@ abstract class AbstractSQLConnection implements IDatabaseConnection, ISQLConnect
      */
     public function __construct(IDatabaseConnectionSettings $connectionSettings, $adapterName = '') {
         // initializes the needed steps for the Connection
-        $this->prepareAndInitilizeAdapter($connectionSettings, $adapterName);
+        $this->prepareAndInitializeAdapter($connectionSettings, $adapterName);
     }
 
     /**
@@ -88,7 +89,7 @@ abstract class AbstractSQLConnection implements IDatabaseConnection, ISQLConnect
      *
      * @return mixed
      */
-    abstract public function prepareAndInitilizeAdapter(IDatabaseConnectionSettings $connectionSettings, $adapterName);
+    abstract public function prepareAndInitializeAdapter(IDatabaseConnectionSettings $connectionSettings, $adapterName);
 
     /**
      * a database connection needs certain parameters to work
@@ -114,29 +115,76 @@ abstract class AbstractSQLConnection implements IDatabaseConnection, ISQLConnect
         }
 
         $validatorFactory = new AnnotationPropertyValidatorFactory(
-            new ValidatorParser()
+            new AnnotationValidatorParser()
         );
 
+
+        $resultSet = [];
         /**
          * @var $property \ReflectionProperty
          */
         foreach ($connectionSettings->getParameterGenerator() as $property) {
-            $validatorObject = $validatorFactory->make($property);
-            if (!$validatorObject->count()) {
+
+            $validatorSetList = $validatorFactory->make($property);
+            if (!$validatorSetList) {
                 continue;
             }
-
-            $validatorObject->rewind();
 
             /**
              * @var IFlyweightValidator $validator
              */
-            foreach ($validatorObject as $validator) {
+            foreach ($validatorSetList as &$validatorSet) {
                 $property->setAccessible(true); //
 
-                if (!$validator($property->getValue($connectionSettings))) {
-                    return false;
+                // if the field is not mandatory and null it will be set as true
+                if ($validatorSet[AnnotationValidatorParser::INDEX_MANDATORY] == false && $property->getValue($connectionSettings) === null) {
+                    $validatorSet[AnnotationPropertyValidatorFactory::INDEX_RESULT] = true;
+                } else {
+                    $validatorSet[AnnotationPropertyValidatorFactory::INDEX_RESULT] =
+                        $validatorSet[AnnotationValidatorParser::INDEX_INTERFACE]($property->getValue($connectionSettings));
                 }
+                $validatorSet['value'] = $property->getValue($connectionSettings);
+                $validatorSet['name'] = $property->getName();
+            }
+            $resultSet[] = $validatorSetList;
+        }
+        unset($validatorSet, $property, $validatorFactory, $validatorSetList);
+
+
+        $translator = function ($operator, $result_old, $result_new) {
+            static $operatorFactory;
+
+            if (!$operatorFactory) {
+                $operatorFactory = new InterpreterOperatorFactory();
+            }
+
+            switch ($operator) {
+                case '&':
+                    return $operatorFactory->make('binary\InterpreterBinaryAnd', null)->operate($result_old, $result_new);
+                    break;
+                case '|':
+                    return $operatorFactory->make('binary\InterpreterBinaryOr', null)->operate($result_old, $result_new);
+                    break;
+                case '^':
+                    return $operatorFactory->make('binary\InterpreterBinaryXOr', null)->operate($result_old, $result_new);
+                    break;
+            }
+        };
+
+        $c = count($resultSet)-1;
+        for ($i = 0; $i < $c; $i++) {
+            $c2 = count($resultSet[$i]);
+            $setValue = true;
+            for ($x = 0; $x < $c2; $x++) {
+                $result = $resultSet[$i][$x][AnnotationPropertyValidatorFactory::INDEX_RESULT];
+                $expectation = $resultSet[$i][$x][AnnotationValidatorParser::INDEX_EXPECTED];
+                $operator = $resultSet[$i][$x][AnnotationValidatorParser::INDEX_OPERATOR];
+
+                $setValue &= $translator($operator, $result, $expectation);
+
+            }
+            if ($setValue == false) {
+                return false;
             }
         }
 

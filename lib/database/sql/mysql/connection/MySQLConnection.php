@@ -49,7 +49,7 @@ class MySQLConnection extends AbstractSQLConnection
      *
      * @return mixed
      */
-    public function prepareAndInitilizeAdapter(IDatabaseConnectionSettings $connectionSettings, $adapterName)
+    public function prepareAndInitializeAdapter(IDatabaseConnectionSettings $connectionSettings, $adapterName)
     {
         if (!$adapterName) {
             throw new \InvalidArgumentException('The AdapterName was not specified, this field is not Optional in the MySQL Connection');

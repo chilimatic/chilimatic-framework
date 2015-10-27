@@ -51,7 +51,9 @@ class PHtml extends AbstractView
      */
     public function render($templateFile = '')
     {
-        $this->setTemplateFile($templateFile);
+        if ($templateFile) {
+            $this->setTemplateFile($templateFile);
+        }
 
         $this->initRender();
 
@@ -59,9 +61,10 @@ class PHtml extends AbstractView
             throw new \LogicException('no template given');
         }
 
+
         try {
             ob_start();
-            include $this->templateFile;
+            include $this->getTemplateFile();
             $this->content = ob_get_clean();
         } catch (\Exception $e) {
             ob_end_clean();

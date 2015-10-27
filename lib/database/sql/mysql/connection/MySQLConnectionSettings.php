@@ -14,8 +14,8 @@ class MySQLConnectionSettings extends AbstractSQLConnectionSettings
     /**
      * Mysql default Port
      *
-     * @validator type\scalar\isInt
-     * @validator generic\NotEmpty
+     * @validator (name="type\scalar\isInt", expect="true")
+     * @validator (name="generic\NotEmpty")
      *
      * @var int
      */
@@ -23,14 +23,14 @@ class MySQLConnectionSettings extends AbstractSQLConnectionSettings
 
     /**
      * connection type
-     * @validator type\scalar\isBool
+     * @validator (name="type\scalar\isBool", expect="true", mandatory="true")
      *
      * @var bool
      */
     private $persistent = false;
 
     /**
-     * @validator type\scalar\isString
+     * @validator (name="type\scalar\isString", expect="true", operator="&", mandatory="false")
      *
      * @var string
      */

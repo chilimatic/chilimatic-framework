@@ -1,5 +1,6 @@
 <?php
 namespace chilimatic\lib\traits\general;
+use chilimatic\lib\config\Config;
 use chilimatic\lib\parser\annotation\ViewParser;
 
 /**
@@ -21,7 +22,8 @@ trait MethodAnnotationTemplateHelper
      */
     public function getView($callerName)
     {
-        if (!method_exists(__CLASS__, $callerName)) {
+        $method = str_replace(__CLASS__ . '::', '', $callerName);
+        if (!method_exists(__CLASS__, $method)) {
             return '';
         }
 
@@ -33,8 +35,9 @@ trait MethodAnnotationTemplateHelper
         $tokens = $parser->parse($method->getDocComment());
 
 
+        $class = new $tokens[0];
+        $class->setTemplateFile(Config::get('document_root') . '/' . $tokens[1]);
 
-
-        return $tokens;
+        return $class;
     }
 }

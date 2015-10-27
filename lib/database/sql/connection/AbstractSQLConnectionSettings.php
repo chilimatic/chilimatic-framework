@@ -21,8 +21,8 @@ abstract class AbstractSQLConnectionSettings implements IDatabaseConnectionSetti
 {
 
     /**
-     * @validator type\scalar\isInt
-     * @validator generic\NotEmpty
+     * @validator (name="type\scalar\isString")
+     * @validator (name="generic\NotEmpty")
      *
      * the host ip
      *
@@ -31,8 +31,8 @@ abstract class AbstractSQLConnectionSettings implements IDatabaseConnectionSetti
     private $host;
 
     /**
-     * @validator type\scalar\isString
-     * @validator generic\NotEmpty
+     * @validator (name="type\scalar\isString")
+     * @validator (name="generic\NotEmpty")
      *
      * the username
      *
@@ -41,8 +41,8 @@ abstract class AbstractSQLConnectionSettings implements IDatabaseConnectionSetti
     private $username;
 
     /**
-     * @validator type\scalar\isString
-     * @validator generic\NotEmpty
+     * @validator (name="type\scalar\isString")
+     * @validator (name="generic\NotEmpty")
      * the password
      *
      * @var string
@@ -50,14 +50,14 @@ abstract class AbstractSQLConnectionSettings implements IDatabaseConnectionSetti
     private $password;
 
     /**
-     * @validator type\scalar\isString
+     * @validator (name="type\scalar\isString", mandatory="false")
      *
      * @var string
      */
     private $database;
 
     /**
-     * @validator type\scalar\isInt
+     * @validator (name="type\scalar\isInt", mandatory="false")
      *
      * @var int
      */
@@ -215,7 +215,7 @@ abstract class AbstractSQLConnectionSettings implements IDatabaseConnectionSetti
         $properties = $reflection->getProperties();
 
         if ($reflection->getParentClass()) {
-            return $properties + $this->getReflectionPropertiesRecursive($reflection->getParentClass());
+            $properties = array_merge($properties, $this->getReflectionPropertiesRecursive($reflection->getParentClass()));
         }
 
         return $properties;
@@ -229,8 +229,12 @@ abstract class AbstractSQLConnectionSettings implements IDatabaseConnectionSetti
      */
     public function getParameterGenerator()
     {
-        $reflection = new \ReflectionClass($this);
-        $propertyList = $this->getReflectionPropertiesRecursive($reflection);
+        static $reflection, $propertyList;
+
+        if (!$reflection) {
+            $reflection = new \ReflectionClass($this);
+            $propertyList = $this->getReflectionPropertiesRecursive($reflection);
+        }
 
         foreach ($propertyList as $property) {
             yield $property;
