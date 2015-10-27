@@ -14,6 +14,12 @@ use chilimatic\lib\database\sql\mysql\connection\MySQLConnectionSettings;
 class PDOConnectionAdapterTest extends PHPUnit_Framework_TestCase
 {
 
+    public function setUp() {
+        if (!extension_loaded('mysqli')) {
+            $this->markTestSkipped('The MySQLi extension is not available.');
+        }
+    }
+
     /**
      * @return array
      */

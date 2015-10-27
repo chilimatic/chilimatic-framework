@@ -13,6 +13,12 @@ use chilimatic\lib\database\sql\mysql\connection\MySQLConnectionSettings;
 class MysqlConnectionTest extends PHPUnit_Framework_TestCase
 {
 
+    public function setUp() {
+        if (!extension_loaded('mysqli')) {
+            $this->markTestSkipped('The MySQLi extension is not available.');
+        }
+    }
+
     /**
      * @return MySQLConnectionSettings
      */
