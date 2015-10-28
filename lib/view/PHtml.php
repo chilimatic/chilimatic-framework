@@ -6,6 +6,7 @@
  * Time: 17:49
  */
 namespace chilimatic\lib\view;
+use chilimatic\lib\exception\ViewException;
 
 /**
  * Class PHtml
@@ -38,7 +39,11 @@ class PHtml extends AbstractView
     public function initRender()
     {
         if (!file_exists((string)$this->getTemplateFile())) {
-            $this->setTemplateFile($this->getConfigVariable('templatePath') . self::FILE_EXTENSION);
+            if ($this->getConfigVariable('templatePath')) {
+                $this->setTemplateFile($this->getConfigVariable('templatePath') . self::FILE_EXTENSION);
+            } else {
+                throw new ViewException('No Tpl found:' . $this->getTemplateFile());
+            }
         }
     }
 

@@ -47,7 +47,12 @@ Trait RouteTrait
     /**
      * @var string
      */
-    private $defaultNameSpace = '\chilimatic\app\module';
+    private $defaultAppNameSpace = '\app\module';
+
+    /**
+     * @var string
+     */
+    private $applicationNameSpace = '';
 
     /**
      * @var string
@@ -79,11 +84,14 @@ Trait RouteTrait
     public function getDefaultRoute()
     {
         try {
+            // check if we have a config
+            $this->loadConfig();
+
             return $this->buildRouteMap(
                 $this->defaultUrlDelimiter,
                 [
                     'object' => implode('\\', $this->generateClassName(
-                        $this->defaultNameSpace,
+                        $this->applicationNameSpace . $this->defaultAppNameSpace,
                         $this->defaultModule,
                         $this->defaultControllerPath,
                         $this->defaultClass)
@@ -96,6 +104,19 @@ Trait RouteTrait
             throw $e;
         }
     }
+
+    /**
+     * loads the config
+     */
+    public function loadConfig()
+    {
+        $config = \chilimatic\lib\di\ClosureFactory::getInstance()->get('config');
+        $ns = $config->get('application-namespace');
+        if ($ns) {
+            $this->applicationNameSpace = $config->get('application-namespace');
+        }
+    }
+
 
     /**
      * returns the map
@@ -156,7 +177,7 @@ Trait RouteTrait
 
             $class     = implode('\\',
                 $this->generateClassName(
-                    $this->defaultNameSpace,
+                    $this->defaultAppNameSpace,
                     $module,
                     $this->defaultControllerPath,
                     $className
@@ -168,7 +189,7 @@ Trait RouteTrait
         } else {
             $className = $this->defaultClass;
             $class     = implode('\\', $this->generateClassName(
-                $this->defaultNameSpace,
+                $this->defaultAppNameSpace,
                 $this->defaultModule,
                 $this->defaultControllerPath,
                 $this->defaultClass)
@@ -289,7 +310,7 @@ Trait RouteTrait
      */
     public function getDefaultNameSpace()
     {
-        return $this->defaultNameSpace;
+        return $this->defaultAppNameSpace;
     }
 
     /**

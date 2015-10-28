@@ -28,6 +28,9 @@ class NodeRoute extends AbstractRoute
     private $binaryTree;
 
 
+    /**
+     * @param string $path
+     */
     public function __construct($path)
     {
         $this->binaryTree = new BinaryTree();
