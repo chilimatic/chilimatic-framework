@@ -7,10 +7,10 @@
  *
  */
 
-namespace chilimatic\lib\Tool;
+namespace chilimatic\lib\tool;
 
 use chilimatic\lib\config\Config;
-use chilimatic\lib\exception\Exception_InvalidArgument;
+use chilimatic\lib\exception\InvalidArgumentException;
 
 /**
  * Class Tool
@@ -245,7 +245,7 @@ class Tool
      * @param $key                                                          string
      * @param \chilimatic\Tool\SORT_ASC|\chilimatic\Tool\SORT_DESC|int $asc SORT_ASC|SORT_DESC
      *
-     * @throws Exception_InvalidArgument
+     * @throws InvalidArgumentException
      */
     public static function usortByArrayKey(&$array, $key, $asc = SORT_ASC)
     {
@@ -255,7 +255,7 @@ class Tool
             SORT_DESC
         );
 
-        if (!in_array($asc, $sort_flags)) throw new Exception_InvalidArgument('sort flag only accepts SORT_ASC or SORT_DESC');
+        if (!in_array($asc, $sort_flags)) throw new InvalidArgumentException('sort flag only accepts SORT_ASC or SORT_DESC');
 
         $cmp = function (array $a, array $b) use ($key, $asc, $sort_flags) {
             if (!is_array($key)) { // just one key and sort direction
@@ -377,5 +377,25 @@ class Tool
         return $res;
     }
 
+    /**
+     * @param string $clearTextPassword
+     * @param string $salt
+     * @param int $algorithm
+     * @param array $options
+     *
+     * @return bool|string
+     */
+    static public function userPasswordGenerator($clearTextPassword, $salt, $algorithm = PASSWORD_BCRYPT, array $options = []) {
+        return password_hash($salt . $clearTextPassword, $algorithm, $options);
+    }
+
+    /**
+     * @param $seed
+     *
+     * @return string
+     */
+    static public function generateSalt($seed) {
+        return uniqid($seed);
+    }
 
 }

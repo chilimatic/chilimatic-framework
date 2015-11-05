@@ -1,7 +1,7 @@
 <?php
 namespace chilimatic\lib\tool;
 
-use \chilimatic\lib\exception\Exception_File;
+use \chilimatic\lib\exception\FileException;
 use \chilimatic\lib\config\Config;
 
 /**
@@ -21,7 +21,7 @@ class Pdf
      * @param $target_file_name
      * @param bool $multiple
      *
-     * @throws \chilimatic\lib\exception\Exception_File|\Exception
+     * @throws \chilimatic\lib\exception\FileException|\Exception
      * @return bool
      */
     public static function concat_pdf($path_array, $target_file_name, $multiple = false)
@@ -32,7 +32,7 @@ class Pdf
         $unique    = array();
         try {
             if (empty($path_array)) {
-                throw new Exception_File((string)"\$path_array was empty", (int)Config::get('file_error'), (int)Config::get('error_lvl_low'), (string)__FILE__, (string)__LINE__);
+                throw new FileException((string)"\$path_array was empty", (int)Config::get('file_error'), (int)Config::get('error_lvl_low'), (string)__FILE__, (string)__LINE__);
             }
 
             foreach ($path_array as $pdf_file) {
@@ -47,7 +47,7 @@ class Pdf
             unset($pdf_file);
 
             if (empty($cmd_files)) {
-                throw new Exception_File((string)"No valid File within the whole array", (int)Config::get('file_error'), (int)Config::get('error_lvl_low'), (string)__FILE__, (string)__LINE__);
+                throw new FileException((string)"No valid File within the whole array", (int)Config::get('file_error'), (int)Config::get('error_lvl_low'), (string)__FILE__, (string)__LINE__);
             }
 
             $cmd .= (string)$cmd_files;
@@ -60,10 +60,10 @@ class Pdf
             system($cmd . " cat output $target_file_name", $output);
 
             if (strpos(strtolower($output), 'err') !== false) {
-                throw new Exception_File((string)"Error generating the pdf file $cmd\n$output", (int)Config::get('file_error'), (int)Config::get('error_lvl_low'), (string)__FILE__, (string)__LINE__);
+                throw new FileException((string)"Error generating the pdf file $cmd\n$output", (int)Config::get('file_error'), (int)Config::get('error_lvl_low'), (string)__FILE__, (string)__LINE__);
             }
             unset($cmd, $output);
-        } catch (Exception_File $e) {
+        } catch (FileException $e) {
             throw $e;
         }
 

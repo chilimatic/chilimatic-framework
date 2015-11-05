@@ -84,14 +84,11 @@ Trait RouteTrait
     public function getDefaultRoute()
     {
         try {
-            // check if we have a config
-            $this->loadConfig();
-
             return $this->buildRouteMap(
                 $this->defaultUrlDelimiter,
                 [
                     'object' => implode('\\', $this->generateClassName(
-                        $this->applicationNameSpace . $this->defaultAppNameSpace,
+                        $this->getApplicationNameSpace() . $this->defaultAppNameSpace,
                         $this->defaultModule,
                         $this->defaultControllerPath,
                         $this->defaultClass)
@@ -113,7 +110,7 @@ Trait RouteTrait
         $config = \chilimatic\lib\di\ClosureFactory::getInstance()->get('config');
         $ns = $config->get('application-namespace');
         if ($ns) {
-            $this->applicationNameSpace = $config->get('application-namespace');
+            $this->applicationNameSpace = $ns;
         }
     }
 
@@ -174,10 +171,10 @@ Trait RouteTrait
         if (count($pathPart) >= 1) {
             $module    = empty($pathPart[0]) ? $this->defaultModule : $pathPart[0];
             $className = empty($pathPart[1]) ? $this->defaultClass : $pathPart[1];
-
+            $test = $this->getApplicationNameSpace(). $this->defaultAppNameSpace;
             $class     = implode('\\',
                 $this->generateClassName(
-                    $this->defaultAppNameSpace,
+                    $this->getApplicationNameSpace(). $this->defaultAppNameSpace,
                     $module,
                     $this->defaultControllerPath,
                     $className
@@ -398,5 +395,48 @@ Trait RouteTrait
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getDefaultAppNameSpace()
+    {
+        return $this->defaultAppNameSpace;
+    }
+
+    /**
+     * @param string $defaultAppNameSpace
+     *
+     * @return $this
+     */
+    public function setDefaultAppNameSpace($defaultAppNameSpace)
+    {
+        $this->defaultAppNameSpace = $defaultAppNameSpace;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApplicationNameSpace()
+    {
+        if (!$this->applicationNameSpace) {
+            $this->loadConfig();
+        }
+
+        return $this->applicationNameSpace;
+    }
+
+    /**
+     * @param string $applicationNameSpace
+     *
+     * @return $this
+     */
+    public function setApplicationNameSpace($applicationNameSpace)
+    {
+        $this->applicationNameSpace = $applicationNameSpace;
+
+        return $this;
+    }
 
 }
