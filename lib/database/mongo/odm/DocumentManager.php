@@ -26,6 +26,14 @@ use chilimatic\lib\parser\annotation\AnnotationOdmParser;
 class DocumentManager
 {
     /**
+     * the different indexes of the mongoCollection return array
+     */
+    const RESULT_CONNECTION_ID_INDEX = 'connectionid';
+    const RESULT_ERROR_INDEX         = 'err';
+    const RESULT_OK_INDEX            = 'ok';
+    const N_INDEX                    = 'n';
+
+    /**
      * @trait
      */
     use ErrorLogTrait;
@@ -64,6 +72,17 @@ class DocumentManager
 
 
     /**
+     * @var []
+     */
+    private $modelPrototypeStorage;
+
+    /**
+     * @var []
+     */
+    private $lastResult;
+
+
+    /**
      * DocumentManager constructor.
      *
      * @param \MongoClient $connection
@@ -71,9 +90,10 @@ class DocumentManager
      */
     public function __construct(\MongoClient $connection, AnnotationOdmParser $parser)
     {
-        $this->connection   = $connection;
-        $this->modelCache   = new ModelCache();
-        $this->parser       = $parser;
+        $this->connection           = $connection;
+        $this->modelCache           = new ModelCache();
+        $this->parser               = $parser;
+        $this->modelTemplateStorage = [];
     }
 
     /**
@@ -85,15 +105,19 @@ class DocumentManager
     {
         if (!isset($this->annotationCache[$modelName])) {
             $reflection = new \ReflectionClass($modelName);
-            $comment = $reflection->getDocComment();
+            $comment    = $reflection->getDocComment();
             $this->annotationCache[$modelName] = $this->parser->parse($comment);
         }
 
         $configuration = $this->annotationCache[$modelName];
-
         return $configuration;
     }
 
+    /**
+     * @param $configuration
+     *
+     * @return \MongoCollection|null
+     */
     private function getCollectionBy($configuration)
     {
         if (!$configuration) {
@@ -116,25 +140,39 @@ class DocumentManager
             return new \SplObjectStorage();
         }
 
-        $configuration = $this->getModelConfiguration($modelName);
-        $collection = $this->getCollectionBy($configuration);
+        $configuration  = $this->getModelConfiguration($modelName);
+        $collection     = $this->getCollectionBy($configuration);
 
-        $resultSet = $collection->find($param);
-        $result = new \SplObjectStorage();
+        $resultSet  = $collection->find($param);
+        $result     = new \SplObjectStorage();
         // clone is much faster than new
-        $tpl = new $modelName();
+        if (!$this->modelPrototypeStorage[$modelName]) {
+            $this->modelTemplateStorage[$modelName] = new $modelName();
+        }
+
         foreach ($resultSet as $data) {
-            $nModel = $this->fillModel(clone $tpl, $data);
+            $nModel = $this->fillModel(
+                clone $this->modelTemplateStorage[$modelName],
+                $data
+            );
             $result->attach($nModel);
         }
 
         return $result;
     }
 
-    private function fillModel(AbstractModel $model, array $data) {
+    /**
+     * @param AbstractModel $model
+     * @param array $data
+     *
+     * @return AbstractModel
+     */
+    private function fillModel(AbstractModel $model, array $data)
+    {
         if (!$data) {
             return $model;
         }
+
         $reflection = new \ReflectionClass($model);
         foreach($reflection->getProperties() as $property) {
             $property->setAccessible(true);
@@ -149,7 +187,7 @@ class DocumentManager
      * @param string $modelName
      * @param $param
      *
-     * @return AbstractModel
+     * @return AbstractModel|null
      */
     public function findOneBy($modelName, $param = [])
     {
@@ -162,21 +200,35 @@ class DocumentManager
         );
         $result = $collection->findOne($param);
 
-        return $this->fillModel(new $modelName(), $result);
+        if (!$result) {
+            return null;
+        }
+
+        // clone is much faster than new [speed over memory!]
+        if (!$this->modelPrototypeStorage[$modelName]) {
+            $this->modelTemplateStorage[$modelName] = new $modelName();
+        }
+
+        return $this->fillModel($this->modelTemplateStorage[$modelName], $result);
     }
 
     /**
      * @param AbstractModel $model
+     *
+     * @return array|bool
      */
     public function delete(AbstractModel $model)
     {
-        if ($this->modelCache->get($model)) {
-            $this->modelCache->remove($model);
-        }
+        $collection = $this->getCollectionBy(
+            $this->getModelConfiguration(get_class($model))
+        );
 
+        $this->setLastResult(
+            $collection->remove($this->getModelDataAsArray($model))
+        );
 
+        return (bool) ($this->lastResult) ? $this->lastResult[self::RESULT_OK_INDEX] : false;
     }
-
 
     /**
      * @param AbstractModel $model
@@ -189,7 +241,11 @@ class DocumentManager
             $this->getModelConfiguration(get_class($model))
         );
 
-        return $collection->insert($this->getModelData($model));;
+        $this->setLastResult(
+            $collection->insert($this->getModelDataAsArray($model))
+        );
+
+        return (bool) ($this->lastResult) ? $this->lastResult[self::RESULT_OK_INDEX] : false;
     }
 
     /**
@@ -201,6 +257,7 @@ class DocumentManager
     {
         $reflectionClass = new \ReflectionClass($model);
         $set = [];
+
         foreach ($reflectionClass->getProperties() as $property) {
             $property->setAccessible(true);
             $set[$property->getName()] = $property->getValue($model);
@@ -230,4 +287,23 @@ class DocumentManager
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
+    public function getLastResult()
+    {
+        return $this->lastResult;
+    }
+
+    /**
+     * @param array $lastResult
+     *
+     * @return $this
+     */
+    public function setLastResult(array $lastResult = null)
+    {
+        $this->lastResult = $lastResult;
+
+        return $this;
+    }
 }
