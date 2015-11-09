@@ -30,10 +30,4 @@ interface ISQLConnectionSettings {
      * @return mixed
      */
     public function setConnectionParam($host, $username, $password, $database = null, $settingList = []);
-
-
-    /**
-     * @return \Generator
-     */
-    public function getParameterGenerator();
 }

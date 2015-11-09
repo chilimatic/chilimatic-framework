@@ -3,8 +3,7 @@
 namespace chilimatic\lib\validator;
 
 use chilimatic\lib\interfaces\IFlyWeightParser;
-use chilimatic\lib\interpreter\operator\InterpreterOperatorFactory;
-use chilimatic\lib\parser\Annotation\AnnotationValidatorParser;
+use chilimatic\lib\parser\annotation\AnnotationValidatorParser;
 use chilimatic\lib\transformer\string\AnnotationValidatorClassName;
 use chilimatic\lib\transformer\string\AnnotationValidatorPrependNameSpace;
 
@@ -46,6 +45,12 @@ class AnnotationPropertyValidatorFactory
     private $namespaceTransformer;
 
     /**
+     * @var []
+     */
+    private $validatorTemplates;
+
+
+    /**
      * @param IFlyWeightParser $parser
      */
     public function __construct(IFlyWeightParser $parser)
@@ -79,7 +84,6 @@ class AnnotationPropertyValidatorFactory
         $validatorSet = [];
         $this->missingValidators = [];
 
-
         foreach ($result as $validatorToken) {
             // check if the annotation is with the full namespace already otherwise put it relative
             $className = $this->namespaceTransformer->transform(
@@ -90,13 +94,17 @@ class AnnotationPropertyValidatorFactory
                     AnnotationValidatorPrependNameSpace::NAMESPACE_OPTION_INDEX => __NAMESPACE__
                 ]
             );
-
             if (class_exists($className, true)) {
+                // keep the validators in the runtime -> they are stateless and can be used as a reference
+                if (empty($this->validatorTemplates[$className])) {
+                    $this->validatorTemplates[$className] = new $className();
+                }
+
                 $validatorSet[] = [
                     self::INDEX_RESULT                             => null,
                     AnnotationValidatorParser::INDEX_MANDATORY     => $validatorToken[AnnotationValidatorParser::INDEX_MANDATORY],
                     AnnotationValidatorParser::INDEX_OPERATOR      => $validatorToken[AnnotationValidatorParser::INDEX_OPERATOR],
-                    AnnotationValidatorParser::INDEX_INTERFACE     => new $className(),
+                    AnnotationValidatorParser::INDEX_INTERFACE     => $this->validatorTemplates[$className],
                     AnnotationValidatorParser::INDEX_EXPECTED      => $validatorToken[AnnotationValidatorParser::INDEX_EXPECTED],
                 ];
             } else {

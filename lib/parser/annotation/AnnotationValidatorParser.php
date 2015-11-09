@@ -8,7 +8,7 @@
  * File: AnnotationValidatorParser.php
  */
 
-namespace chilimatic\lib\parser\Annotation;
+namespace chilimatic\lib\parser\annotation;
 
 use chilimatic\lib\interfaces\IFlyWeightParser;
 use chilimatic\lib\interpreter\type\InterpreterTypeBoolean;

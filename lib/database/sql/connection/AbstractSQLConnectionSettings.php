@@ -11,14 +11,20 @@ namespace chilimatic\lib\database\sql\connection;
  * File: AbstractSqlConnectionSettings.php
  */
 use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
+use chilimatic\lib\interfaces\ISelfValidator;
+use chilimatic\lib\traits\validator\PropertyValidatorGeneratorTrait;
 
 /**
  * Class AbstractSqlConnectionSettings
  *
  * @package chilimatic\lib\database\sql\connection
  */
-abstract class AbstractSQLConnectionSettings implements IDatabaseConnectionSettings, ISQLConnectionSettings
+abstract class AbstractSQLConnectionSettings implements IDatabaseConnectionSettings, ISQLConnectionSettings, ISelfValidator
 {
+    /**
+     * trait implements the ISelfValidator
+     */
+    use PropertyValidatorGeneratorTrait;
 
     /**
      * @validator (name="type\scalar\isString")
@@ -203,41 +209,5 @@ abstract class AbstractSQLConnectionSettings implements IDatabaseConnectionSetti
         $this->port = $port;
 
         return $this;
-    }
-
-    /**
-     * @param \ReflectionClass $reflection
-     *
-     * @return \ReflectionProperty[]
-     */
-    public function getReflectionPropertiesRecursive(\ReflectionClass $reflection)
-    {
-        $properties = $reflection->getProperties();
-
-        if ($reflection->getParentClass()) {
-            $properties = array_merge($properties, $this->getReflectionPropertiesRecursive($reflection->getParentClass()));
-        }
-
-        return $properties;
-    }
-
-
-    /**
-     * returns the reflection Properties as Traversable
-     *
-     * @return \Generator
-     */
-    public function getParameterGenerator()
-    {
-        static $reflection, $propertyList;
-
-        if (!$reflection) {
-            $reflection = new \ReflectionClass($this);
-            $propertyList = $this->getReflectionPropertiesRecursive($reflection);
-        }
-
-        foreach ($propertyList as $property) {
-            yield $property;
-        }
     }
 }
