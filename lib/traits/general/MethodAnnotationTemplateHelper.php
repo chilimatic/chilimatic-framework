@@ -2,6 +2,7 @@
 namespace chilimatic\lib\traits\general;
 use chilimatic\lib\config\Config;
 use chilimatic\lib\parser\annotation\ViewParser;
+use chilimatic\lib\view\AbstractView;
 
 /**
  *
@@ -14,13 +15,12 @@ use chilimatic\lib\parser\annotation\ViewParser;
 
 trait MethodAnnotationTemplateHelper
 {
-
     /**
      * @param string $callerName
      *
-     * @return array|string
+     * @return AbstractView
      */
-    public function getView($callerName)
+    public function getViewFromAnnotation($callerName, $relativePath)
     {
         $method = str_replace(__CLASS__ . '::', '', $callerName);
         if (!method_exists(__CLASS__, $method)) {
@@ -34,9 +34,15 @@ trait MethodAnnotationTemplateHelper
         // checks the doc header of the class
         $tokens = $parser->parse($method->getDocComment());
 
-
+        /**
+         * @var \chilimatic\lib\view\AbstractView $class
+         */
         $class = new $tokens[0];
-        $class->setTemplateFile(Config::get('document_root') . '/' . $tokens[1]);
+
+
+        if ($relativePath && $tokens[1]) {
+            $class->setTemplateFile($relativePath . '/' . $tokens[1]);
+        }
 
         return $class;
     }

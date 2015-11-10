@@ -17,6 +17,6 @@ interface IAnnotationTemplate
      *
      * @return string
      */
-    public function getView($name);
+    public function getViewFromAnnotation($name);
 
 }

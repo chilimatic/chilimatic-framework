@@ -10,11 +10,15 @@
 
 namespace chilimatic\lib\log\client;
 
+use chilimatic\lib\config\Config;
 use chilimatic\lib\template\IAnnotationTemplate;
 use chilimatic\lib\traits\general\MethodAnnotationTemplateHelper;
 
 class PrintOutWebTemplate extends AbstractClient implements IAnnotationTemplate
 {
+    /**
+     * implements the IAnnotationInterface
+     */
     use MethodAnnotationTemplateHelper;
 
     /**
@@ -23,9 +27,8 @@ class PrintOutWebTemplate extends AbstractClient implements IAnnotationTemplate
      */
     public function send()
     {
-        $view = $this->getView(__FUNCTION__);
+        $view = $this->getViewFromAnnotation(__FUNCTION__, Config::get('document_root'));
         $view->logMessages = $this->logMessages;
         echo $view->render();
     }
-
 }

@@ -259,8 +259,13 @@ class DocumentManager
         $set = [];
 
         foreach ($reflectionClass->getProperties() as $property) {
-            $property->setAccessible(true);
-            $set[$property->getName()] = $property->getValue($model);
+            /**
+             * @todo move the check out into a validator
+             */
+            if (strpos($property->getDocComment(), 'ODM\\Property') !== false) {
+                $property->setAccessible(true);
+                $set[$property->getName()] = $property->getValue($model);
+            }
         }
 
         return $set;

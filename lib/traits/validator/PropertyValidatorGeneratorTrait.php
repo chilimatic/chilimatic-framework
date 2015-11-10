@@ -1,6 +1,5 @@
 <?php
 namespace chilimatic\lib\traits\validator;
-use chilimatic\lib\interfaces\IFlyWeightValidator;
 use chilimatic\lib\interpreter\operator\InterpreterOperatorFactory;
 use chilimatic\lib\parser\annotation\AnnotationValidatorParser;
 use chilimatic\lib\validator\AnnotationPropertyValidatorFactory;
