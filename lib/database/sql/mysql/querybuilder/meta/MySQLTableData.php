@@ -9,6 +9,7 @@
  */
 namespace chilimatic\lib\database\sql\mysql\querybuilder\meta;
 use chilimatic\lib\database\sql\querybuilder\meta\AbstractSQLTableData;
+use chilimatic\lib\exception\DatabaseException;
 
 
 /**
@@ -32,6 +33,10 @@ class MySQLTableData extends AbstractSQLTableData
          * @var \PDOStatement $stmt
          */
         $stmt = $this->db->getDb()->query('desc ' . $this->tableName);
+        if (!$stmt) {
+            throw new DatabaseException('Could not get table description :' . print_r($stmt->errorInfo(), true));
+        }
+
         $this->columnData = $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
