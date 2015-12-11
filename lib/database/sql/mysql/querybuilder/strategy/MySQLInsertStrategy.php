@@ -29,8 +29,7 @@ class MySQLInsertStrategy extends AbstractStrategy
     {
         return implode(' ', [
             $this->generateInsertClause($this->tableData),
-            $this->generateSetClause($this->generateFieldList()),
-            $this->generateWhereClause($this->generateKeyList()),
+            $this->generateSetClause($this->generateFieldList())
         ]);
     }
 }

@@ -100,12 +100,16 @@ class EntityManager
         $stmt = $this->db->prepare($query);
 
         foreach ($param as $set) {
-            if (isset($set['value'])) {
+            if (isset($set['value']) || isset($set['name'])) {
                 $value = &$set['value'];
                 $key   = $set['name'];
             } else {
                 $value = &$set[1];
                 $key   = $set[0];
+            }
+
+            if (!$key) {
+                continue;
             }
             $stmt->bindParam($key, $value);
         }
@@ -317,7 +321,14 @@ class EntityManager
 
         $stmt = $this->prepare($data[0], $data[1]);
 
-        return $stmt->execute();
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            $info = $stmt->errorInfo();
+            error_log(print_r($info), true);
+            return false;
+        }
+
     }
 
     /**
@@ -333,7 +344,7 @@ class EntityManager
     }
 
     /**
-     * @return \chilimatic\lib\database\ORM\querybuilder\AbstractQueryBuilder
+     * @return AbstractQueryBuilder
      */
     public function getQueryBuilder()
     {

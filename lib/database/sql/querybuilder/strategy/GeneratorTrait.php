@@ -60,7 +60,7 @@ Trait GeneratorTrait {
      * @return string
      */
     public function generateInsertClause(AbstractSQLTableData $tableData) {
-        return "INSERT INTO " . $tableData->getTableNameWithPrefix();
+        return "INSERT INTO " . $tableData->getTableName();
     }
 
     /**

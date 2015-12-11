@@ -21,7 +21,7 @@ class MySQLTableData extends AbstractSQLTableData
 {
 
     /**
-     * @return void
+     * @throws \Exception
      */
     protected function fetchTableMetaData()
     {
@@ -34,10 +34,14 @@ class MySQLTableData extends AbstractSQLTableData
          */
         $stmt = $this->db->getDb()->query('desc ' . $this->tableName);
         if (!$stmt) {
-            throw new DatabaseException('Could not get table description :' . print_r($this->db->getDb()->errorInfo(), true));
+            throw new \Exception('Could not get table description :' . print_r($this->db->getDb()->errorInfo(), true));
         }
 
-        $this->columnData = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $this->columnData = [];
+        foreach ($stmt->fetchAll(\PDO::FETCH_ASSOC) as $set) {
+            $this->columnData[$set['Field']] = $set;
+        }
+        unset($set, $stmt);
     }
 
     /**

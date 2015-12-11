@@ -64,7 +64,6 @@ class MySQLQueryBuilder extends AbstractQueryBuilder
          */
         $this->tableData = new MySQLTableData($db);
         $this->paramTransformer = new DynamicSQLParameter();
-
         parent::__construct($cache, $db);
     }
 
@@ -160,7 +159,22 @@ class MySQLQueryBuilder extends AbstractQueryBuilder
     {
         $newModelData = [];
         foreach ($modelData as $column) {
-            $newModelData[] = [$this->paramTransformer->transform($column['name']), $column['value']];
+            $name = $this->paramTransformer->transform($column['name']);
+
+            switch (true) {
+                case is_object($column['value']):
+                    switch (true) {
+                        case ($column['value'] instanceOf \DateTime):
+                            $newModelData[] = [$name, (string) $column['value']->format('Y-m-d H:i:s')];
+                            break;
+                    }
+
+                    break;
+                default:
+                    $newModelData[] = [$name, (string) $column['value']];
+                    break;
+            }
+
         }
 
         return $newModelData;
@@ -169,8 +183,9 @@ class MySQLQueryBuilder extends AbstractQueryBuilder
 
     /**
      * @param AbstractModel $model
+     * @param null $diff
      *
-     * @return mixed
+     * @return array
      */
     public function generateUpdateForModel(AbstractModel $model, $diff = null)
     {
@@ -187,7 +202,7 @@ class MySQLQueryBuilder extends AbstractQueryBuilder
 
         return [
             $strategy->generateSQLStatement(),
-            $strategy->getModelData()
+            $this->prepareModelDataForStatement($strategy->getModelData())
         ];
     }
 
