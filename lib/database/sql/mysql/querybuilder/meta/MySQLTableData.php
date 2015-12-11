@@ -34,7 +34,7 @@ class MySQLTableData extends AbstractSQLTableData
          */
         $stmt = $this->db->getDb()->query('desc ' . $this->tableName);
         if (!$stmt) {
-            throw new DatabaseException('Could not get table description :' . print_r($stmt->errorInfo(), true));
+            throw new DatabaseException('Could not get table description :' . print_r($this->db->getDb()->errorInfo(), true));
         }
 
         $this->columnData = $stmt->fetchAll(\PDO::FETCH_ASSOC);
