@@ -142,20 +142,25 @@ abstract class AbstractQueryBuilder implements IQueryBuilder
      */
     public function extractRelations(\ReflectionClass $reflection)
     {
-        $relation     = new \SplFixedArray();
         $propertyList = $reflection->getDefaultProperties();
 
         if ($this->cache && $res = $this->cache->get(md5(json_encode($propertyList)))) {
             return $res;
         }
 
+        $relation = [];
+
         foreach ($propertyList as $name => $value) {
-            $d = $this->parser->parse($reflection->getProperty($name)->getDocComment());
+            $comment = $reflection->getProperty($name)->getDocComment();
+            $d = $this->parser->parse($comment);
             if (!$d) {
                 continue;
             }
-            $relation->setSize($relation->getSize() + 1);
-            $relation[$relation->count() - 1] = $d;
+            $relation[] = [
+                'mapping_id' => $d[0],
+                'model'      => $d[1],
+                'target'     => $name
+            ];
         }
 
         if ($this->cache) {

@@ -39,7 +39,6 @@ trait MethodAnnotationTemplateHelper
          */
         $class = new $tokens[0];
 
-
         if ($relativePath && $tokens[1]) {
             $class->setTemplateFile($relativePath . '/' . $tokens[1]);
         }

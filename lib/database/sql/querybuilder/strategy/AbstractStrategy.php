@@ -105,4 +105,25 @@ abstract class AbstractStrategy implements ISQLStrategy
         return $this;
     }
 
+
+    public function getPrimaryKeySet()
+    {
+        $set = [];
+        $primaryKey = $this->getTableData()->getPrimaryKey();
+        $keyCount = count($primaryKey);
+        $hitCount = 0;
+
+        foreach ($this->getModelData() as $dataMap) {
+            if ($keyCount == $hitCount) {
+                break;
+            }
+            // for
+            if (in_array($dataMap['name'], $primaryKey)) {
+                $set[] = $dataMap;
+                $hitCount++;
+            }
+        }
+        return $set;
+    }
+
 }

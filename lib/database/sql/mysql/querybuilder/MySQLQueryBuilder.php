@@ -227,7 +227,7 @@ class MySQLQueryBuilder extends AbstractQueryBuilder
 
         return [
             $strategy->generateSQLStatement(),
-            $strategy->getModelData()
+            $this->prepareModelDataForStatement($strategy->getPrimaryKeySet())
         ];
     }
 

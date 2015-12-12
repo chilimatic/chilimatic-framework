@@ -18,11 +18,13 @@ Trait ConsistencyTrait
      */
     public function checkRelations($relationList)
     {
-        if (!$relationList) return true;
-        $relationList->rewind();
+        if (!$relationList) {
+            return true;
+        }
+
         foreach ($relationList as $entry) {
-            if (!class_exists($entry[1])) {
-                throw new \ErrorException($entry[1] . ' Relations Class does not exist!');
+            if (!class_exists($entry['model'])) {
+                throw new \ErrorException($entry['model'] . ' Relations Class does not exist!');
             }
         }
 

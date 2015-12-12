@@ -69,7 +69,7 @@ Trait GeneratorTrait {
      * @return string
      */
     public function generateDeleteClause(AbstractSQLTableData $tableData) {
-        return "DELETE FROM " . $tableData->getTableNameWithPrefix();
+        return "DELETE FROM " . $tableData->getTableName();
     }
 
     /**
@@ -78,7 +78,7 @@ Trait GeneratorTrait {
      * @return string
      */
     public function generateUpdateClause(AbstractSQLTableData $tableData) {
-        return "UPDATE " . $tableData->getTableNameWithPrefix();
+        return "UPDATE " . $tableData->getTableName();
     }
 
     /**

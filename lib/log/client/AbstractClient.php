@@ -156,5 +156,8 @@ abstract class AbstractClient implements ClientInterface
      */
     abstract public function send();
 
-
+    public function __destruct() {
+        // if the logger is destroyed we always send the errors :)
+        $this->send();
+    }
 }

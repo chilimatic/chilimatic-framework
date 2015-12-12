@@ -33,11 +33,6 @@ class EntityManager
     use ErrorLogTrait;
 
     /**
-     * @var string
-     */
-    const setterPrefix = 'set';
-
-    /**
      * @var AbstractDatabase
      */
     public $db;
@@ -240,12 +235,15 @@ class EntityManager
         }
 
         $p = (array)get_object_vars($row);
-
+        $reflection = new \ReflectionClass($model);
         foreach ($p as $property => $value) {
-            $property = str_replace('_', '', $property);
-            $m        = self::setterPrefix . ucfirst($property);
-            if (method_exists($model, $m)) {
-                $model->$m($value);
+            try {
+                $property = $reflection->getProperty($property);
+                $property->setAccessible(true);
+                $property->setValue($model, $value);
+            } catch (\Exception $e) {
+                $this->log(ILog::T_ERROR, $e->getMessage());
+                continue;
             }
         }
 
@@ -264,25 +262,29 @@ class EntityManager
         if (!$this->queryBuilder->fetchCacheData($model)) {
             return $model;
         }
+        $reflection = new \ReflectionClass($model);
 
         foreach ($this->queryBuilder->fetchCacheData($model)['relationList'] as $relation) {
-            $injectionModel = new $relation[1]();
-            if (strpos($relation[1], '\\') !== false) {
-                $tmp      = explode('\\', $relation[1]);
-                $property = array_pop($tmp);
-            } else {
-                $property = $relation[1];
+            $injectionModel = new $relation['model']();
+            try {
+                $property = $reflection->getProperty($relation['target']);
+            } catch (\Exception $e) {
+                $this->log(ILog::T_ERROR, $e->getMessage());
+                continue;
             }
-            $m = self::setterPrefix . $property;
+
+            $property->setAccessible(true);
 
             /**
              * @todo implement dynamic mappings from doc head
              */
             if (!$this->lazyLoading) {
-                $this->queryBuilder->generateSelectForModel($injectionModel, ['id' => $relation[0]]);
+                $mappingProperty = $reflection->getProperty($relation['mapping_id']);
+                $mappingProperty->setAccessible(true);
+                $this->findOneBy($injectionModel, ['id' => $mappingProperty->getValue($model)]);
+                unset($mappingProperty);
             }
-
-            $model->$m($injectionModel);
+            $property->setValue($model, $injectionModel);
         }
 
         return $model;
@@ -298,7 +300,13 @@ class EntityManager
         }
         
         $stmt = $this->prepare($data[0], $data[1]);
-        return $stmt->execute();
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            $this->log(ILog::T_ERROR, print_r($stmt->errorInfo()), true);
+            return false;
+        }
     }
 
 
@@ -324,8 +332,7 @@ class EntityManager
         if ($stmt->execute()) {
             return true;
         } else {
-            $info = $stmt->errorInfo();
-            error_log(print_r($info), true);
+            $this->log(ILog::T_ERROR, print_r($stmt->errorInfo()), true);
             return false;
         }
 

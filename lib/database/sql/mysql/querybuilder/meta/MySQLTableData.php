@@ -53,7 +53,6 @@ class MySQLTableData extends AbstractSQLTableData
             return $this->primaryKey;
         }
 
-
         foreach ($this->getColumnData() as $data) {
             if (!empty($data['Key']) && $data['Key'] == 'PRI') {
                 $this->primaryKey[] = $data['Field'];
