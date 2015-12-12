@@ -158,20 +158,22 @@ Trait RouteTrait
 
     /**
      * @param $path
+     * @param array|null $urlParts
      *
-     * @return null
+     * @return Map|null
      */
-    public function getStandardRouting($path)
+    public function getStandardRoute(array $urlParts = null)
     {
-        // remove starting and ending slash
-        $path     = trim($path, $this->defaultUrlDelimiter);
-        $pathPart = explode($this->defaultUrlDelimiter, $path);
+        // if there is the slash in the positon zero remove it
+        if (isset($urlParts[0]) && $urlParts[0] == '/') {
+            array_shift($urlParts);
+        }
+
 
         // more than 1 part means class/method/[value or param{/value}]
-        if (count($pathPart) >= 1) {
-            $module    = empty($pathPart[0]) ? $this->defaultModule : $pathPart[0];
-            $className = empty($pathPart[1]) ? $this->defaultClass : $pathPart[1];
-            $test = $this->getApplicationNameSpace(). $this->defaultAppNameSpace;
+        if (count($urlParts) >= 1) {
+            $module    = empty($urlParts[0]) ? $this->defaultModule : $urlParts[0];
+            $className = empty($urlParts[1]) ? $this->defaultClass : $urlParts[1];
             $class     = implode('\\',
                 $this->generateClassName(
                     $this->getApplicationNameSpace(). $this->defaultAppNameSpace,
@@ -180,7 +182,7 @@ Trait RouteTrait
                     $className
                 )
             );
-            $urlMethod = (string)empty($pathPart[2]) ? $this->defaultMethod : $pathPart[2];
+            $urlMethod = (string)empty($urlParts[2]) ? $this->defaultMethod : $urlParts[2];
             $method    = $this->transformer->transform($urlMethod . $this->actionSuffix);
 
         } else {

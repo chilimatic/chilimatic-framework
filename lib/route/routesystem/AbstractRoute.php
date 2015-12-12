@@ -46,11 +46,11 @@ abstract class AbstractRoute
 
 
     /**
-     * @param $path
+     * @param array $urlParts
      *
      * @return mixed
      */
-    abstract public function getRoute($path);
+    abstract public function getRoute(array $urlParts = []);
 
     /**
      * @param $uri

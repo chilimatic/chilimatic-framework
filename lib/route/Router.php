@@ -54,10 +54,14 @@ class Router implements IRouter
     private $routeSystem;
 
     /**
-     * @var
+     * @var UrlParser
      */
     private $urlParser;
 
+    /**
+     * @var string
+     */
+    private $path;
 
     /**
      * @param string
@@ -68,7 +72,7 @@ class Router implements IRouter
     public function __construct($type)
     {
         $this->urlParser   = new UrlParser();
-        $this->routeSystem = RouteSystemFactory::make($type, $this->__getPath());
+        $this->routeSystem = RouteSystemFactory::make($type, $this->getCurrentUrlPath());
     }
 
     /**
@@ -76,23 +80,35 @@ class Router implements IRouter
      *
      * @return array|string
      */
-    private function __getPath()
+    private function getCurrentUrlPath()
     {
-
-        if (!empty($this->path)) return $this->path;
+        if ($this->path) {
+            return $this->path;
+        }
 
         /**
          * check if the path is empty otherwise
          * set it with the server variable and if there's no server variable set it as the default delimiter [/] the root
          */
-        $path = !empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null;
+        $this->path = !empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null;
+        $this->urlPart = $this->parsePath($this->path);
 
-        if (empty($path) || $path == '/') $path = Map::DEFAULT_URL_DELIMITER;
+        return $this->path;
+    }
+
+    /**
+     * @param string $path
+     *
+     * @return array
+     */
+    private function parsePath($path)
+    {
+        if (empty($path)) {
+            $path = Map::DEFAULT_URL_DELIMITER;
+        }
+
         // get the clean path
-        $this->urlPart = $this->urlParser->parse($path);
-
-
-        return $path;
+        return $this->urlParser->parse($path);
     }
 
 
@@ -107,12 +123,14 @@ class Router implements IRouter
      */
     public function getRoute($path = null)
     {
-
-        if (empty($path)) {
-            $path = $this->__getPath();;
+        // check the path
+        if (!$path || ($this->path && $path != $this->path)){
+            $urlParts = $this->urlPart;
+        } else {
+            $urlParts = $this->parsePath($path);
         }
 
-        return $this->routeSystem->getRoute($path);
+        return $this->routeSystem->getRoute($urlParts);
     }
 
 
@@ -144,5 +162,27 @@ class Router implements IRouter
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getUrlPart()
+    {
+        if (!$this->urlPart) {
+            $this->urlPart = $this->getCurrentUrlPath();
+        }
 
+        return $this->urlPart;
+    }
+
+    /**
+     * @param array $urlPart
+     *
+     * @return $this
+     */
+    public function setUrlPart($urlPart)
+    {
+        $this->urlPart = $urlPart;
+
+        return $this;
+    }
 }

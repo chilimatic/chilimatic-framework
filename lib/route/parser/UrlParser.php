@@ -65,7 +65,7 @@ class UrlParser implements IFlyWeightParser
         if (empty($content)) return [];
 
         $path = $this->getCleanPath($content);
-
+        $pathParts = [$this->delimiter];
         // check if there is even a need for further checks
         if (mb_strpos($path, $this->delimiter) === false) {
             if (!$path) {
@@ -73,26 +73,25 @@ class UrlParser implements IFlyWeightParser
             }
 
             // set the root and the path
-            $pathParts = array(
+            $tmpPathParts = [
                 $this->delimiter,
                 $path
-            );
+            ];
 
-            return $pathParts;
+            return $tmpPathParts;
         }
 
         // if there's a deeper path it's time to walk through it and clean the empty parts etc
-        $pathParts = explode($this->delimiter, $path);
+        $tmpPathParts = explode($this->delimiter, $path);
+
 
         // walk through the array and remove the empty entries
-        for ($i = 0, $c = count($pathParts); $i < $c; $i++) {
-            if (empty($pathParts[$i])) unset($pathParts[$i]);
+        for ($i = 0, $c = count($tmpPathParts); $i < $c; $i++) {
+            if (!$tmpPathParts[$i]) unset($tmpPathParts[$i]);
         }
 
-        // reindex them sort them
-        sort($pathParts);
         // prepend the default delimiter
-        array_unshift($pathParts, $this->delimiter);
+        $pathParts = array_merge($pathParts, $tmpPathParts);
 
         // path parts
         return $pathParts;

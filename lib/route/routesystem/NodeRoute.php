@@ -51,22 +51,18 @@ class NodeRoute extends AbstractRoute
     }
 
     /**
-     * the real routing should happen here
+     * @param null $path
+     * @param array|null $urlParts
      *
-     * @param mixed $path
-     *
-     * @return null
-     *
-     * @throws RouteException
+     * @return mixed|null
      */
-    public function getRoute($path = null)
+    public function getRoute(array $urlParts = null)
     {
-
-        if (($map = $this->binaryTree->findByKey($path))) {
+        if (($map = $this->binaryTree->findByKey(implode($urlParts)))) {
             return $map;
         }
 
-        if (($map = $this->getStandardRouting($path))) {
+        if (($map = $this->getStandardRoute($urlParts))) {
             return $map;
         }
 
