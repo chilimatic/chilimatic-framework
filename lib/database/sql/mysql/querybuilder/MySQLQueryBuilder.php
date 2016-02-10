@@ -30,6 +30,10 @@ use chilimatic\lib\transformer\string\DynamicSQLParameter;
  */
 class MySQLQueryBuilder extends AbstractQueryBuilder
 {
+    const UPDATE_QUERY = 2;
+    const INSERT_QUERY = 1;
+    const DELETE_QUERY = 3;
+    const SELECT_QUERY = 0;
 
     /**
      * trait for the annotation checks
@@ -91,7 +95,11 @@ class MySQLQueryBuilder extends AbstractQueryBuilder
 
         $strategy->setTransformer($this->paramTransformer);
 
-        return $strategy->generateSQLStatement();
+        return  [
+            $strategy->generateSQLStatement(),
+            $param,
+            self::SELECT_QUERY
+        ];
     }
 
     /**
@@ -146,7 +154,8 @@ class MySQLQueryBuilder extends AbstractQueryBuilder
 
         return [
             $strategy->generateSQLStatement(),
-            $this->prepareModelDataForStatement($strategy->getModelData())
+            $this->prepareModelDataForStatement($strategy->getModelData()),
+            self::INSERT_QUERY
         ];
     }
 
@@ -202,7 +211,8 @@ class MySQLQueryBuilder extends AbstractQueryBuilder
 
         return [
             $strategy->generateSQLStatement(),
-            $this->prepareModelDataForStatement($strategy->getModelData())
+            $this->prepareModelDataForStatement($strategy->getModelData()),
+            self::UPDATE_QUERY
         ];
     }
 
@@ -227,7 +237,8 @@ class MySQLQueryBuilder extends AbstractQueryBuilder
 
         return [
             $strategy->generateSQLStatement(),
-            $this->prepareModelDataForStatement($strategy->getPrimaryKeySet())
+            $this->prepareModelDataForStatement($strategy->getPrimaryKeySet()),
+            self::DELETE_QUERY
         ];
     }
 

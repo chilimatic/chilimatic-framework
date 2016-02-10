@@ -40,9 +40,10 @@ class MockMysqlConnectionAdapter extends AbstractSQLConnectionAdapter
     }
 
     /**
-     * @param string $sql
-     *
+     * @param $sql
      * @param array $options
+     *
+     * @return bool
      */
     public function prepare($sql, $options = [])
     {
@@ -109,6 +110,14 @@ class MockMysqlConnectionAdapter extends AbstractSQLConnectionAdapter
     public function getErrorInfo()
     {
         return [];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastInsertId()
+    {
+        return 12;
     }
 
 }

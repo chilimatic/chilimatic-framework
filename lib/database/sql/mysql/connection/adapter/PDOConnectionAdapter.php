@@ -159,4 +159,12 @@ class PDOConnectionAdapter extends AbstractSQLConnectionAdapter
     {
         return $this->getResource()->errorInfo();
     }
+
+    /**
+     * @return mixed
+     */
+    public function getLastInsertId()
+    {
+        return $this->getResource()->lastInsertId();
+    }
 }

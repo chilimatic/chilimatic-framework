@@ -129,7 +129,6 @@ class Router implements IRouter
         } else {
             $urlParts = $this->parsePath($path);
         }
-
         return $this->routeSystem->getRoute($urlParts);
     }
 

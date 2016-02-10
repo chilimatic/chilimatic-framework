@@ -50,6 +50,7 @@ class MapObject extends Generic
      */
     public function init()
     {
+
         // numeric array
         if (!empty($this->config) && is_object($this->config)) {
             $this->class      = (string)$this->config->object;

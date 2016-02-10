@@ -195,5 +195,11 @@ class MySQLiConnectionAdapter extends AbstractSQLConnectionAdapter
         return $this->getResource()->error_list;
     }
 
-
+    /**
+     * @return mixed
+     */
+    public function getLastInsertId()
+    {
+        return $this->getResource()->insert_id;
+    }
 }

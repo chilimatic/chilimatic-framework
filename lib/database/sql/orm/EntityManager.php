@@ -16,6 +16,7 @@ namespace chilimatic\lib\database\sql\orm;
 use chilimatic\lib\cache\handler\ModelCache;
 use chilimatic\lib\database\AbstractDatabase;
 use chilimatic\lib\database\ErrorLogTrait;
+use chilimatic\lib\database\sql\mysql\querybuilder\MySQLQueryBuilder;
 use chilimatic\lib\database\sql\querybuilder\AbstractQueryBuilder;
 use chilimatic\lib\log\ILog;
 
@@ -129,7 +130,6 @@ class EntityManager
 
         } else {
             $this->log(ILog::T_ERROR, implode(',', $stmt->errorInfo()));
-            $objectStorage->attach($model);
         }
 
         return $objectStorage;
@@ -186,12 +186,13 @@ class EntityManager
     public function findBy(AbstractModel $model, $param = [])
     {
         if ($this->useCache && $this->modelCache) {
-            if ($ret = $this->modelCache->get($model, $param)) {
+            if (($ret = $this->modelCache->get($model, $param))) {
                 return $ret;
             }
         }
 
-        $query  = $this->queryBuilder->generateSelectForModel($model, $param);
+        list($query, $param, $type) = $this->queryBuilder->generateSelectForModel($model, $param);
+
         $result = $this->executeQuery(
             $model,
             $this->prepare(
@@ -234,7 +235,7 @@ class EntityManager
             return $model;
         }
 
-        $p = (array)get_object_vars($row);
+        $p = (array) get_object_vars($row);
         $reflection = new \ReflectionClass($model);
         foreach ($p as $property => $value) {
             try {
@@ -290,16 +291,21 @@ class EntityManager
         return $model;
     }
 
+    /**
+     * @param AbstractModel $model
+     *
+     * @return bool
+     */
     public function delete(AbstractModel $model)
     {
 
-        $data = $this->queryBuilder->generateDeleteForModel($model);
+        list($query, $param, $type) = $this->queryBuilder->generateDeleteForModel($model);
 
         if ($this->modelCache->get($model)) {
             $this->modelCache->remove($model);
         }
         
-        $stmt = $this->prepare($data[0], $data[1]);
+        $stmt = $this->prepare($query, $param);
 
         if ($stmt->execute()) {
             return true;
@@ -309,33 +315,118 @@ class EntityManager
         }
     }
 
-
     /**
-     * @param AbstractModel $model
+     * @param array $modelCacheData
+     * @param $model
      *
      * @return bool
      */
-    public function persist(AbstractModel $model)
+    public function checkForPrimaryKey(array $modelCacheData, $model)
     {
-        // create a query based on if the model exists or not (update or insert)
-        if ($this->modelCache->get($model)) {
-            $data = $this->queryBuilder->generateUpdateForModel($model);
-        } else {
-            $data = $this->queryBuilder->generateInsertForModel($model);
+        $data = null;
+        $className = get_class($model);
+
+        foreach ($modelCacheData[$className]['tableData']->getPrimaryKey() as $key) {
+            $getter = "get". ucfirst($key);
+            if (method_exists($model, $getter) && $model->{$getter}() !== null) {
+                return true;
+            }
+        }
+
+        unset($getter, $key, $className);
+
+        return false;
+    }
+
+
+    /**
+     * @param AbstractModel $model
+     * @param bool $forceInsert
+     *
+     * @todo think about a way to simplify this I'm sure I overcomplicated the approach based on the code structure
+     * (class ...) the issue is the Responsibility <- the check should not be in the entity manager and not
+     * in the cache layer
+     *
+     * @return mixed
+     */
+    public function getPersistData(AbstractModel $model, $forceInsert = false)
+    {
+        if ($forceInsert || !$this->modelCache->get($model)) {
+            return $this->queryBuilder->generateInsertForModel($model);
+        }
+
+        $modelCacheData = $this->queryBuilder->getModelDataCache();
+
+        if (isset($modelCacheData[get_class($model)])) {
+            $hasPrimaryKeys = $this->checkForPrimaryKey($modelCacheData, $model);
+
+            if ($hasPrimaryKeys) {
+                return $this->queryBuilder->generateUpdateForModel($model);
+            } else {
+                return $this->queryBuilder->generateInsertForModel($model);
+            }
+        }
+
+        return $this->queryBuilder->generateUpdateForModel($model);
+    }
+
+
+    /**
+     * @param AbstractModel $model
+     * @param bool|false $forceInsert (force flag)
+     *
+     * @return bool
+     */
+    public function persist(AbstractModel $model, $forceInsert = false)
+    {
+        $retval = false;
+        try {
+            list ($query, $param, $type) = $this->getPersistData($model, $forceInsert);
+            $stmt = $this->prepare($query, $param);
+
+            if ($stmt->execute()) {
+
+                if ($type == MySQLQueryBuilder::INSERT_QUERY) {
+                    $this->setModelPrimaryKey($this->db->getLastInsertId(), $model);
+                }
+
+                $retval = true;
+            } else {
+                $this->log(ILog::T_ERROR, print_r($stmt->errorInfo()), true);
+                $retval = false;
+            }
+        } catch (\Exception $e) {
+            $this->log(ILog::T_ERROR, $e->getMessage(), true);
+            return false;
         }
 
         // add to the modelCache
         $this->modelCache->set($model);
 
-        $stmt = $this->prepare($data[0], $data[1]);
+        return $retval;
+    }
 
-        if ($stmt->execute()) {
-            return true;
-        } else {
-            $this->log(ILog::T_ERROR, print_r($stmt->errorInfo()), true);
-            return false;
+    /**
+     * @param $keyValue
+     * @param AbstractModel $model
+     */
+    public function setModelPrimaryKey($keyValue, AbstractModel $model)
+    {
+        if (!$keyValue) {
+            return;
+        }
+        $modelCacheData = $this->queryBuilder->getModelDataCache();
+
+        if (isset($modelCacheData[get_class($model)])) {
+            foreach ($modelCacheData[get_class($model)]['tableData']->getPrimaryKey() as $primaryKey) {
+                $setter = "set". ucfirst($primaryKey);
+                if (method_exists($model, $setter)) {
+                    $model->{$setter}($keyValue);
+                }
+            }
         }
 
+        return;
     }
 
     /**

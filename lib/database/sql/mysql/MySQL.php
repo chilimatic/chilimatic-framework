@@ -638,6 +638,13 @@ class MySQL extends AbstractDatabase
         }
     }
 
+    /**
+     * @return mixed
+     */
+    public function getLastInsertId() {
+        return $this->db->getDbAdapter()->getLastInsertId();
+    }
+
 
     /**
      * wrapper for the db_detail object the parameter should be a valid db

@@ -37,6 +37,11 @@ Trait RouteTrait
     /**
      * @var string
      */
+    private $notFoundMethod = 'notFound';
+
+    /**
+     * @var string
+     */
     private $actionSuffix = 'Action';
 
     /**
@@ -83,6 +88,7 @@ Trait RouteTrait
      */
     public function getDefaultRoute()
     {
+
         try {
             return $this->buildRouteMap(
                 $this->defaultUrlDelimiter,
@@ -157,7 +163,6 @@ Trait RouteTrait
 
 
     /**
-     * @param $path
      * @param array|null $urlParts
      *
      * @return Map|null
@@ -194,12 +199,12 @@ Trait RouteTrait
                 $this->defaultClass)
             );
 
-            $urlMethod = (string)$this->defaultMethod;
+            $urlMethod = (string) $this->notFoundMethod;
             $method    = $this->transformer->transform($urlMethod . $this->actionSuffix);
         }
 
         if (class_exists($class, true)) {
-            foreach ((array)get_class_methods($class) as $cmethod) {
+            foreach ((array) get_class_methods($class) as $cmethod) {
                 if (strtolower($cmethod) != strtolower($method)) {
                     continue;
                 }

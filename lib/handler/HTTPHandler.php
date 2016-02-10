@@ -81,7 +81,10 @@ class HTTPHandler extends AbstractHandler
      */
     public function getDefaultTemplate($className)
     {
-        return INCLUDE_ROOT .
+        /**
+         * todo replace with config object
+         */
+        return APPLICATION_PATH .
         strtolower(
             str_replace(array('\\'), '/',
                 str_replace(

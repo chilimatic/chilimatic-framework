@@ -158,6 +158,11 @@ abstract class AbstractSQLConnectionAdapter implements IDatabaseConnectionAdapte
     abstract public function getErrorInfo();
 
 
+    /**
+     * @return mixed
+     */
+    abstract public function getLastInsertId();
+
 
     /**
      * @return mixed
@@ -238,6 +243,7 @@ abstract class AbstractSQLConnectionAdapter implements IDatabaseConnectionAdapte
 
         return $this;
     }
+
 
 
 }

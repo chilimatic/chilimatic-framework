@@ -209,4 +209,25 @@ abstract class AbstractQueryBuilder implements IQueryBuilder
 
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function getModelDataCache()
+    {
+        return $this->modelDataCache;
+    }
+
+    /**
+     * @param array $modelDataCache
+     *
+     * @return $this
+     */
+    public function setModelDataCache($modelDataCache)
+    {
+        $this->modelDataCache = $modelDataCache;
+
+        return $this;
+    }
+
 }
