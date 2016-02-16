@@ -23,9 +23,17 @@ class ToFile extends AbstractClient
      */
     public function send()
     {
+        $format = $this->getFormat();
+
         $msgString = '';
-        foreach ($this->logMessages as $message) {
-            $msgString .= $message;
+        if ($format) {
+            foreach ($this->logMessages as $message) {
+                $msgString .= $format->format($message);
+            }
+        } else {
+            foreach ($this->logMessages as $message) {
+                $msgString .= implode(' ', $message);
+            }
         }
 
         if (!$this->targetFile) {
@@ -35,4 +43,23 @@ class ToFile extends AbstractClient
         }
     }
 
+    /**
+     * @return string
+     */
+    public function getTargetFile()
+    {
+        return $this->targetFile;
+    }
+
+    /**
+     * @param string $targetFile
+     *
+     * @return $this
+     */
+    public function setTargetFile($targetFile)
+    {
+        $this->targetFile = $targetFile;
+
+        return $this;
+    }
 }

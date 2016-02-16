@@ -31,11 +31,18 @@ abstract class AbstractStrategy implements ISQLStrategy
     protected $modelData = [];
 
     /**
+     * @var array
+     */
+    protected $queryParam = [];
+
+    /**
      * @param AbstractSQLTableData $tableData
      */
-    public function __construct(AbstractSQLTableData $tableData = null, array $modelData = null) {
+    public function __construct(AbstractSQLTableData $tableData = null, array $modelData = null, array $queryParam = null)
+    {
         $this->tableData = $tableData;
         $this->modelData = $modelData;
+        $this->queryParam = $queryParam;
     }
 
     /**

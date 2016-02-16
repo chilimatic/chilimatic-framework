@@ -171,7 +171,15 @@ class EntityManager
         $ret = [];
 
         foreach ($param as $key => $value) {
-            $ret[] = [':' . md5($key), $value];
+            if (is_array($value)) {
+                $keyString = md5($key);
+                foreach ($value as $subKey => $subValue) {
+                    $ret[] =[':' . $keyString.$subKey , $subValue];
+                }
+            } else {
+                $ret[] = [':' . md5($key), $value];
+            }
+
         }
 
         return $ret;
@@ -309,7 +317,9 @@ class EntityManager
 
         if ($stmt->execute()) {
             return true;
+
         } else {
+            $test = $stmt->errorInfo();
             $this->log(ILog::T_ERROR, print_r($stmt->errorInfo()), true);
             return false;
         }

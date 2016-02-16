@@ -90,7 +90,8 @@ class MySQLQueryBuilder extends AbstractQueryBuilder
          */
         $strategy = new MySQLSelectStrategy(
             $cacheData[self::TABLE_DATA_INDEX],
-            array_keys($param)
+            array_keys($param),
+            $param
         );
 
         $strategy->setTransformer($this->paramTransformer);
@@ -112,21 +113,29 @@ class MySQLQueryBuilder extends AbstractQueryBuilder
     {
         $data    = $columData = [];
         $keyList = $tableData->getPrimaryKey();
+        $reflection        = new \ReflectionClass($model);
 
         foreach ($tableData->getColumnNames() as $column) {
-            $reflection        = new \ReflectionClass($model);
-            $reflectedProperty = $reflection->getProperty($column);
-            $reflectedProperty->setAccessible(true);
 
-            $columData = [
-                'value' => $reflectedProperty->getValue($model),
-                'name'  => $column
-            ];
+            try {
+                $reflectedProperty = $reflection->getProperty($column);
 
-            if (in_array($column, $keyList)) {
-                array_merge($columData, ['KEY' => true]);
+
+                $reflectedProperty->setAccessible(true);
+
+                $columData = [
+                    'value' => $reflectedProperty->getValue($model),
+                    'name'  => $column
+                ];
+
+                if (in_array($column, $keyList)) {
+                    array_merge($columData, ['KEY' => true]);
+                }
+                $data[] = $columData;
+            } catch (\Exception $e) {
+                $logger = \chilimatic\lib\di\ClosureFactory::getInstance()->get('error-log');
+                $logger->error($e->getMessage(), $e->getTraceAsString());
             }
-            $data[] = $columData;
         }
 
         return $data;

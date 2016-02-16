@@ -114,7 +114,19 @@ Trait GeneratorTrait {
 
         $predicateList = [];
         foreach ($fieldList as $name) {
-            $predicateList[] = "$name = " . $this->transformer->transform($name);
+            if (!empty($this->queryParam[$name]) && is_array($this->queryParam[$name])) {
+                $tName = $this->transformer->transform($name);
+                $predicate = "$name IN (";
+
+                for ($i =0, $c = count($this->queryParam[$name]); $i < $c; $i++) {
+                    $predicate .= $tName. $i . ',';
+                }
+                $predicate = rtrim($predicate, ',');
+                $predicate .= ")";
+                $predicateList[] = $predicate;
+            } else {
+                $predicateList[] = "$name = " . $this->transformer->transform($name);
+            }
         }
 
         return $predicateList;

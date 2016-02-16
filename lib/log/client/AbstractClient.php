@@ -11,7 +11,7 @@ namespace chilimatic\lib\log\client;
 abstract class AbstractClient implements ClientInterface
 {
     /**
-     * @var \chilimatic\lib\formater\Log
+     * @var \chilimatic\lib\formatter\Log
      */
     protected $format;
 
@@ -21,9 +21,9 @@ abstract class AbstractClient implements ClientInterface
     protected $logMessages;
 
     /**
-     * @param \chilimatic\lib\formater\Log $format
+     * @param \chilimatic\lib\formatter\Log $format
      */
-    public function __construct(\chilimatic\lib\formater\Log $format = null)
+    public function __construct(\chilimatic\lib\formatter\Log $format = null)
     {
         $this->format      = $format;
         $this->logMessages = new \SPLQueue();
@@ -134,27 +134,28 @@ abstract class AbstractClient implements ClientInterface
     }
 
     /**
-     * @param \chilimatic\lib\formater\Log $format
+     * @param \chilimatic\lib\formatter\Log $format
      *
      * @return mixed
      */
-    public function setFormat(\chilimatic\lib\formater\Log $format)
+    public function setFormat(\chilimatic\lib\formatter\Log $format)
     {
-        // TODO: Implement setFormat() method.
+        $this->format = $format;
     }
 
     /**
-     * @return \chilimatic\lib\formater\Log|null
+     * @return \chilimatic\lib\formatter\Log|null
      */
     public function getFormat()
     {
-        // TODO: Implement getFormat() method.
+        return $this->format;
     }
 
     /**
      * @return mixed
      */
     abstract public function send();
+
 
     public function __destruct() {
         // if the logger is destroyed we always send the errors :)

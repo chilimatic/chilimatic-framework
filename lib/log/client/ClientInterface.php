@@ -17,9 +17,9 @@ Interface ClientInterface
 {
 
     /**
-     * @param \chilimatic\lib\formater\Log $format
+     * @param \chilimatic\lib\formatter\Log $format
      */
-    public function __construct(\chilimatic\lib\formater\Log $format = null);
+    public function __construct(\chilimatic\lib\formatter\Log $format = null);
 
     /**
      * @param string $message
@@ -67,14 +67,14 @@ Interface ClientInterface
     public function showError();
 
     /**
-     * @param \chilimatic\lib\formater\Log $format
+     * @param \chilimatic\lib\formatter\Log $format
      *
      * @return mixed
      */
-    public function setFormat(\chilimatic\lib\formater\Log $format);
+    public function setFormat(\chilimatic\lib\formatter\Log $format);
 
     /**
-     * @return \chilimatic\lib\formater\Log|null
+     * @return \chilimatic\lib\formatter\Log|null
      */
     public function getFormat();
 
