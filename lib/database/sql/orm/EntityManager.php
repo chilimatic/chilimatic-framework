@@ -319,8 +319,7 @@ class EntityManager
             return true;
 
         } else {
-            $test = $stmt->errorInfo();
-            $this->log(ILog::T_ERROR, print_r($stmt->errorInfo()), true);
+            $this->log(ILog::T_ERROR, print_r($stmt->errorInfo(), true));
             return false;
         }
     }

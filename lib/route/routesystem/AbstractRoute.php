@@ -19,6 +19,8 @@ use chilimatic\lib\transformer\string\DynamicFunctionCallName;
  */
 abstract class AbstractRoute
 {
+
+    const PATH_ROOT = '/';
     /**
      * Trait
      */

@@ -170,15 +170,18 @@ Trait RouteTrait
     public function getStandardRoute(array $urlParts = null)
     {
         // if there is the slash in the positon zero remove it
-        if (isset($urlParts[0]) && $urlParts[0] == '/') {
+        if (isset($urlParts[0]) && $urlParts[0] === '/') {
             array_shift($urlParts);
         }
 
 
         // more than 1 part means class/method/[value or param{/value}]
-        if (count($urlParts) >= 1) {
+        if (count($urlParts) >= 1)
+        {
             $module    = empty($urlParts[0]) ? $this->defaultModule : $urlParts[0];
+            unset($urlParts[0]);
             $className = empty($urlParts[1]) ? $this->defaultClass : $urlParts[1];
+            unset($urlParts[1]);
             $class     = implode('\\',
                 $this->generateClassName(
                     $this->getApplicationNameSpace(). $this->defaultAppNameSpace,
@@ -188,6 +191,7 @@ Trait RouteTrait
                 )
             );
             $urlMethod = (string)empty($urlParts[2]) ? $this->defaultMethod : $urlParts[2];
+            unset($urlParts[2]);
             $method    = $this->transformer->transform($urlMethod . $this->actionSuffix);
 
         } else {
@@ -214,7 +218,8 @@ Trait RouteTrait
                     [
                         'object'    => $class,
                         'method'    => $this->transformer->transform($method),
-                        'namespace' => null
+                        'namespace' => null,
+                        'param'     => $urlParts
                     ],
                     $this->defaultUrlDelimiter
                 );

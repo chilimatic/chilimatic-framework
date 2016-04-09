@@ -96,7 +96,9 @@ class Map
     public function __construct($uri = null, $callback = null, $delimiter = '/')
     {
 
-        if (empty($uri)) return;
+        if (empty($uri)) {
+            return;
+        }
 
         $this->_delimiter = (!empty($delimiter) ? $delimiter : self::DEFAULT_URL_DELIMITER);
 
@@ -120,7 +122,7 @@ class Map
     {
         try {
             // set to false as default
-            $validate = false;
+            $validate = [];
 
             // check if there is the marker vor a special validation and or a / for complex routing
             if (strpos($uri, self::VALIDATION_PREFIX) === false && strpos($uri, $this->getDelimiter()) === false) {
@@ -129,9 +131,9 @@ class Map
 
             $parts = explode($this->_delimiter, $uri);
             for ($i = 0, $c = count($parts); $i < $c; $i++) {
-                if (empty($parts[$i])) continue;
-                elseif ((strpos($parts[$i], self::VALIDATION_PREFIX)) === false) { // if there's no placeholder in use for a specific type
-
+                if (empty($parts[$i])) {
+                    continue;
+                } elseif ((strpos($parts[$i], self::VALIDATION_PREFIX)) === false) { // if there's no placeholder in use for a specific type
                     $this->urlPart[] = $parts[$i];
                     continue;
                 }

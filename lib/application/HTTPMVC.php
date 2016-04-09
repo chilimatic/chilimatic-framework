@@ -63,7 +63,9 @@ class HTTPMVC
      */
     public function __construct(ClosureFactory $di = null, AbstractConfig $config = null)
     {
-        if (!$di) return;
+        if (!$di) {
+            return;
+        }
 
         $this->config = $config;
         $this->di     = $di;
@@ -73,8 +75,10 @@ class HTTPMVC
         }
 
         foreach ($this->defaultDependencies as $closure) {
-            if (!$di->exists($closure)) continue;
-            $this->$closure = $di->get($closure);
+            if (!$di->exists($closure)) {
+                continue;
+            }
+            $this->{$closure} = $di->get($closure);
         }
     }
 
@@ -163,7 +167,7 @@ class HTTPMVC
             $this->router = $this->di->get(
                 'routing',
                 [
-                    'type' => $this->config->get('routingType') ? $this->config->get('routingType') : Router::DEFAULT_ROUTING_TYPE
+                    'type' => $this->config->get('routing_type') ? $this->config->get('routing_type') : Router::DEFAULT_ROUTING_TYPE
                 ]
             );
         }
