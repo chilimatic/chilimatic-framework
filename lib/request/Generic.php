@@ -76,7 +76,9 @@ abstract class Generic extends \stdClass implements JsonSerializable, ISingelton
      */
     public function add($key, $value)
     {
-        if (!$key) return $this;
+        if (!$key) {
+            return $this;
+        }
 
         $this->param[$key] = $value;
 
@@ -111,16 +113,16 @@ abstract class Generic extends \stdClass implements JsonSerializable, ISingelton
      *
      * @return null
      */
-    public function get($property, $type = null)
+    public function get($property, $type = null, $default = null)
     {
         if (!isset($this->param[$property])) {
-            return null;
+            return $default;
         }
 
         if (isset($type)) {
             $method = TypeCast::METHODPREFIX . $type;
 
-            return TypeCast::$method($property);
+            return TypeCast::$method($this->param[$property]);
         }
 
         return $this->param[$property];

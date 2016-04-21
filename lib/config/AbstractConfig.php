@@ -127,7 +127,9 @@ abstract class AbstractConfig implements IConfig
         }
 
         $node = $this->mainNode->getLastByKey($var);
-        if (empty($node)) return null;
+        if ($node === null) {
+            return null;
+        }
 
         return $node->getData();
     }
@@ -143,7 +145,9 @@ abstract class AbstractConfig implements IConfig
     public function getById($id)
     {
         $node = $this->mainNode->getById($id);
-        if (empty($node)) return null;
+        if ($node === null) {
+            return null;
+        }
 
         return $node->getData();
     }
@@ -159,7 +163,9 @@ abstract class AbstractConfig implements IConfig
     public function setById($id, $val)
     {
         // set the variable
-        if (empty($id)) return $this;
+        if (empty($id)) {
+            return $this;
+        }
 
         $node = new Node($this->mainNode, $id, $val);
 
@@ -180,7 +186,9 @@ abstract class AbstractConfig implements IConfig
     public function set($key, $val)
     {
         // set the variable
-        if (empty($key)) return $this;
+        if (empty($key)) {
+            return $this;
+        }
 
         if (!($node = $this->mainNode->getLastByKey($key))) {
             $newNode = new Node($this->mainNode, $key, $val);

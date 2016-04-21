@@ -14,7 +14,6 @@
  */
 namespace chilimatic\lib\request;
 
-
 /**
  * Class Handler
  *
@@ -26,21 +25,21 @@ class Handler extends \stdClass implements RequestInterface
     /**
      * Post object
      *
-     * @var \chilimatic\lib\request\Post
+     * @var Post
      */
     private $post;
 
     /**
      * Get object
      *
-     * @var \chilimatic\lib\request\Get
+     * @var Get
      */
     private $get;
 
     /**
      * File object
      *
-     * @var \chilimatic\lib\request\File
+     * @var File
      */
     private $file;
 
@@ -48,14 +47,14 @@ class Handler extends \stdClass implements RequestInterface
      * CLI object ($argv)
      *
      *
-     * @var \chilimatic\lib\request\Cli
+     * @var Cli
      */
     private $cli;
 
     /**
      * Request object
      *
-     * @var \chilimatic\lib\request\Request|null
+     * @var Request|null
      */
     private $request;
 
@@ -118,12 +117,14 @@ class Handler extends \stdClass implements RequestInterface
      */
     public static function getInstance(array $param = array())
     {
-        if (!(self::$instance instanceof \chilimatic\lib\request\Handler)) {
+        if (!(self::$instance instanceof Handler)) {
             // construct the object
             self::$instance = new self();
         }
 
-        if ($param) return self::$instance->$param;
+        if ($param)  {
+            return self::$instance->{$param};
+        }
 
 
         // return the object
@@ -149,7 +150,7 @@ class Handler extends \stdClass implements RequestInterface
      *
      * @return $this
      */
-    public function setCli(\chilimatic\lib\request\Cli $cli)
+    public function setCli(Cli $cli)
     {
         $this->cli = $cli;
 
@@ -157,7 +158,7 @@ class Handler extends \stdClass implements RequestInterface
     }
 
     /**
-     * @return \chilimatic\lib\request\File
+     * @return File
      */
     public function getFile()
     {
@@ -171,11 +172,11 @@ class Handler extends \stdClass implements RequestInterface
     }
 
     /**
-     * @param \chilimatic\lib\request\File $file
+     * @param File $file
      *
      * @return $this
      */
-    public function setFile(\chilimatic\lib\request\File $file)
+    public function setFile(File $file)
     {
         $this->file = $file;
 
@@ -183,7 +184,7 @@ class Handler extends \stdClass implements RequestInterface
     }
 
     /**
-     * @return \chilimatic\lib\request\Get
+     * @return Get
      */
     public function getGet()
     {
@@ -197,11 +198,11 @@ class Handler extends \stdClass implements RequestInterface
     }
 
     /**
-     * @param \chilimatic\lib\request\Get $get
+     * @param Get $get
      *
      * @return $this
      */
-    public function setGet(\chilimatic\lib\request\Get $get)
+    public function setGet(Get $get)
     {
         $this->get = $get;
 
@@ -209,7 +210,7 @@ class Handler extends \stdClass implements RequestInterface
     }
 
     /**
-     * @return \chilimatic\lib\request\Post
+     * @return Post
      */
     public function getPost()
     {
@@ -223,11 +224,11 @@ class Handler extends \stdClass implements RequestInterface
     }
 
     /**
-     * @param \chilimatic\lib\request\Post $post
+     * @param Post $post
      *
      * @return $this
      */
-    public function setPost(\chilimatic\lib\request\Post $post)
+    public function setPost(Post $post)
     {
         $this->post = $post;
 
@@ -252,7 +253,7 @@ class Handler extends \stdClass implements RequestInterface
      *
      * @return $this
      */
-    public function setRequest(\chilimatic\lib\request\Request $request)
+    public function setRequest(Request $request)
     {
         $this->request = $request;
 
