@@ -167,4 +167,17 @@ class PDOConnectionAdapter extends AbstractSQLConnectionAdapter
     {
         return $this->getResource()->lastInsertId();
     }
+
+    /**
+     * @param \PDOStatement $stmt
+     * @return int
+     */
+    public function getAffectedRows($stmt = null)
+    {
+        if (!$stmt instanceof \PDOStatement) {
+            return null;
+        }
+
+        return $stmt->rowCount();
+    }
 }

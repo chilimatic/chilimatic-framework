@@ -167,6 +167,12 @@ abstract class AbstractSQLConnectionAdapter implements IDatabaseConnectionAdapte
     /**
      * @return mixed
      */
+    abstract public function getAffectedRows($stmt = null);
+
+
+    /**
+     * @return mixed
+     */
     public function getResource()
     {
         return $this->resource;

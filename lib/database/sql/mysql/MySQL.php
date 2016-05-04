@@ -710,12 +710,16 @@ class MySQL extends AbstractDatabase
      */
     public function query($query)
     {
-        $db = $this->getDb();
-        if (empty($query) || !$db) return false;
+
+        if (empty($query) || !$this->db) {
+            return false;
+        }
 
 
         // if the resource type is not a mysql link it should try to reconnect
-        if (!$db->isConnected()) $db->ping();
+        if (!$this->db->isConnected()) {
+            $this->db->ping();
+        }
 
         // the last sql query
         $this->lastSql = (string)$query;
@@ -723,30 +727,36 @@ class MySQL extends AbstractDatabase
 
         // if the master is down a select may query the slave but it should not
         // insert anything
-        if ($this->slaveConnection === $this->getDb() && stripos(trim($query), 'SELECT') !== 0) {
+        if ($this->slaveConnection === $this->db && stripos(trim($query), 'SELECT') !== 0) {
             throw new DatabaseException(__METHOD__ . ' no Select on slave, abort !!', self::ERR_CONN, self::SEVERITY_LOG, __FILE__, __LINE__);
         }
 
         // tries execute the query and fetches the result
-        $res             = $db->getDb()->query($query);
-        $this->insert_id = $db->getDb()->insert_id;
+        $res             = $this->db->getDbAdapter()->query($query);
+
 
         try {
             // in cases of errors
             if (!$res) {
-                $this->error   = $db->getDb()->errorCode();
-                $this->errorno = $db->getDb()->errorCode();
+                $this->error   = $this->db->getDbAdapter()->getErrorInfo();
+                $this->errorno = $this->db->getDbAdapter()->getErrorCode();
                 throw new DatabaseException(__METHOD__ . "\nsql: $this->lastSql\nsql_error:$this->error\nsql_errorno:$this->errorno", self::ERR_EXEC, self::SEVERITY_LOG, __FILE__, __LINE__);
+            } else {
+                $this->insert_id = $this->db->getDbAdapter()->getLastInsertId();
             }
         } catch (DatabaseException $e) {
-            if (Config::get('use_exception') !== true) return false;
+            if (Config::get('use_exception') !== true) {
+                return false;
+            }
             throw $e;
         }
 
         // reset old errors
         $this->error         = '';
         $this->errorno       = 0;
-        $this->affected_rows = $db->getDb()->affected_rows;
+        if ($res && $res instanceof \PDOStatement){
+            $this->affected_rows = $this->db->getDbAdapter()->getAffectedRows($res);
+        }
 
         return $res;
     }

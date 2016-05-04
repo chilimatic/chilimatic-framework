@@ -6,10 +6,6 @@ use chilimatic\lib\database\connection\IDatabaseConnectionAdapter;
 use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
 use chilimatic\lib\database\sql\mysql\connection\MySQLConnectionSettings;
 use chilimatic\lib\exception\DatabaseException;
-use chilimatic\lib\interfaces\IFlyWeightValidator;
-use chilimatic\lib\interpreter\operator\InterpreterOperatorFactory;
-use chilimatic\lib\parser\annotation\AnnotationValidatorParser;
-use chilimatic\lib\validator\AnnotationPropertyValidatorFactory;
 
 /**
  * Class AbstractSqlConnection

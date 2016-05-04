@@ -13,6 +13,7 @@
 
 
 namespace chilimatic\lib\database\sql\orm;
+use chilimatic\lib\transformer\string\UnderScoreToCamelCase;
 use chilimatic\lib\cache\handler\ModelCache;
 use chilimatic\lib\database\AbstractDatabase;
 use chilimatic\lib\database\ErrorLogTrait;
@@ -332,11 +333,18 @@ class EntityManager
      */
     public function checkForPrimaryKey(array $modelCacheData, $model)
     {
-        $data = null;
-        $className = get_class($model);
 
-        foreach ($modelCacheData[$className]['tableData']->getPrimaryKey() as $key) {
-            $getter = "get". ucfirst($key);
+        $className = get_class($model);
+        $transformer = new UnderScoreToCamelCase();
+
+        foreach ($modelCacheData[$className]['tableData']->getPrimaryKey() as $key)
+        {
+            if (strpos($key, '_') !== false){
+                $getter = "get". ucfirst($transformer($key));
+            } else {
+                $getter = "get". ucfirst($key);
+            }
+
             if (method_exists($model, $getter) && $model->{$getter}() !== null) {
                 return true;
             }
