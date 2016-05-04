@@ -1,7 +1,7 @@
 <?php
 namespace chilimatic\lib\interpreter\operator;
 
-use chilimatic\lib\interfaces\IFactoryOptions;
+use chilimatic\lib\Interfaces\IFactoryOptions;
 
 /**
  *

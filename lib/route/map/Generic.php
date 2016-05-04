@@ -1,7 +1,7 @@
 <?php
 namespace chilimatic\lib\route\map;
 
-use chilimatic\lib\interfaces\IFlyWeightParser;
+use chilimatic\lib\Interfaces\IFlyWeightParser;
 
 /**
  * Class Generic
@@ -17,7 +17,7 @@ abstract class Generic implements IMapStragey
     protected $config;
 
     /**
-     * @var \chilimatic\lib\interfaces\IFlyWeightParser
+     * @var \chilimatic\lib\Interfaces\IFlyWeightParser
      */
     protected $parser;
 

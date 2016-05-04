@@ -10,7 +10,7 @@
 
 namespace chilimatic\lib\route\parser;
 
-use chilimatic\lib\interfaces\IFlyWeightParser;
+use chilimatic\lib\Interfaces\IFlyWeightParser;
 
 /**
  * Class UrlParser

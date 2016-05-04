@@ -7,7 +7,7 @@ namespace chilimatic\lib\validator\generic;
  *
  * @package chilimatic\lib\validator\type\functions
  */
-class NotEmpty implements \chilimatic\lib\interfaces\IFlyWeightValidator
+class NotEmpty implements \chilimatic\lib\Interfaces\IFlyWeightValidator
 {
     /**
      * @param mixed $value

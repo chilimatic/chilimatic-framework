@@ -7,7 +7,7 @@ namespace chilimatic\lib\route\map;
  * Date: 6/14/14
  * Time: 8:15 PM
  */
-use chilimatic\lib\interfaces\IFlyWeightParser;
+use chilimatic\lib\Interfaces\IFlyWeightParser;
 
 /**
  * Interface MapCallInterface

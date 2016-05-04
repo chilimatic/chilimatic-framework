@@ -9,8 +9,8 @@
  */
 namespace chilimatic\lib\datastructure\graph\filter;
 
-use chilimatic\lib\interfaces\IFlyWeightValidator;
-use chilimatic\lib\interfaces\IFlyWeightTransformer;
+use chilimatic\lib\Interfaces\IFlyWeightValidator;
+use chilimatic\lib\Interfaces\IFlyWeightTransformer;
 
 /**
  * Class FactoryStatic

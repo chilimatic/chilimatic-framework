@@ -21,7 +21,7 @@ use chilimatic\lib\database\sql\mysql\querybuilder\strategy\MySQLUpdateStrategy;
 use chilimatic\lib\database\sql\querybuilder\AbstractQueryBuilder;
 use chilimatic\lib\database\sql\querybuilder\ConsistencyTrait;
 use chilimatic\lib\database\sql\querybuilder\meta\AbstractSQLTableData;
-use chilimatic\lib\transformer\string\DynamicSQLParameter;
+use chilimatic\lib\Transformer\String\DynamicSQLParameter;
 
 /**
  * Class MysqlQueryBuilder
@@ -352,7 +352,7 @@ class MySQLQueryBuilder extends AbstractQueryBuilder
     }
 
     /**
-     * @return \chilimatic\lib\interfaces\IFlyWeightTransformer
+     * @return \chilimatic\lib\Interfaces\IFlyWeightTransformer
      */
     public function getParamTransformer()
     {
@@ -360,11 +360,11 @@ class MySQLQueryBuilder extends AbstractQueryBuilder
     }
 
     /**
-     * @param \chilimatic\lib\interfaces\IFlyWeightTransformer $paramTransformer
+     * @param \chilimatic\lib\Interfaces\IFlyWeightTransformer $paramTransformer
      *
      * @return $this
      */
-    public function setParamTransformer(\chilimatic\lib\interfaces\IFlyWeightTransformer $paramTransformer)
+    public function setParamTransformer(\chilimatic\lib\Interfaces\IFlyWeightTransformer $paramTransformer)
     {
         $this->paramTransformer = $paramTransformer;
 

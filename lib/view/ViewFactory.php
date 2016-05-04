@@ -1,6 +1,6 @@
 <?php
 namespace chilimatic\lib\view;
-use chilimatic\lib\interfaces\IFactoryOptions;
+use chilimatic\lib\Interfaces\IFactoryOptions;
 use chilimatic\lib\traits\general\ClassExists;
 
 /**

@@ -10,7 +10,7 @@
 
 namespace chilimatic\lib\validator;
 
-use chilimatic\lib\interfaces\IFlyWeightValidator;
+use chilimatic\lib\Interfaces\IFlyWeightValidator;
 
 /**
  * Class DynamicFunctionNamePreTransformed

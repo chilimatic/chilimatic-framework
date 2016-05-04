@@ -149,7 +149,7 @@ class NodeTest extends PHPUnit_Framework_TestCase
     {
         $filterFactory = new \chilimatic\lib\datastructure\graph\filter\Factory();
         $filterFactory->setValidator(new chilimatic\lib\validator\DynamicCallNamePreTransformed());
-        $filterFactory->setTransformer(new chilimatic\lib\transformer\string\DynamicObjectCallName());
+        $filterFactory->setTransformer(new chilimatic\lib\Transformer\String\DynamicObjectCallName());
 
         $this->initNodes();
         $resultSet = $this->node->getByKey('test-1', $filterFactory->make('last-node'));

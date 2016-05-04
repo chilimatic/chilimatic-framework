@@ -1,7 +1,7 @@
 <?php
 
 namespace chilimatic\lib\interpreter\type;
-use chilimatic\lib\interfaces\IFlyWeightExecute;
+use chilimatic\lib\Interfaces\IFlyWeightExecute;
 
 /**
  * Class InterpreterTypeBoolean

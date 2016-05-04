@@ -1,5 +1,5 @@
 <?php
-use chilimatic\lib\interfaces\IFlyWeightGenerator;
+use chilimatic\lib\Interfaces\IFlyWeightGenerator;
 
 
 /**

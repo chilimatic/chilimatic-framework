@@ -8,7 +8,7 @@
 
 namespace chilimatic\lib\database\sql\mysql;
 
-use \chilimatic\lib\interfaces\ISingeltonString;
+use \chilimatic\lib\Interfaces\ISingeltonString;
 
 /**
  * Class Collection

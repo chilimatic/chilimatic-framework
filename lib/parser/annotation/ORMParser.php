@@ -10,7 +10,7 @@
 
 namespace chilimatic\lib\parser\annotation;
 
-use chilimatic\lib\interfaces\IFlyWeightParser;
+use chilimatic\lib\Interfaces\IFlyWeightParser;
 
 class ORMParser implements IFlyWeightParser
 {

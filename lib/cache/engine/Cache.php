@@ -3,7 +3,7 @@
 namespace chilimatic\lib\cache\engine;
 
 use chilimatic\lib\exception\CacheException;
-use \chilimatic\lib\interfaces\ISingelton;
+use \chilimatic\lib\Interfaces\ISingelton;
 
 /**
  * Class Cache

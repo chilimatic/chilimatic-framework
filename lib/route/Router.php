@@ -4,7 +4,7 @@ namespace chilimatic\lib\route;
 use chilimatic\lib\cache\engine\Cache;
 use chilimatic\lib\config\Config;
 use chilimatic\lib\exception\RouteException;
-use chilimatic\lib\interfaces\IFlyWeightParser;
+use chilimatic\lib\Interfaces\IFlyWeightParser;
 use chilimatic\lib\route\parser\UrlParser;
 use chilimatic\lib\route\routesystem\RouteSystemFactory;
 

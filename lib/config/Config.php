@@ -9,7 +9,7 @@
 
 namespace chilimatic\lib\config;
 
-use chilimatic\lib\interfaces\ISingelton;
+use chilimatic\lib\Interfaces\ISingelton;
 
 /**
  * Class Config

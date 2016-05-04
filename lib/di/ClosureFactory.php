@@ -58,7 +58,9 @@ class ClosureFactory
      */
     public function setServiceList($serviceList = [])
     {
-        if (!$serviceList) return;
+        if (!$serviceList) {
+            return;
+        }
 
         foreach ($serviceList as $key => $closure) {
             $this->set($key, $closure);
@@ -69,9 +71,7 @@ class ClosureFactory
     /**
      * @return void
      */
-    private function __clone()
-    {
-    }
+    private function __clone(){}
 
     /**
      * @param string $path
@@ -142,9 +142,7 @@ class ClosureFactory
      */
     public function remove($key)
     {
-        unset($this->serviceCollection[$key]);
-        unset($this->pseudoSingeltonList[$key]);
-
+        unset($this->serviceCollection[$key], $this->pseudoSingeltonList[$key]);
         return $this;
     }
 

@@ -1,7 +1,7 @@
 <?php
 namespace chilimatic\lib\route\validator;
 
-use chilimatic\lib\interfaces\IFlyWeightValidator;
+use chilimatic\lib\Interfaces\IFlyWeightValidator;
 
 /**
  * Class AbstractValidator

@@ -2,7 +2,7 @@
 namespace chilimatic\lib\database\sql\querybuilder\strategy;
 
 use chilimatic\lib\database\sql\querybuilder\meta\AbstractSQLTableData;
-use chilimatic\lib\interfaces\IFlyWeightTransformer;
+use chilimatic\lib\Interfaces\IFlyWeightTransformer;
 
 /**
  * Class GeneratorTrait

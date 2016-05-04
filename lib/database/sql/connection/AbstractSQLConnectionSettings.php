@@ -11,7 +11,7 @@ namespace chilimatic\lib\database\sql\connection;
  * File: AbstractSqlConnectionSettings.php
  */
 use chilimatic\lib\database\connection\IDatabaseConnectionSettings;
-use chilimatic\lib\interfaces\ISelfValidator;
+use chilimatic\lib\Interfaces\ISelfValidator;
 use chilimatic\lib\traits\validator\PropertyValidatorGeneratorTrait;
 
 /**

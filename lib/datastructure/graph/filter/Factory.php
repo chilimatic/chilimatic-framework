@@ -17,12 +17,12 @@ namespace chilimatic\lib\datastructure\graph\filter;
 class Factory
 {
     /**
-     * @var null|\chilimatic\lib\interfaces\IFlyWeightValidator
+     * @var null|\chilimatic\lib\Interfaces\IFlyWeightValidator
      */
     private $validator;
 
     /**
-     * @var null|\chilimatic\lib\interfaces\IFlyWeightTransformer
+     * @var null|\chilimatic\lib\Interfaces\IFlyWeightTransformer
      */
     private $transformer;
 
@@ -51,7 +51,7 @@ class Factory
     }
 
     /**
-     * @return \chilimatic\lib\interfaces\IFlyWeightValidator|null
+     * @return \chilimatic\lib\Interfaces\IFlyWeightValidator|null
      */
     public function getValidator()
     {
@@ -59,11 +59,11 @@ class Factory
     }
 
     /**
-     * @param \chilimatic\lib\interfaces\IFlyWeightValidator $validator
+     * @param \chilimatic\lib\Interfaces\IFlyWeightValidator $validator
      *
      * @return $this
      */
-    public function setValidator(\chilimatic\lib\interfaces\IFlyWeightValidator $validator)
+    public function setValidator(\chilimatic\lib\Interfaces\IFlyWeightValidator $validator)
     {
         $this->validator = $validator;
 
@@ -71,7 +71,7 @@ class Factory
     }
 
     /**
-     * @return \chilimatic\lib\interfaces\IFlyWeightTransformer|null
+     * @return \chilimatic\lib\Interfaces\IFlyWeightTransformer|null
      */
     public function getTransformer()
     {
@@ -79,11 +79,11 @@ class Factory
     }
 
     /**
-     * @param \chilimatic\lib\interfaces\IFlyWeightTransformer $transformer
+     * @param \chilimatic\lib\Interfaces\IFlyWeightTransformer $transformer
      *
      * @return $this
      */
-    public function setTransformer(\chilimatic\lib\interfaces\IFlyWeightTransformer $transformer)
+    public function setTransformer(\chilimatic\lib\Interfaces\IFlyWeightTransformer $transformer)
     {
         $this->transformer = $transformer;
 

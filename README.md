@@ -420,7 +420,7 @@ $filterFactory = new \chilimatic\lib\datastructure\graph\filter\Factory();
 // the validator checks if the name is conform to the convetions this-will-be
 $filterFactory->setValidator(new chilimatic\lib\validator\DynamicCallNamePreTransformed());
 // the transformer will change the this-will-be string to ThisWillBe
-$filterFactory->setTransformer(new chilimatic\lib\transformer\string\DynamicObjectCallName());
+$filterFactory->setTransformer(new chilimatic\lib\Transformer\String\DynamicObjectCallName());
 $filterLastNode = $filterFactory->make('lastNode');
 $filterFirstNode = $filterFactory->make('firstNode');
 

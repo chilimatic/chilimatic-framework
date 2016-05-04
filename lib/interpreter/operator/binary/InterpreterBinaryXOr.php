@@ -1,6 +1,6 @@
 <?php
 namespace chilimatic\lib\interpreter\operator\binary;
-use chilimatic\lib\interfaces\IFlyWeightOperate;
+use chilimatic\lib\Interfaces\IFlyWeightOperate;
 
 /**
  *

@@ -9,7 +9,7 @@
 
 namespace chilimatic\lib\request;
 
-use chilimatic\lib\interfaces\ISingeltonArray;
+use chilimatic\lib\Interfaces\ISingeltonArray;
 use chilimatic\lib\tool\TypeCast;
 use \JsonSerializable;
 

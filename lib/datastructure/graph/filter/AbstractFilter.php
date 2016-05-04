@@ -10,7 +10,7 @@
 
 namespace chilimatic\lib\datastructure\graph\filter;
 
-use chilimatic\lib\interfaces\IFlyWeightFilter;
+use chilimatic\lib\Interfaces\IFlyWeightFilter;
 
 abstract class AbstractFilter implements IFlyWeightFilter
 {

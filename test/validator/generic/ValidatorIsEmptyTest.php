@@ -14,7 +14,7 @@ class ValidatorIsEmptyTest extends PHPUnit_Framework_TestCase
      */
     public function checkIfValidatorImplementsTheInterface() {
         $validator = new \chilimatic\lib\validator\generic\IsEmpty();
-        $this->assertInstanceOf('\chilimatic\lib\interfaces\IFlyweightValidator', $validator);
+        $this->assertInstanceOf('\chilimatic\lib\Interfaces\IFlyweightValidator', $validator);
     }
 
     /**

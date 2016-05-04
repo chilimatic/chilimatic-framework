@@ -2,7 +2,7 @@
 namespace chilimatic\lib\route\map;
 
 use chilimatic\lib\exception\RouteException;
-use chilimatic\lib\interfaces\IFlyWeightParser;
+use chilimatic\lib\Interfaces\IFlyWeightParser;
 use chilimatic\lib\route\Map;
 
 class StrategyFactory implements StaticMapFactory

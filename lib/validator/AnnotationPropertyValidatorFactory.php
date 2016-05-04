@@ -2,10 +2,10 @@
 
 namespace chilimatic\lib\validator;
 
-use chilimatic\lib\interfaces\IFlyWeightParser;
+use chilimatic\lib\Interfaces\IFlyWeightParser;
 use chilimatic\lib\parser\annotation\AnnotationValidatorParser;
-use chilimatic\lib\transformer\string\AnnotationValidatorClassName;
-use chilimatic\lib\transformer\string\AnnotationValidatorPrependNameSpace;
+use chilimatic\lib\Transformer\String\AnnotationValidatorClassName;
+use chilimatic\lib\Transformer\String\AnnotationValidatorPrependNameSpace;
 
 /**
  *

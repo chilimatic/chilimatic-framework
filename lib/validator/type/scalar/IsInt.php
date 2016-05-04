@@ -16,7 +16,7 @@ namespace chilimatic\lib\validator\type\scalar;
  *
  * @package chilimatic\lib\validator\type\scalar
  */
-class IsInt implements \chilimatic\lib\interfaces\IFlyWeightValidator
+class IsInt implements \chilimatic\lib\Interfaces\IFlyWeightValidator
 {
     /**
      * @param mixed $value

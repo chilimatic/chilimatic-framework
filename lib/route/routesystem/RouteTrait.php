@@ -7,10 +7,10 @@
  */
 namespace chilimatic\lib\route\routesystem;
 
-use chilimatic\lib\interfaces\IFlyWeightTransformer;
+use chilimatic\lib\Interfaces\IFlyWeightTransformer;
 use chilimatic\lib\route\Map;
 use chilimatic\lib\route\map\MapFactory;
-use chilimatic\lib\transformer\string\DynamicFunctionCallName;
+use chilimatic\lib\Transformer\String\DynamicFunctionCallName;
 
 /**
  * Class RouteTrait

@@ -64,7 +64,7 @@ abstract class AbstractQueryBuilder implements IQueryBuilder
     protected $position;
 
     /**
-     * @var \chilimatic\lib\interfaces\IFlyWeightTransformer
+     * @var \chilimatic\lib\Interfaces\IFlyWeightTransformer
      */
     protected $paramTransformer;
 

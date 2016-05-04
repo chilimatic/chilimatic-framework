@@ -8,7 +8,7 @@ namespace chilimatic\lib\parser\annotation;
  *
  * File: AnnotationOdmParser.php
  */
-use chilimatic\lib\interfaces\IFlyWeightParser;
+use chilimatic\lib\Interfaces\IFlyWeightParser;
 
 /**
  * Class AnnotationValidatorParser
