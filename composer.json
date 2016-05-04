@@ -7,8 +7,11 @@
     "minimum-stability" : "dev",
     "require": {
         "php": ">=5.4",
-        "chilimatic/interfaces" : "1.*",
-        "chilimatic/transformer-component": "1.*"
+        "chilimatic/interfaces-component" : "1.*",
+        "chilimatic/transformer-component": "1.*",
+        "chilimatic/parser-component": "1.*",
+        "chilimatic/di-component": "1.*",
+        "chilimatic/database-component": "dev-master"
     },
     "require-dev": {
       "phpunit/phpunit": "4.5.*",

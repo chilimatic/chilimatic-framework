@@ -10,8 +10,9 @@ namespace chilimatic\lib\session\engine;
 
 
 use chilimatic\lib\config\Config;
-use chilimatic\lib\database\Mysql as MysqlDb;
-use chilimatic\lib\traits\Database as DatabaseTrait;
+use chilimatic\lib\Database\Mysql as MysqlDb;
+use chilimatic\lib\Database\Traits\DatabaseConnection;
+
 
 class Mysql extends GenericEngine
 {
@@ -20,7 +21,7 @@ class Mysql extends GenericEngine
      * database trait to establish
      * the database connection when needed
      */
-    use DatabaseTrait;
+    use DatabaseConnection;
 
     /**
      * special session db name if

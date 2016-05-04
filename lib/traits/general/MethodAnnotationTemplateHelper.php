@@ -1,7 +1,7 @@
 <?php
 namespace chilimatic\lib\traits\general;
-use chilimatic\lib\config\Config;
-use chilimatic\lib\parser\annotation\ViewParser;
+
+use chilimatic\lib\Parser\Annotation\AnnotationViewParser;
 use chilimatic\lib\view\AbstractView;
 
 /**
@@ -27,7 +27,7 @@ trait MethodAnnotationTemplateHelper
             return '';
         }
 
-        $parser = new ViewParser();
+        $parser = new AnnotationViewParser();
         $reflection = new \ReflectionClass($this);
         $method = $reflection->getMethod($callerName);
 

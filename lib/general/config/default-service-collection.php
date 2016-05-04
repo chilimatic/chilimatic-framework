@@ -1,4 +1,9 @@
 <?php
+use chilimatic\lib\Database\Sql\Mysql\Connection\MySQLConnectionStorage;
+use chilimatic\lib\Database\Sql\Mysql\Querybuilder\MySQLQueryBuilder;
+use chilimatic\lib\Database\Sql\Orm\EntityManager;
+use chilimatic\lib\log\client\PrintOut;
+
 return
     [
         'view'                => function ($setting = []) {
@@ -28,7 +33,7 @@ return
             return chilimatic\lib\cache\engine\CacheFactory::make($setting['type'], isset($setting['setting']) ? $setting['setting'] : null);
         },
         'entity-manager'      => function ($setting = []) {
-            $mysqlStorage = new \chilimatic\lib\database\mysql\MysqlConnectionStorage();
+            $mysqlStorage = new MySQLConnectionStorage();
             $mysqlStorage->addConnection(
                 $setting['host'],
                 $setting['username'],
@@ -37,17 +42,17 @@ return
                 isset($setting['port']) ? $setting['port'] : null,
                 isset($setting['charset']) ? $setting['charset'] : null
             );
+
             $master = $mysqlStorage->getConnection(0);
-            $em     = new \chilimatic\lib\database\orm\EntityManager(new \chilimatic\lib\database\mysql\Mysql($master));
+            $em     = new EntityManager(new Mysql($master));
 
             return $em->setQueryBuilder(\chilimatic\lib\di\ClosureFactory::getInstance()->get('query-builder'));
         },
         'query-builder'       => function ($setting = []) {
-            $queryBuilder = new \chilimatic\lib\database\orm\querybuilder\MysqlQueryBuilder();
-
-            return $queryBuilder->setCache(\chilimatic\lib\di\ClosureFactory::getInstance()->get('cache', ['type' => 'shmop']));
+            $queryBuilder = new MysqlQueryBuilder(\chilimatic\lib\di\ClosureFactory::getInstance()->get('cache', ['type' => 'shmop']));
+            return $queryBuilder;
         },
         'error-handler'       => function ($setting = []) {
-            return new \chilimatic\lib\error\Handler(new \chilimatic\lib\log\client\printOut());
+            return new \chilimatic\lib\error\Handler(new PrintOut());
         },
     ];
