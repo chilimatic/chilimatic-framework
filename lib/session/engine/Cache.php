@@ -8,7 +8,7 @@
 
 namespace chilimatic\lib\session\engine;
 
-use chilimatic\lib\cache\engine\Cache as CacheManager;
+use chilimatic\lib\Cache\Engine\Cache as CacheManager;
 use chilimatic\lib\config\Config;
 
 
@@ -53,7 +53,9 @@ class Cache extends GenericEngine
         // write it to the cache
         $this->engine = CacheManager::getInstance($param);
 
-        if (!$this->engine || !$this->engine->isConnected()) return false;
+        if (!$this->engine || !$this->engine->isConnected()) {
+            return false;
+        }
 
         return true;
     }
