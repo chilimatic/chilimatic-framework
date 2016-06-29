@@ -10,9 +10,9 @@
 
 namespace chilimatic\lib\application;
 
-use chilimatic\lib\config\AbstractConfig;
-use chilimatic\lib\di\ClosureFactory;
-use chilimatic\lib\route\Router;
+use chilimatic\lib\Config\AbstractConfig;
+use chilimatic\lib\Di\ClosureFactory;
+use chilimatic\lib\Route\Router;
 
 /**
  * Class HTTPMVC

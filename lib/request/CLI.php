@@ -71,9 +71,10 @@ class CLI extends Generic implements RequestInterface
      */
     public function _transform(array $array = null)
     {
-        if (empty($array)) return;
-
-
+        if (empty($array)) {
+            return;
+        }
+        
         foreach ($array as $param) {
             if (strpos($param, '=') > 0) {
                 $tmp           = explode(Generic::ASSIGNMENT_OPERATOR, $param);

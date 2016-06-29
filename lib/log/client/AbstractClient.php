@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: j
- * Date: 05.02.15
- * Time: 23:48
- */
-
 namespace chilimatic\lib\log\client;
 
 abstract class AbstractClient implements ClientInterface
@@ -26,12 +19,12 @@ abstract class AbstractClient implements ClientInterface
     public function __construct(\chilimatic\lib\formatter\Log $format = null)
     {
         $this->format      = $format;
-        $this->logMessages = new \SPLQueue();
+        $this->logMessages = new \SplQueue();
     }
 
-    function __toString()
+    public function __toString()
     {
-        // TODO: Implement __toString() method.
+        return '';
     }
 
     /**

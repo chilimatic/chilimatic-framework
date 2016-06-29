@@ -1,7 +1,7 @@
 <?php
 namespace chilimatic\lib\view;
 use chilimatic\lib\Interfaces\IFactoryOptions;
-use chilimatic\lib\traits\general\ClassExists;
+use chilimatic\lib\Traits\ClassExists;
 
 /**
  *
@@ -26,7 +26,7 @@ class ViewFactory implements IFactoryOptions
      *
      * @return null
      */
-    public function make($name, $options = [])
+    public function make(string $name, $options = [])
     {
         if (!$name || !$this->exists($name)) {
             return null;
@@ -41,7 +41,7 @@ class ViewFactory implements IFactoryOptions
      *
      * @return mixed|null
      */
-    public function __invoke($name, $options)
+    public function __invoke(string $name, $options)
     {
         return $this->make($name, $options);
     }

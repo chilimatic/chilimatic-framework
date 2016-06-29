@@ -1,5 +1,5 @@
 <?php
-namespace chilimatic\lib\traits\general;
+namespace chilimatic\lib\view\traits;
 
 use chilimatic\lib\Parser\Annotation\AnnotationViewParser;
 use chilimatic\lib\view\AbstractView;

@@ -57,10 +57,4 @@ Interface ILog
      * @return
      */
     public function write_log($msg = '', $log_level = 0);
-
-
-    /**
-     * destructor calls the destructor of the file object
-     */
-    public function __destruct();
 }

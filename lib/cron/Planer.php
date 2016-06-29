@@ -8,8 +8,7 @@ namespace chilimatic\lib\cron;
  */
 class Planer
 {
-
-
+    
     /**
      * the complete cron string before
      * the parsin process starts
@@ -115,7 +114,9 @@ class Planer
     public function __construct($cron_string = null)
     {
 
-        if (empty($cron_string)) return;
+        if (empty($cron_string)) {
+            return;
+        }
 
         $this->calc_cron((string)$cron_string);
     }
@@ -184,10 +185,12 @@ class Planer
     public function calc_cron($cron_string = null)
     {
 
-        if (empty($cron_string)) return false;
+        if (empty($cron_string)) {
+            return false;
+        }
 
         // set the given cronstring
-        $this->cron_string = $cron_string;
+        $this->cron_string = trim($cron_string);
         // get the curren timestamp
         $this->current_time = strtotime(date('Y-m-d H:i:00', time()));
         $this->calc_time    = strtotime(date('Y-m-d H:i:00', time()));
@@ -204,7 +207,7 @@ class Planer
 
         $count = count($tmp_array = explode(' ', $this->cron_string));
 
-        if (trim($this->cron_string) == '* * * * *' || trim($this->cron_string) == '* * * * * *') {
+        if ($this->cron_string === '* * * * *' || $this->cron_string === '* * * * * *') {
             $this->next_run      = strtotime('+1 minute', $this->current_time);
             $this->date_next_run = date('Y-m-d H:i:s', $this->next_run);
 
@@ -334,7 +337,7 @@ class Planer
                         // reset the restart
                         $next_up = false;
 
-                        for ($x = 0; count($this->cron_array) > $x; $x++) {
+                        for ($x = 0, $c = count($this->cron_array); $c > $x; $x++) {
                             $this->{$this->cron_array[$x]['p_name']} = null;
                         }
                         // cleanup useless vars
@@ -349,7 +352,9 @@ class Planer
                     foreach ($range as $sub_range) {
                         $sub_range['placeholder'] = (string)$this->cron_array[$i]['placeholder'];
                         $sub_range['p_name']      = (string)$this->cron_array[$i]['p_name'];
-                        if (!empty($this->{$this->cron_array[$i]['p_name']})) break;
+                        if (!empty($this->{$this->cron_array[$i]['p_name']})) {
+                            break;
+                        }
                         $this->__set_value((array)$sub_range);
                     }
 
@@ -390,7 +395,9 @@ class Planer
     public function parse_position($string)
     {
 
-        if (empty($string)) return array();
+        if (empty($string)) {
+            return array();
+        }
 
         // get the timestamp for this year
         $time_array = array(
@@ -398,7 +405,7 @@ class Planer
             'interval' => false
         );
 
-        if ($string == '*') {
+        if ($string === '*') {
             return $time_array;
         } else if (preg_match('/^(\d{4})$/', $string)) {
             $time_array['range'] = $string;

@@ -12,7 +12,7 @@ namespace chilimatic\lib\log\client;
 
 use chilimatic\lib\config\Config;
 use chilimatic\lib\template\IAnnotationTemplate;
-use chilimatic\lib\traits\general\MethodAnnotationTemplateHelper;
+use chilimatic\lib\view\traits\MethodAnnotationTemplateHelper;
 
 class PrintOutWebTemplate extends AbstractClient implements IAnnotationTemplate
 {

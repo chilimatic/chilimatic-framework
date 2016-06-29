@@ -69,8 +69,6 @@ class Mysql extends GenericEngine
 
         // override über die config [optional]
         $this->_session_life_time = (($tmp = Config::get('session_lifetime')) != '') ? $tmp : $this->_session_life_time;
-
-        return;
     }
 
     /**

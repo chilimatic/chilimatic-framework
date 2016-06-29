@@ -6,11 +6,15 @@
     "version": "1.0.0",
     "minimum-stability" : "dev",
     "require": {
-        "php": ">=5.4",
-        "chilimatic/interfaces-component" : "1.*",
-        "chilimatic/transformer-component": "1.*",
-        "chilimatic/parser-component": "1.*",
-        "chilimatic/di-component": "1.*",
+        "php": ">=7",
+        "chilimatic/interfaces-component" : "2.*",
+        "chilimatic/transformer-component": "2.*",
+        "chilimatic/parser-component": "2.*",
+        "chilimatic/di-component": "2.*",
+        "chilimatic/traits-component": "2.*",
+        "chilimatic/datastructure-component": "2.*",
+        "chilimatic/config-component": "2.*",
+        "chilimatic/route-component": "2.*",
         "chilimatic/database-component": "dev-master"
     },
     "require-dev": {

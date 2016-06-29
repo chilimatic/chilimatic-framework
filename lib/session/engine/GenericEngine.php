@@ -8,13 +8,15 @@
  */
 namespace chilimatic\lib\session\engine;
 
+use chilimatic\lib\Traits\ObserverSubject;
+
 abstract class GenericEngine implements SessionEngineInterface, \SplSubject
 {
     /**
      * implements the methods for the observer Subject without crowding
      * this class
      */
-    use \chilimatic\lib\traits\ObserverSubject;
+    use ObserverSubject;
 
     /**
      * specific session key if we use a cache storage

@@ -1,8 +1,8 @@
 <?php
 namespace chilimatic\lib\log;
 
-use chilimatic\lib\config\Config;
-use chilimatic\lib\exception\LogException;
+use chilimatic\lib\Config\Config;
+use chilimatic\lib\log\exception\LogException;
 use chilimatic\lib\file\File;
 
 /**
@@ -104,7 +104,9 @@ class Error implements ILog
     public function write_log($msg = '', $log_level = 0)
     {
         // log level check
-        if ($this->log_level > (int)$log_level) return true;
+        if ($this->log_level > (int)$log_level) {
+            return true;
+        }
 
         try {
             if (!$this->file->open((string)"$this->_log_path/$this->_file_name")) {
@@ -139,7 +141,7 @@ class Error implements ILog
              *       -> multithread issues
              */
             if ($this->file->append($this->msg) === false) {
-                // some code that
+                // some code that does something :9
             }
         } catch (LogException $e) {
             error_log($e->getMessage());
@@ -148,19 +150,5 @@ class Error implements ILog
         }
 
         return true;
-    }
-
-
-    /**
-     * (non-PHPdoc)
-     *
-     * @see Log::__destruct()
-     */
-    public function __destruct()
-    {
-
-        if (!empty($this->file)) {
-            $this->file->__destruct();
-        }
     }
 }

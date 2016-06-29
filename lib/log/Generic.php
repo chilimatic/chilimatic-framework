@@ -2,7 +2,7 @@
 namespace chilimatic\lib\log;
 
 use chilimatic\lib\config\Config;
-use chilimatic\lib\exception\LogException;
+use chilimatic\lib\log\exception\LogException;
 use chilimatic\lib\file\File;
 
 /**
@@ -82,7 +82,9 @@ class Generic implements ILog
     {
 
         // log level check
-        if ($this->log_level > (int)$log_level) return true;
+        if ($this->log_level > (int)$log_level) {
+            return true;
+        }
 
         try {
             if (!$this->file->open((string)"$this->_log_path/$this->_file_name") && !$this->file->create_file("$this->_log_path/$this->_file_name")) {
@@ -110,17 +112,5 @@ class Generic implements ILog
         }
 
         return true;
-    }
-
-
-    /**
-     * destructor
-     */
-    public function __destruct()
-    {
-
-        if (!empty($this->file)) {
-            $this->file->__destruct();
-        }
     }
 }

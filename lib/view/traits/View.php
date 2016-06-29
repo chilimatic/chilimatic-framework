@@ -1,5 +1,5 @@
 <?php
-namespace chilimatic\lib\traits;
+namespace chilimatic\lib\view\traits;
 
 /**
  * Generic trait to initialize the trait object if it's needed
@@ -11,7 +11,7 @@ use \chilimatic\lib\exception\ViewException;
 /**
  * Class View
  *
- * @package chilimatic\lib\traits
+ * @package chilimatic\lib\view\traits
  */
 trait View
 {
@@ -44,7 +44,9 @@ trait View
 
         $view = (string)__NAMESPACE__ . (string)(empty($engine) ? "\\View_{$this->default_view_engine}" : "\\View_{$engine}");
 
-        if ($this->view instanceof $view) return true;
+        if ($this->view instanceof $view) {
+            return true;
+        }
 
         try {
             $this->view = new $view();
