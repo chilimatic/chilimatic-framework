@@ -68,7 +68,7 @@ class HTTPHandler extends AbstractHandler
         $this->setView($return[1]->getView());
 
         $this->getView()->setConfigVariable(
-            'templatePath',
+            'templateFile',
             $this->getDefaultTemplate(get_class($return[1]))
         );
     }
