@@ -7,8 +7,8 @@
  */
 namespace chilimatic\lib\controller;
 
-use chilimatic\lib\di\ClosureFactory;
-use chilimatic\lib\view\AbstractView;
+use chilimatic\lib\Di\ClosureFactory;
+use chilimatic\lib\View\AbstractView;
 
 /**
  * Class HTTPController

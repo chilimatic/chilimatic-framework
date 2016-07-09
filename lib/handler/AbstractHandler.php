@@ -86,7 +86,7 @@ abstract class AbstractHandler implements IHandler
     }
 
     /**
-     * @return \chilimatic\lib\view\generic
+     * @return mixed
      */
     public function getView()
     {
@@ -94,7 +94,7 @@ abstract class AbstractHandler implements IHandler
     }
 
     /**
-     * @param \chilimatic\lib\view\generic $view
+     * @param mixed
      *
      * @return $this
      */
