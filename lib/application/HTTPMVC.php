@@ -12,7 +12,11 @@ namespace chilimatic\lib\application;
 
 use chilimatic\lib\Config\AbstractConfig;
 use chilimatic\lib\Di\ClosureFactory;
+use chilimatic\lib\handler\HTTPHandler;
+use chilimatic\lib\request\Handler;
+use chilimatic\lib\Route\Exception\RouteException;
 use chilimatic\lib\Route\Router;
+
 
 /**
  * Class HTTPMVC
@@ -27,19 +31,18 @@ class HTTPMVC
      */
     const FETCH_DEPENDENCIES = 'addDependencies';
 
-
     /**
-     * @var \chilimatic\lib\route\Router
+     * @var Router
      */
     protected $router;
 
     /**
-     * @var \chilimatic\lib\request\Handler
+     * @var Handler
      */
     protected $requestHandler;
 
     /**
-     * @var \chilimatic\lib\handler\httphandler
+     * @var httphandler
      */
     protected $httpHandler;
 
@@ -51,7 +54,7 @@ class HTTPMVC
     /**
      * @var array
      */
-    protected $defaultDependencies = [
+    protected static $defaultDependencies = [
         'handler',
         'route',
         'request'
@@ -60,6 +63,7 @@ class HTTPMVC
     /**
      * @param ClosureFactory $di
      * @param AbstractConfig $config
+     * @throws \BadFunctionCallException
      */
     public function __construct(ClosureFactory $di = null, AbstractConfig $config = null)
     {
@@ -70,20 +74,22 @@ class HTTPMVC
         $this->config = $config;
         $this->di     = $di;
 
-        if ($di->exists(self::FETCH_DEPENDENCIES)) {
-            $this->defaultDependencies = array_merge((array)$this->defaultDependencies, (array)$di->get(self::FETCH_DEPENDENCIES));
+        if ($this->di->exists(self::FETCH_DEPENDENCIES)) {
+            self::$defaultDependencies = array_merge((array) self::$defaultDependencies, (array) $this->di->get(self::FETCH_DEPENDENCIES));
         }
 
-        foreach ($this->defaultDependencies as $closure) {
-            if (!$di->exists($closure)) {
+        foreach (self::$defaultDependencies as $closure) {
+            if (!$this->di->exists($closure)) {
                 continue;
             }
-            $this->{$closure} = $di->get($closure);
+            $this->{$closure} = $this->di->get($closure);
         }
     }
 
     /**
      * @return void
+     * @throws \BadFunctionCallException
+     * @throws RouteException
      */
     public function init()
     {
@@ -94,6 +100,7 @@ class HTTPMVC
 
     /**
      * @return mixed
+     * @throws \BadFunctionCallException
      */
     public function getRequestHandler()
     {
@@ -118,6 +125,7 @@ class HTTPMVC
 
     /**
      * @return mixed
+     * @throws \BadFunctionCallException
      */
     public function getHandler()
     {
@@ -160,6 +168,7 @@ class HTTPMVC
 
     /**
      * @return Router
+     * @throws \BadFunctionCallException
      */
     public function getRouter()
     {
@@ -167,7 +176,7 @@ class HTTPMVC
             $this->router = $this->di->get(
                 'routing',
                 [
-                    'type' => $this->config->get('routing_type') ? $this->config->get('routing_type') : Router::DEFAULT_ROUTING_TYPE
+                    'type' => $this->config->get('routing_type') ?: Router::DEFAULT_ROUTING_TYPE
                 ]
             );
         }

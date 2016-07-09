@@ -15,7 +15,8 @@
         "chilimatic/datastructure-component": "2.*",
         "chilimatic/config-component": "2.*",
         "chilimatic/route-component": "2.*",
-        "chilimatic/database-component": "dev-master"
+        "chilimatic/database-component": "dev-master",
+        "chilimatic/view-component" : "2.*"
     },
     "require-dev": {
       "phpunit/phpunit": "4.5.*",
